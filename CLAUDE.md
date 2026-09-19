@@ -43,6 +43,16 @@ A feature owns its own API calls, components and hooks. Reaching into another fe
 - **The UI is in Danish.** Code and comments are in English.
 - **Mobile matters.** Five staff use this from phones while setting tables. Every view works at 375px wide.
 
+## Deployment
+
+The frontend is served from Azure Static Web Apps. The whole deployment — both repos — is one script, in the backend repo:
+
+```bash
+cd ../WeddingBooking-Backend && ./infra/deploy.sh
+```
+
+It builds this app with `VITE_API_BASE_URL` pointed at the API's real Azure hostname, which it reads out of the deployment rather than having anyone type it. `public/staticwebapp.config.json` makes Static Web Apps serve `index.html` for client-side routes; without it every URL except `/` is a 404 on refresh.
+
 ## What belongs here, and what belongs in the backend
 
 Full table in [ARCHITECTURE.md](./ARCHITECTURE.md#what-belongs-where). The short version:

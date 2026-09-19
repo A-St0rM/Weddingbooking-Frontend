@@ -8,6 +8,8 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(import.meta.dirname, './src') },
   },
+  // staticwebapp.config.json must land in dist/ so Static Web Apps picks it up.
+  publicDir: 'public',
   server: {
     port: 5173,
     // The API is same-origin in development, so no CORS and no base URL to configure.
