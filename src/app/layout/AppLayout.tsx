@@ -2,9 +2,12 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useMig, rolleNavne } from '@/features/auth/hooks/useMig';
 import { logUd } from '@/features/auth/hooks/useSession';
 
-// Kunder arrives in ticket 04, Pakker in ticket 06. Links are added when the
-// pages behind them exist, not before.
-const links = [{ to: '/bookinger', label: 'Bookinger' }];
+// Pakker arrives in ticket 06. Links are added when the pages behind them
+// exist, not before.
+const links = [
+  { to: '/bookinger', label: 'Bookinger' },
+  { to: '/kunder', label: 'Kunder' },
+];
 
 export function AppLayout() {
   const { data: mig } = useMig(true);

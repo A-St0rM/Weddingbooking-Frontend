@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useBookinger } from '@/features/booking/hooks/useBookinger';
 import { formatDato, formatGæsteantal } from '@/lib/format';
 
 export function BookingListe() {
-  const { data: bookinger, isPending, error } = useBookinger();
+  const [søg, setSøg] = useState('');
+  const { data: bookinger, isPending, error } = useBookinger(søg);
 
   return (
     <div className="space-y-4">
@@ -19,6 +21,15 @@ export function BookingListe() {
         </Link>
       </div>
 
+      {/* How a couple is found when they ring without giving a date. */}
+      <input
+        type="search"
+        value={søg}
+        onChange={(event) => setSøg(event.target.value)}
+        placeholder="Søg på brudeparrets navn"
+        className="w-full rounded-lg border border-stone-300 px-3 py-2"
+      />
+
       {isPending && <p className="text-stone-500">Henter bookinger…</p>}
 
       {error && (
@@ -29,20 +40,30 @@ export function BookingListe() {
 
       {bookinger?.length === 0 && (
         <p className="rounded-lg border border-dashed border-stone-300 p-8 text-center text-stone-500">
-          Ingen bookinger endnu.
+          {søg ? `Ingen bookinger matcher "${søg}".` : 'Ingen bookinger endnu.'}
         </p>
       )}
 
       {bookinger && bookinger.length > 0 && (
         <ul className="space-y-2">
           {bookinger.map((booking) => (
-            <li key={booking.id} className="rounded-lg border border-stone-200 bg-white p-4">
-              <p className="font-semibold">{booking.kundenavn ?? 'Uden navn'}</p>
-              <p className="text-sm text-stone-600">
-                {booking.bryllupsdato ? formatDato(booking.bryllupsdato) : 'Dato ikke aftalt'}
-                {' · '}
-                {formatGæsteantal(booking.gæsteantal)}
-              </p>
+            <li key={booking.id}>
+              <Link
+                to={`/bookinger/${booking.id}`}
+                className="block rounded-lg border border-stone-200 bg-white p-4 hover:border-stone-400"
+              >
+                <p className="font-semibold">{booking.kundenavn}</p>
+                <p className="text-sm text-stone-600">
+                  {booking.bryllupsdato ? formatDato(booking.bryllupsdato) : 'Dato ikke aftalt'}
+                  {' · '}
+                  {formatGæsteantal(booking.gæsteantal)}
+                </p>
+                {booking.harSærskiltBetaler && (
+                  <p className="mt-1 text-xs text-stone-500">
+                    Betales af {booking.betalernavn}
+                  </p>
+                )}
+              </Link>
             </li>
           ))}
         </ul>
