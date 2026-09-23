@@ -1,12 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  hentBooking,
   hentBookinger,
   hentBookingerPaaDato,
   opretBooking,
+  sætBetaler,
 } from '@/features/booking/api/bookingApi';
 
-export function useBookinger() {
-  return useQuery({ queryKey: ['bookinger'], queryFn: hentBookinger });
+export function useBookinger(søg = '') {
+  return useQuery({
+    queryKey: ['bookinger', { søg }],
+    queryFn: () => hentBookinger(søg || undefined),
+  });
+}
+
+export function useBooking(id: string) {
+  return useQuery({ queryKey: ['booking', id], queryFn: () => hentBooking(id) });
 }
 
 /**
@@ -28,5 +37,17 @@ export function useOpretBooking() {
   return useMutation({
     mutationFn: opretBooking,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['bookinger'] }),
+  });
+}
+
+export function useSætBetaler(bookingId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (betalerKundeId: string | null) => sætBetaler(bookingId, betalerKundeId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['booking', bookingId] });
+      await queryClient.invalidateQueries({ queryKey: ['bookinger'] });
+    },
   });
 }
