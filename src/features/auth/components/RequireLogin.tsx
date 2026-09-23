@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ApiError } from '@/lib/apiClient';
 import { logUd, useSession } from '@/features/auth/hooks/useSession';
 import { useMig } from '@/features/auth/hooks/useMig';
 import { LogIndSide } from '@/features/auth/components/LogIndSide';
@@ -27,11 +28,27 @@ export function RequireLogin({ children }: { children: ReactNode }) {
   }
 
   if (mig.isError) {
+    // Only a 403 means what it says. Anything else — the API is down, the
+    // deployment is older than this page, a proxy in between — must not be
+    // reported as "you have no access": that sends someone hunting through
+    // user accounts for a problem that is not there.
+    const nægtetAdgang = mig.error instanceof ApiError && mig.error.status === 403;
+
     return (
       <div className="mx-auto mt-16 max-w-md space-y-4 text-center">
-        <p className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-          Du er logget ind, men har ikke adgang til bookingsystemet. Kontakt event manageren.
-        </p>
+        {nægtetAdgang ? (
+          <p className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            Du er logget ind, men har ikke adgang til bookingsystemet. Kontakt event manageren.
+          </p>
+        ) : (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+            <p className="font-medium">Kunne ikke få fat i API'et.</p>
+            <p className="mt-1">
+              Det er ikke et spørgsmål om din adgang — serveren svarer ikke.
+              {mig.error instanceof ApiError && ` (HTTP ${mig.error.status})`}
+            </p>
+          </div>
+        )}
         <button
           type="button"
           onClick={logUd}
