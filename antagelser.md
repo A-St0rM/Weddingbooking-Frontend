@@ -76,3 +76,12 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Fremvisningens vært** vælges på bookingen; er ingen valgt, bruges den første aktive event producer (Bryan). Mødebekræftelsen sætter værten på CC og hans telefonnummer i teksten. At booke en fremvisning flytter en forespørgsel til *Fremvisning aftalt*.
 - **Noter kan skrives af alle roller** (Bryan noterer et opkald); mails sendes kun af event manager og ejere. Noter redigeres og slettes ikke — de er historikken.
 - **Verifikation:** 43 domænetests og 23 integrationstests grønne — mødebekræftelsen har Bryan på CC og hans nummer i teksten, et udkast sender intet, den redigerede tekst er det, der sendes, og mailen står i historikken med tid og modtagere. Set i browseren. Migrationerne `Communication` og `InitialSimulatedMail` anvendt; advisors rene.
+
+## Fase 7 — AI-resumé
+
+- **Den selvstændige side `/resume` kræver ikke login** og rører ikke databasen, som kriteriet siger. Endepunktet er det eneste ud over `/health`, der er åbent, og det er **rate-begrænset til 5 kald i minuttet pr. adresse**, så det ikke bliver en åben dør til godsets OpenAI-konto. Det kan slås fra med `Summary:StandaloneEnabled=false`.
+- **Modellen skriver ingen tal.** Den får bookingens data til orientering, men instrueres i ikke at gentage gæsteantal, datoer eller beløb; de vises i en separat boks "Fra bookingen", som API'et selv skriver ud fra de strukturerede data.
+- **Resuméet gemmes aldrig af sig selv.** "Gem som note" er et bevidst tryk og gemmer det som en intern note.
+- **Uden OpenAI-nøgle** bruges en fast adapter, der tager bookingens data og tekstens egne sætninger efter enkle regler — tydeligt mærket "Uden AI". Med nøglen (`OpenAI__ApiKey` i App Service) bruges OpenAI med struktureret output (model `gpt-4.1-mini`, kan ændres med `OpenAI__Model`). **Jeg har ingen OpenAI-nøgle og har derfor ikke kaldt OpenAI**; adapterens forespørgsel og svarparsing er testet mod en stub.
+- **Kok og event producer** får resuméet uden pris- og betalingslinjer.
+- **Verifikation:** 26 integrationstests grønne (siden uden login, bookingens tal fra bookingen, intet gemt); siden set i browseren uden login.

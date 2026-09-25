@@ -4,6 +4,7 @@ import { AccessGate } from '@/features/auth/components/AccessGate';
 import { ComposePage } from '@/features/messages/components/ComposePage';
 import { OutboxPage } from '@/features/messages/components/OutboxPage';
 import { TemplatesPage } from '@/features/messages/components/TemplatesPage';
+import { StandaloneSummaryPage } from '@/features/summaries/components/StandaloneSummaryPage';
 import { UsersPage } from '@/features/users/components/UsersPage';
 import { MorePage } from '@/features/auth/components/MorePage';
 import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
@@ -18,6 +19,8 @@ import { CustomerPage } from '@/features/customers/components/CustomerPage';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 export const router = createBrowserRouter([
+  // Open without login: the standalone AI summary.
+  { path: '/resume', element: <StandaloneSummaryPage /> },
   {
     element: (
       <AccessGate>

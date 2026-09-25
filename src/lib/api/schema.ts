@@ -140,6 +140,90 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/summary/standalone": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["StandaloneSummaryRequest"];
+                    "text/json": components["schemas"]["StandaloneSummaryRequest"];
+                    "application/*+json": components["schemas"]["StandaloneSummaryRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SummaryResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BookingSummaryRequest"];
+                    "text/json": components["schemas"]["BookingSummaryRequest"];
+                    "application/*+json": components["schemas"]["BookingSummaryRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SummaryResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/settings/pricing": {
         parameters: {
             query?: never;
@@ -2309,6 +2393,9 @@ export interface components {
             price: null | components["schemas"]["PriceResponse"];
             sameDateBookings: components["schemas"]["BookingSummaryResponse"][];
         };
+        BookingSummaryRequest: {
+            extraText: null | string;
+        };
         BookingSummaryResponse: {
             /** Format: uuid */
             id: string;
@@ -2322,6 +2409,12 @@ export interface components {
             stage: components["schemas"]["SalesStage"];
             status: components["schemas"]["DisplayStatus"];
             paymentTerms: components["schemas"]["PaymentTerms"];
+        };
+        CaseSummary: {
+            status: string;
+            agreedContent: string;
+            openItems: string[];
+            lastContact: string;
         };
         ChangeStageRequest: {
             stage: components["schemas"]["SalesStage"];
@@ -2667,6 +2760,9 @@ export interface components {
             /** Format: int32 */
             attachmentCount: number;
         };
+        StandaloneSummaryRequest: {
+            text: string;
+        };
         StringSegment: {
             buffer?: null | string;
             /** Format: int32 */
@@ -2675,6 +2771,13 @@ export interface components {
             length?: number;
             value?: null | string;
             hasValue?: boolean;
+        };
+        SummaryResponse: {
+            source: string;
+            summary: components["schemas"]["CaseSummary"];
+            facts: null | string[];
+            /** Format: date-time */
+            generatedAt: string;
         };
         SurchargeResponse: {
             /** Format: int32 */

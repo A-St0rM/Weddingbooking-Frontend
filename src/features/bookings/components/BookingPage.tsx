@@ -8,6 +8,7 @@ import { useBooking } from '@/features/bookings/api/bookings';
 import { AgreementCard } from '@/features/agreements/components/AgreementCard';
 import { ReadinessCard } from '@/features/readiness/components/ReadinessCard';
 import { HistoryCard } from '@/features/notes/components/HistoryCard';
+import { SummaryCard } from '@/features/summaries/components/SummaryCard';
 import { PaymentsCard } from '@/features/payments/components/PaymentsCard';
 import { usePermissions } from '@/features/auth/permissions';
 import { BookingLinesCard } from '@/features/bookings/components/BookingLinesCard';
@@ -59,6 +60,7 @@ function BookingView({ booking }: { booking: Booking }) {
       {seesPrices && <AgreementCard booking={booking} />}
       {manages && <StageCard booking={booking} />}
       <ContactCard customer={booking.customer} />
+      <SummaryCard bookingId={booking.id} />
       <HistoryCard bookingId={booking.id} />
     </div>
   );
