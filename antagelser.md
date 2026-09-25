@@ -13,3 +13,12 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **En eksisterende bruger bindes til sin Supabase-konto ved første login** via e-mailen; derefter slås vedkommende op på Supabase-id'et. En administrator kan derfor oprette en bruger, før personen har en Supabase-konto.
 - **Kun lyst tema.** Systemet bruges i dagslys; et mørkt tema er ikke bygget.
 - **Verifikation:** build uden advarsler; `/health` 200; `/api/me` uden token 401; forfalsket token 401 (nøglerne hentes fra det nye Supabase-projekt); CORS-preflight fra `localhost:5173` 204; migrationen `InitialUsers` anvendt gennem connectoren, advisors uden fund; login-siden kontrolleret i 375 px.
+
+## Fase 1 — Kunder og bookinger
+
+- **Kundens navn er parret som én enhed** ("Tobias og Cecilie"). Kontaktpersonerne er de enkelte personer med e-mail og telefon; den første tilføjede bliver primær.
+- **"Underskrevet" kan ikke vælges i hånden.** Det sættes, når den underskrevne aftale uploades (fase 4). De øvrige salgstrin vælges frit, også tilbage.
+- **Gæsteantal 1–350**, fordi laden har plads til 350. Håndhævet i domænet og som check-constraint i databasen.
+- **Samme dato:** afbestilte og tabte bookinger tæller ikke med i advarslen.
+- **Samtidige rettelser** giver 409 med "Ændret af en anden" og en knap til at hente den nyeste udgave (Postgres' `xmin`).
+- **Verifikation:** build og typecheck rene; migrationen `CustomersAndBookings` anvendt gennem connectoren; advisors: ingen sikkerhedsfund, kun "ubrugt indeks" på de nye tabeller. Oprettelse, søgning og advarsel kræver login mod en database og er ikke kørt af mig.
