@@ -1,6 +1,7 @@
 import { createBrowserRouter, Link, Navigate } from 'react-router-dom';
 import { AppShell } from '@/app/layout/AppShell';
 import { AccessGate } from '@/features/auth/components/AccessGate';
+import { UsersPage } from '@/features/users/components/UsersPage';
 import { MorePage } from '@/features/auth/components/MorePage';
 import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
 import { HomePage } from '@/features/home/HomePage';
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
       { path: 'pakker', element: <PackageListPage /> },
       { path: 'pakker/:id', element: <PackagePage /> },
       { path: 'regnskab', element: <AccountingSimPage /> },
+      { path: 'brugere', element: <UsersPage /> },
       { path: 'mere', element: <MorePage /> },
       { path: 'profil', element: <Navigate to="/mere" replace /> },
       {

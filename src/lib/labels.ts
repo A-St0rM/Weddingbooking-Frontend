@@ -7,6 +7,8 @@ import type {
   PackageKind,
   PaymentTerms,
   ProductGroup,
+  ReadinessCategory,
+  ReadinessStatus,
   SalesStage,
 } from '@/lib/api/types';
 
@@ -112,4 +114,24 @@ export const documentStatusLabels: Record<DocumentStatus, string> = {
   Sent: 'Sendt',
   Booked: 'Bogført',
   Paid: 'Betalt',
+};
+
+export const readinessCategoryLabels: Record<ReadinessCategory, string> = {
+  Contact: 'Kontakt',
+  TableSetting: 'Opdækning og opstilling',
+  Decoration: 'Pynt og blomster',
+  Food: 'Mad og allergier',
+  PostEventInvoicing: 'Efterfakturering',
+};
+
+export const readinessStatusLabels: Record<ReadinessStatus, string> = {
+  NotStarted: 'Ikke startet',
+  InProgress: 'I gang',
+  Done: 'Færdig',
+};
+
+export const readinessStatusTones: Record<ReadinessStatus, Tone> = {
+  NotStarted: 'neutral',
+  InProgress: 'warn',
+  Done: 'ok',
 };

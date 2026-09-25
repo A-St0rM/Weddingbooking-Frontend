@@ -2,15 +2,19 @@ import { Link } from 'react-router-dom';
 import { Envelope, Phone } from '@phosphor-icons/react';
 import { Card } from '@/components/ui/Card';
 import type { Customer } from '@/lib/api/types';
+import { usePermissions } from '@/features/auth/permissions';
 
 export function ContactCard({ customer }: { customer: Customer }) {
+  const { manages } = usePermissions();
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Kontakt</h2>
-        <Link to={`/kunder/${customer.id}`} className="inline-flex min-h-11 items-center font-medium text-primary">
-          Ret kunde
-        </Link>
+        {manages && (
+          <Link to={`/kunder/${customer.id}`} className="inline-flex min-h-11 items-center font-medium text-primary">
+            Ret kunde
+          </Link>
+        )}
       </div>
       {customer.contacts.length === 0 ? (
         <p className="text-ink-muted">Ingen kontaktpersoner endnu.</p>

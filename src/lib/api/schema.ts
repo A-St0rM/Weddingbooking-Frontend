@@ -37,6 +37,109 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateUserRequest"];
+                    "text/json": components["schemas"]["CreateUserRequest"];
+                    "application/*+json": components["schemas"]["CreateUserRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UpdateUserRequest"];
+                    "text/json": components["schemas"]["UpdateUserRequest"];
+                    "application/*+json": components["schemas"]["UpdateUserRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/settings/pricing": {
         parameters: {
             query?: never;
@@ -92,6 +195,136 @@ export interface paths {
         };
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReadinessResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AddReadinessRequest"];
+                    "text/json": components["schemas"]["AddReadinessRequest"];
+                    "application/*+json": components["schemas"]["AddReadinessRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReadinessResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/readiness/{itemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    itemId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UpdateReadinessRequest"];
+                    "text/json": components["schemas"]["UpdateReadinessRequest"];
+                    "application/*+json": components["schemas"]["UpdateReadinessRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReadinessResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    itemId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReadinessResponse"];
+                    };
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -1597,6 +1830,10 @@ export interface components {
             /** Format: uuid */
             packageId: string;
         };
+        AddReadinessRequest: {
+            category: components["schemas"]["ReadinessCategory"];
+            title: string;
+        };
         AgreementResponse: {
             clarification: null | string;
             versions: components["schemas"]["AgreementVersionResponse"][];
@@ -1703,6 +1940,12 @@ export interface components {
         };
         CreateInvoiceRequest: {
             kind: components["schemas"]["InstalmentKind"];
+        };
+        CreateUserRequest: {
+            email: string;
+            name: string;
+            role: components["schemas"]["Role"];
+            phone: null | string;
         };
         CustomerDetailResponse: {
             customer: components["schemas"]["CustomerResponse"];
@@ -1876,6 +2119,29 @@ export interface components {
         };
         /** @enum {unknown} */
         ProductGroup: "Reception" | "Ceremony" | "DinnerAndParty" | "LateNight" | "Bar" | "Breakfast" | "FridayEvent" | "Other";
+        /** @enum {unknown} */
+        ReadinessCategory: "Contact" | "TableSetting" | "Decoration" | "Food" | "PostEventInvoicing";
+        ReadinessItemResponse: {
+            /** Format: uuid */
+            id: string;
+            category: components["schemas"]["ReadinessCategory"];
+            title: string;
+            status: components["schemas"]["ReadinessStatus"];
+            notes: null | string;
+            responsible: null | string;
+            /** Format: date-time */
+            updatedAt: string;
+            updatedBy: null | string;
+            canEdit: boolean;
+        };
+        ReadinessResponse: {
+            readyForEvent: boolean;
+            /** Format: int32 */
+            guestCount: number;
+            items: components["schemas"]["ReadinessItemResponse"][];
+        };
+        /** @enum {unknown} */
+        ReadinessStatus: "NotStarted" | "InProgress" | "Done";
         RegisterPaymentRequest: {
             /** Format: double */
             amount: number;
@@ -1939,6 +2205,29 @@ export interface components {
             address: null | string;
             postalCode: null | string;
             city: null | string;
+        };
+        UpdateReadinessRequest: {
+            status: components["schemas"]["ReadinessStatus"];
+            notes: null | string;
+            responsible: null | string;
+        };
+        UpdateUserRequest: {
+            name: string;
+            role: components["schemas"]["Role"];
+            phone: null | string;
+            isActive: boolean;
+        };
+        UserResponse: {
+            /** Format: uuid */
+            id: string;
+            email: string;
+            name: string;
+            phone: null | string;
+            role: components["schemas"]["Role"];
+            isActive: boolean;
+            hasSignedIn: boolean;
+            /** Format: date-time */
+            lastLoginAt: null | string;
         };
     };
     responses: never;

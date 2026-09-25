@@ -5,6 +5,7 @@ import type { Booking } from '@/lib/api/types';
 import { formatKroner, formatLongDate } from '@/lib/format';
 import { useBooking } from '@/features/bookings/api/bookings';
 import { AgreementCard } from '@/features/agreements/components/AgreementCard';
+import { ReadinessCard } from '@/features/readiness/components/ReadinessCard';
 import { PaymentsCard } from '@/features/payments/components/PaymentsCard';
 import { usePermissions } from '@/features/auth/permissions';
 import { BookingLinesCard } from '@/features/bookings/components/BookingLinesCard';
@@ -26,7 +27,7 @@ export function BookingPage() {
 }
 
 function BookingView({ booking }: { booking: Booking }) {
-  const { seesPrices } = usePermissions();
+  const { seesPrices, manages } = usePermissions();
   return (
     <div className="space-y-4">
       <header>
@@ -49,9 +50,10 @@ function BookingView({ booking }: { booking: Booking }) {
       {/* Keyed on the version, so a saved change or someone else's resets the form to what is stored. */}
       <BookingDetailsCard key={booking.version} booking={booking} />
       <BookingLinesCard booking={booking} />
+      <ReadinessCard bookingId={booking.id} />
       {seesPrices && <PaymentsCard booking={booking} />}
       {seesPrices && <AgreementCard booking={booking} />}
-      <StageCard booking={booking} />
+      {manages && <StageCard booking={booking} />}
       <ContactCard customer={booking.customer} />
     </div>
   );

@@ -8,6 +8,7 @@ import { SearchInput } from '@/components/ui/SearchInput';
 import { useDebounced } from '@/lib/hooks/useDebounced';
 import type { BookingSummary } from '@/lib/api/types';
 import { useBookings } from '@/features/bookings/api/bookings';
+import { usePermissions } from '@/features/auth/permissions';
 import { BookingList } from '@/features/bookings/components/BookingRow';
 
 const monthYear = new Intl.DateTimeFormat('da-DK', { month: 'long', year: 'numeric' });
@@ -22,6 +23,8 @@ function byMonth(bookings: BookingSummary[]) {
 }
 
 export function NewBookingLink() {
+  const { manages } = usePermissions();
+  if (!manages) return null;
   return (
     <Link
       to="/bookinger/ny"
