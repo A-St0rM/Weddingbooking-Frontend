@@ -75,6 +75,7 @@ Controllerne er tynde: de validerer input, kalder domænet og mapper til DTO'er.
 - Mapper pr. feature (`bookings`, `customers`, `packages`, `readiness`, `notes`, `messages`, `auth`), hver med sine egne `api/`, `components/` og `hooks/`.
 - **Typerne genereres fra API'ets OpenAPI-beskrivelse** med `openapi-typescript`. Kontrakten har én kilde, så frontend og backend ikke kan drive fra hinanden, når et felt omdøbes.
 - **Mobil først.** Hver side designes til 375 px og skaleres op.
+- **Det visuelle bygges med skills'ene `ui-ux-pro-max`, `apple-design` og `animate`.** Hvornår hver af dem bruges, står i frontend-repoets `CLAUDE.md`.
 
 ---
 
@@ -233,7 +234,7 @@ Engelske identifikatorer holder æøå ude af filstier, databasekolonner og JSON
 
 ### Database
 
-- Alle tabeller i skemaet **`app`**; det simulerede regnskab i **`accounting_sim`**. Supabase eksponerer `public` for alle med den offentlige nøgle.
+- Alle tabeller i skemaet **`app`** — også EF's egen `__EFMigrationsHistory` — og det simulerede regnskab i **`accounting_sim`**. Supabase eksponerer `public` for alle med den offentlige nøgle.
 - Kolonner i `snake_case`.
 - **Hver migration læses igennem før den køres.** EF genererer glad en migration, der dropper en kolonne og sætter alle rækker til en standardværdi. Flyttes data, skrives migrationen i hånden: opret, tilføj nullable, flyt data, stram til, fjern det gamle.
 
@@ -252,8 +253,39 @@ Engelske identifikatorer holder æøå ude af filstier, databasekolonner og JSON
 |---|---|
 | Frontend | Azure Static Web Apps (Free), deployet af `azure-pipelines.yml` ved push til `main` |
 | API | Azure App Service, Linux, **B1** (F1 sover og har ofte nul kvote), deployet af `azure-pipelines.yml` |
-| Database | Supabase-projektet i eu-west-1, via **session-pooleren** |
+| Database | Supabase-projektet `WeddingBooking` i eu-central-1, via **session-pooleren** — se nedenfor |
 | Hemmeligheder | Lokalt: `dotnet user-secrets`. I Azure: App Service-indstillinger. Aldrig i `appsettings.json`. |
+
+### Supabase: projektet og connectoren
+
+| | |
+|---|---|
+| Projekt | `WeddingBooking` |
+| Projekt-id | `htvujiswzzzlanamefri` |
+| Region | eu-central-1 (Frankfurt) |
+| URL | `https://htvujiswzzzlanamefri.supabase.co` |
+| Pooler | `aws-0-eu-central-1.pooler.supabase.com:5432` |
+
+Databasen er oprettet og var tom ved projektstart — intet skema, ingen tabeller.
+
+**Du har adgang til Supabase-connectoren.** Brug den til at:
+
+- se tabeller og kolonner, **før du ændrer skemaet** — tjek den aktuelle tilstand i stedet for at gå ud fra den
+- anvende migrationer
+- køre **sikkerheds- og performance-advisors efter hver skemaændring**
+- læse Postgres- og auth-logs, når noget fejler
+
+**Skemaet ejes af EF Core-migrationerne.** Skriv altid ændringen som en EF-migration først. For at anvende den gennem connectoren: generér SQL'en med
+
+```
+dotnet ef migrations script --idempotent --project src/WeddingBooking.Infrastructure --startup-project src/WeddingBooking.Api
+```
+
+og anvend præcis den. Den skriver sig selv ind i `app.__EFMigrationsHistory`, så en senere `dotnet ef database update` er en no-op i stedet for en konflikt. En tabel oprettet direkte gennem connectoren kender EF ikke, og den næste migration kolliderer med den.
+
+Connectoren giver ikke databasens adgangskode. API'et har stadig brug for forbindelsesstrengen i `dotnet user-secrets` lokalt og i App Service-indstillingerne i Azure.
+
+Svarer connectoren *permission denied*, så sig det og stop — gæt ikke på databasens tilstand.
 
 ### Lektier fra den første opbygning
 
@@ -261,9 +293,9 @@ Hver af disse kostede timer. De står ingen steder i konfigurationen.
 
 - **Databasen:** den direkte vært `db.<ref>.supabase.co` har **kun IPv6** og kan ikke nås fra App Service eller de fleste hjemmenet. Brug session-pooleren:
   ```
-  Host=aws-1-eu-west-1.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.<ref>;Password=...;SSL Mode=Require;Trust Server Certificate=true
+  Host=aws-0-eu-central-1.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.htvujiswzzzlanamefri;Password=...;SSL Mode=Require;Trust Server Certificate=true
   ```
-  Brugernavnet indeholder projekt-id'et. Port **5432** (session), ikke 6543.
+  Brugernavnet indeholder projekt-id'et. Port **5432** (session), ikke 6543. Pooler-værten afhænger af projektet — det gamle projekt lå på `aws-1-eu-west-1`, dette ligger på `aws-0-eu-central-1`. Står værten i tvivl, så tjek den under **Connect → Session pooler** i Supabase-dashboardet.
 - **App Service-indstillingen** hedder `ConnectionStrings__Postgres` med to understreger. Kontrollér værdien efter indsættelse — et tabt første tegn gav fejlen `Couldn't set ost`.
 - **En 500 ligner en CORS-fejl i browseren.** ASP.NET fjerner CORS-headerne, når en undtagelse slipper igennem. Læg en undtagelses-middleware **efter** `UseCors`, som skriver en JSON-500 uden at rydde headerne, og log undtagelsen med et trace-id.
 - **Static Web Apps sender alle ukendte stier til `index.html`** — også `/api/*`, med status 200. Undtag `/api/*` i `navigationFallback`, og lad API-klienten afvise et svar, der ikke er JSON, med en besked om hvorfor.
