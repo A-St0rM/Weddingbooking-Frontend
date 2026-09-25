@@ -47,6 +47,8 @@ function useStoreBooking() {
     void queryClient.invalidateQueries({ queryKey: ['bookings', 'list'] });
     void queryClient.invalidateQueries({ queryKey: ['bookings', 'on-date'] });
     void queryClient.invalidateQueries({ queryKey: ['customers'] });
+    // The payment plan follows the price; ask the accounting system again.
+    void queryClient.invalidateQueries({ queryKey: ['payments', booking.id] });
   };
 }
 

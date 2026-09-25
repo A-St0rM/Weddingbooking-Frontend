@@ -1,16 +1,36 @@
-import { SignOut } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom';
+import { CaretRight, SignOut } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { roleLabels } from '@/lib/format';
+import { navItemsFor } from '@/app/navigation';
 import { useCurrentUser } from '@/features/auth/currentUser';
 import { signOut } from '@/features/auth/hooks/useSession';
 
-export function ProfilePage() {
+/** The destinations that do not fit in the tab bar, and who you are. */
+export function MorePage() {
   const me = useCurrentUser();
+  const more = navItemsFor(me.role).filter((item) => !item.inTabBar);
+
   return (
     <>
-      <PageHeader title="Profil" />
+      <PageHeader title="Mere" />
+      {more.length > 0 && (
+        <ul className="mb-6 divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+          {more.map(({ to, label, icon: Icon }) => (
+            <li key={to}>
+              <Link to={to} className="flex min-h-14 items-center gap-3 px-4 hover:bg-neutral-soft">
+                <Icon aria-hidden="true" className="size-6 text-ink-muted" />
+                <span className="flex-1 font-medium">{label}</span>
+                <CaretRight aria-hidden="true" className="size-4 text-ink-muted" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h2 className="mb-2 text-sm font-semibold text-ink-muted">Din profil</h2>
       <Card>
         <dl className="divide-y divide-line">
           <Row label="Navn" value={me.name} />

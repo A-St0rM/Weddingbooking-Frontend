@@ -97,6 +97,199 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/bookings/{id}/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PaymentsResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/payments/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PaymentsResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/payments/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateInvoiceRequest"];
+                    "text/json": components["schemas"]["CreateInvoiceRequest"];
+                    "application/*+json": components["schemas"]["CreateInvoiceRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PaymentsResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/payments/invoices/{number}/book": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    number: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PaymentsResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/payments/documents/{number}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    number: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/pdf": components["schemas"]["FileContentResult"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/packages": {
         parameters: {
             query?: never;
@@ -979,6 +1172,117 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/accounting-sim/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SimDocumentSummary"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/accounting-sim/documents/{number}/sent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    number: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/accounting-sim/documents/{number}/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    number: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RegisterPaymentRequest"];
+                    "text/json": components["schemas"]["RegisterPaymentRequest"];
+                    "application/*+json": components["schemas"]["RegisterPaymentRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1008,6 +1312,9 @@ export interface components {
             guestCount: number;
             paymentTerms: components["schemas"]["PaymentTerms"];
             stage: components["schemas"]["SalesStage"];
+            status: components["schemas"]["DisplayStatus"];
+            /** Format: date-time */
+            signedAt: null | string;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -1030,6 +1337,7 @@ export interface components {
             customerId: string;
             customerName: string;
             stage: components["schemas"]["SalesStage"];
+            status: components["schemas"]["DisplayStatus"];
             paymentTerms: components["schemas"]["PaymentTerms"];
         };
         ChangeStageRequest: {
@@ -1067,6 +1375,9 @@ export interface components {
         CreateCustomerRequest: {
             name: string;
         };
+        CreateInvoiceRequest: {
+            kind: components["schemas"]["InstalmentKind"];
+        };
         CustomerDetailResponse: {
             customer: components["schemas"]["CustomerResponse"];
             bookings: components["schemas"]["BookingSummaryResponse"][];
@@ -1091,6 +1402,52 @@ export interface components {
             /** Format: date */
             nextEventDate: null | string;
         };
+        /** @enum {unknown} */
+        DisplayStatus: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "DateSecured" | "ReadyForEvent" | "Held" | "AwaitingPostEventInvoice" | "PaymentOverdue" | "Cancelled" | "Lost";
+        DocumentResponse: {
+            number: string;
+            type: components["schemas"]["DocumentType"];
+            status: components["schemas"]["DocumentStatus"];
+            /** Format: double */
+            amount: number;
+            /** Format: double */
+            remaining: number;
+            /** Format: date */
+            dueDate: null | string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @enum {unknown} */
+        DocumentStatus: "Draft" | "Sent" | "Booked" | "Paid";
+        /** @enum {unknown} */
+        DocumentType: "Quote" | "Invoice";
+        EntityTagHeaderValue: {
+            tag?: components["schemas"]["StringSegment"];
+            isWeak?: boolean;
+        };
+        FileContentResult: {
+            /** Format: byte */
+            fileContents?: string;
+            contentType?: null | string;
+            fileDownloadName?: null | string;
+            /** Format: date-time */
+            lastModified?: null | string;
+            entityTag?: null | components["schemas"]["EntityTagHeaderValue"];
+            enableRangeProcessing?: boolean;
+        };
+        /** @enum {unknown} */
+        InstalmentKind: "ReservationFee" | "Instalment" | "FinalPayment";
+        InstalmentResponse: {
+            kind: components["schemas"]["InstalmentKind"];
+            /** Format: double */
+            amount: number;
+            /** Format: date */
+            dueDate: string;
+            state: components["schemas"]["InstalmentState"];
+            invoice: null | components["schemas"]["DocumentResponse"];
+        };
+        /** @enum {unknown} */
+        InstalmentState: "NotInvoiced" | "Draft" | "Booked" | "Paid" | "Overdue";
         /** @enum {unknown} */
         LinePricing: "PerGuest" | "Fixed";
         LineRequest: {
@@ -1146,6 +1503,15 @@ export interface components {
             isActive: boolean;
             lines: components["schemas"]["PackageLineResponse"][];
         };
+        PaymentsResponse: {
+            simulated: boolean;
+            terms: components["schemas"]["PaymentTerms"];
+            /** Format: double */
+            total: number;
+            customerNumber: null | string;
+            quote: null | components["schemas"]["DocumentResponse"];
+            instalments: components["schemas"]["InstalmentResponse"][];
+        };
         /** @enum {unknown} */
         PaymentTerms: "Old" | "New";
         PricedLineResponse: {
@@ -1182,12 +1548,47 @@ export interface components {
         };
         /** @enum {unknown} */
         ProductGroup: "Reception" | "Ceremony" | "DinnerAndParty" | "LateNight" | "Bar" | "Breakfast" | "FridayEvent" | "Other";
+        RegisterPaymentRequest: {
+            /** Format: double */
+            amount: number;
+            /** Format: date */
+            paidOn: null | string;
+        };
         /** @enum {unknown} */
         Role: "EventManager" | "Owner" | "Bookkeeper" | "Chef" | "EventProducer";
         /** @enum {unknown} */
         SalesStage: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "Cancelled" | "Lost";
         SetActiveRequest: {
             isActive: boolean;
+        };
+        SimDocumentSummary: {
+            number: string;
+            type: components["schemas"]["DocumentType"];
+            status: components["schemas"]["DocumentStatus"];
+            customerNumber: string;
+            customerName: string;
+            heading: string;
+            /** Format: double */
+            amount: number;
+            /** Format: double */
+            paid: number;
+            /** Format: double */
+            remaining: number;
+            /** Format: date */
+            dueDate: null | string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: int32 */
+            attachmentCount: number;
+        };
+        StringSegment: {
+            buffer?: null | string;
+            /** Format: int32 */
+            offset?: number;
+            /** Format: int32 */
+            length?: number;
+            value?: null | string;
+            hasValue?: boolean;
         };
         SurchargeResponse: {
             /** Format: int32 */

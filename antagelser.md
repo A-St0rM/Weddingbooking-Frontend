@@ -32,3 +32,17 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Priser og prisliste er kun for event manager, ejere og bogholder.** Kok og event producer får bookingens linjer (menuen) men intet prisfelt i svaret — allerede fra denne fase.
 - **Oprettelse og rettelse** af bookinger, kunder og pakker er for event manager og ejere.
 - **Verifikation:** 11 domænetests grønne, bl.a. 80 → 94 gæster i én rettelse, uændret booking efter prisændring på pakken, tillæg ved 55/59 og ikke ved 60. Migrationen `PackagesAndLines` anvendt; advisors uden sikkerhedsfund.
+
+## Fase 3 — Betalingsplan og simuleret regnskab
+
+- **33 %-raten er 33 % af hele prisen**, og reservationsgebyret trækkes fra i restbetalingen (§11.1). Raten rundes til hele kroner; restbetalingen tager resten, så raterne altid summerer til totalen.
+- **Når en rate er faktureret, ligger beløbet fast** — regnskabet ejer det. Ændres gæsteantallet bagefter, lander forskellen på restbetalingen. Falder prisen under det allerede fakturerede, bliver restbetalingen negativ og vises som et beløb, der skal tilbage.
+- **Er prisen under 25.000 kr.**, er gebyret hele prisen. En booking uden pris har en plan på 0 kr.
+- **Reservationsgebyrets forfald er 8 dage efter booking.** Bookes et bryllup under 6 måneder før, forfalder 33 %-raten ved underskrift, eller ved booking indtil der er skrevet under (§11.5).
+- **Nye bookinger får nye betingelser** (§11.3); gamle betingelser vælges pr. booking.
+- **"Dato sikret" kræver kun, at gebyret er betalt**, som i §4. Underskriften er sit eget salgstrin (fase 4); begge dele kræves, rækkefølgen er fri (§11.2).
+- **"Betaling forfalden"** kræver en bogført, ubetalt faktura med forfaldsdato før i dag (dansk tid). En rate, der ikke er faktureret endnu, er ikke forfalden.
+- **Tilbud sendes fra regnskabet**, ligesom i e-conomic, hvis API ikke kan sende tilbud. Det simulerede regnskab har en side *Regnskab*, hvor et tilbud markeres som sendt og en indbetaling registreres. En faktura sendes, når den bogføres.
+- **Nyt tilbud** laver et nyt tilbudsnummer; det nyeste er det gældende.
+- **Integrationstests** (§10, "når der er tid") er skrevet: det rigtige API mod en rigtig Postgres, med tokens signeret af en testnøgle i stedet for Supabase. De springes over uden en testdatabase og kører ikke i pipelinen.
+- **Verifikation:** 31 domænetests (bl.a. raterne summerer til totalen for 1–350 gæster med begge betingelser) og 14 integrationstests grønne mod en midlertidig lokal Postgres — heriblandt hele forløbet til fuld betaling og at bookingtabellerne ingen status- eller beløbskolonner har. Migrationerne `AccountingReferences` og `InitialSimulatedAccounting` er anvendt på Supabase; advisors uden sikkerhedsfund.
