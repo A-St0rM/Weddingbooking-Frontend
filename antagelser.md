@@ -22,3 +22,13 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Samme dato:** afbestilte og tabte bookinger tæller ikke med i advarslen.
 - **Samtidige rettelser** giver 409 med "Ændret af en anden" og en knap til at hente den nyeste udgave (Postgres' `xmin`).
 - **Verifikation:** build og typecheck rene; migrationen `CustomersAndBookings` anvendt gennem connectoren; advisors: ingen sikkerhedsfund, kun "ubrugt indeks" på de nye tabeller. Oprettelse, søgning og advarsel kræver login mod en database og er ikke kørt af mig.
+
+## Fase 2 — Pakker og pris pr. gæst
+
+- **Tillægget under 60 gæster er et fast beløb pr. booking** (ikke pr. gæst), fordi det dækker faste opstartsomkostninger. Grænse og beløb sættes af en ejer eller event manageren under *Pakker*. **Beløbet 7.500 kr. er en pladsholder** — det rigtige tal kendes ikke (§11.4).
+- **Tillægget kopieres ind på bookingen, når den oprettes**, ligesom priserne. En senere ændring af tillægget rører ikke eksisterende bookinger. En booking uden linjer har ingen pris og derfor intet tillæg.
+- **Prislisten 2026 er lagt ind som startdata** med priserne fra kravene: grundpakke 1.495 kr./gæst, natmad 100 kr., spiritus og cocktailbar 155 kr. **Fredagsarrangementets pris (250 kr./gæst) er opdigtet**; minimum 30 gæster håndhæves. 2027-priser laves med *Kopiér til et nyt år*.
+- **Fredagsarrangementet har sit eget antal** (fast antal, minimum 30), fordi det er for de nærmeste — ikke alle bryllupsgæster.
+- **Priser og prisliste er kun for event manager, ejere og bogholder.** Kok og event producer får bookingens linjer (menuen) men intet prisfelt i svaret — allerede fra denne fase.
+- **Oprettelse og rettelse** af bookinger, kunder og pakker er for event manager og ejere.
+- **Verifikation:** 11 domænetests grønne, bl.a. 80 → 94 gæster i én rettelse, uændret booking efter prisændring på pakken, tillæg ved 55/59 og ikke ved 60. Migrationen `PackagesAndLines` anvendt; advisors uden sikkerhedsfund.

@@ -2,8 +2,9 @@ import { Link, useParams } from 'react-router-dom';
 import { BackLink } from '@/components/ui/BackLink';
 import { QueryState } from '@/components/ui/QueryState';
 import type { Booking } from '@/lib/api/types';
-import { formatLongDate } from '@/lib/format';
+import { formatKroner, formatLongDate } from '@/lib/format';
 import { useBooking } from '@/features/bookings/api/bookings';
+import { BookingLinesCard } from '@/features/bookings/components/BookingLinesCard';
 import { BookingDetailsCard } from '@/features/bookings/components/BookingDetailsCard';
 import { ContactCard } from '@/features/bookings/components/ContactCard';
 import { SameDateWarning } from '@/features/bookings/components/SameDateWarning';
@@ -35,6 +36,7 @@ function BookingView({ booking }: { booking: Booking }) {
         </h1>
         <p className="text-ink-muted first-letter:uppercase">
           {formatLongDate(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
+          {booking.price && booking.lines.length > 0 && <> · <span className="tabular">{formatKroner(booking.price.total)}</span></>}
         </p>
       </header>
 
@@ -42,6 +44,7 @@ function BookingView({ booking }: { booking: Booking }) {
 
       {/* Keyed on the version, so a saved change or someone else's resets the form to what is stored. */}
       <BookingDetailsCard key={booking.version} booking={booking} />
+      <BookingLinesCard booking={booking} />
       <StageCard booking={booking} />
       <ContactCard customer={booking.customer} />
     </div>

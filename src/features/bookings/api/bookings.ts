@@ -78,3 +78,28 @@ export function useChangeStage(id: string) {
     onSuccess: store,
   });
 }
+
+/** Adding a package, a line, changing or removing one — each answers with the whole booking and its new price. */
+export function useBookingLines(id: string) {
+  const store = useStoreBooking();
+  const path = { id };
+  return {
+    addPackage: useMutation({
+      mutationFn: (packageId: string) => call(api.POST('/api/bookings/{id}/packages', { params: { path }, body: { packageId } })),
+      onSuccess: store,
+    }),
+    addLine: useMutation({
+      mutationFn: (body: components['schemas']['LineRequest']) => call(api.POST('/api/bookings/{id}/lines', { params: { path }, body })),
+      onSuccess: store,
+    }),
+    updateLine: useMutation({
+      mutationFn: ({ lineId, body }: { lineId: string; body: components['schemas']['LineRequest'] }) =>
+        call(api.PUT('/api/bookings/{id}/lines/{lineId}', { params: { path: { id, lineId } }, body })),
+      onSuccess: store,
+    }),
+    removeLine: useMutation({
+      mutationFn: (lineId: string) => call(api.DELETE('/api/bookings/{id}/lines/{lineId}', { params: { path: { id, lineId } } })),
+      onSuccess: store,
+    }),
+  };
+}

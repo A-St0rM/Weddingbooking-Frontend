@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { cn } from '@/lib/cn';
 import { roleLabels } from '@/lib/format';
-import { navItems } from '@/app/navigation';
+import { navItemsFor } from '@/app/navigation';
 import { useCurrentUser } from '@/features/auth/currentUser';
 
 /**
@@ -10,6 +10,7 @@ import { useCurrentUser } from '@/features/auth/currentUser';
  */
 export function AppShell() {
   const me = useCurrentUser();
+  const navItems = navItemsFor(me.role);
   const tabs = navItems.filter((item) => item.inTabBar);
 
   return (
