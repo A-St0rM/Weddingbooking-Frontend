@@ -2,11 +2,20 @@
 
 Dette er planen for, **hvordan** systemet bygges. **Hvad** der skal bygges — kunden, processen, problemerne og forretningsreglerne — står i [`projekt-prompt.md`](./projekt-prompt.md). Læs den først; denne plan forudsætter den og gentager den ikke.
 
+## De to repoer
+
+| | Mappe | I Azure DevOps (projekt `EK`) |
+|---|---|---|
+| Frontend og dokumentation | `~/Repos/WeddingBooking` | `WeddingBooking-frontend` |
+| Backend | `~/Repos/WeddingBooking-Backend` | `WeddingBooking-backend` |
+
+De ligger side om side, og sessionen startes fra `~/Repos`, så begge kan læses. Hvert repo har sin egen `CLAUDE.md`, som gælder, når du arbejder i det. Dokumentationen — denne plan og `projekt-prompt.md` — ligger kun i frontend-repoet.
+
 ## Sådan arbejder du med planen
 
 1. Læs `projekt-prompt.md` og hele denne plan, før du rører koden.
 2. Stil mig **de åbne spørgsmål** (§11), der gælder den fase, du skal i gang med. Har jeg ikke svaret, så byg efter standardantagelsen og skriv den ned.
-3. Byg **én fase ad gangen**, på sin egen feature-branch i hvert repo, fase for fase i den rækkefølge, der står i §9.
+3. Byg **én fase ad gangen**, fase for fase i den rækkefølge, der står i §9. Hver fase får en feature-branch **med samme navn i begge repoer**, oprettet fra `main`.
 4. En fase er færdig, når **hvert punkt under "Færdig når" er opfyldt og vist** — på det deployede site, ikke kun lokalt. Stop der, og vent på mit "go", før du starter næste fase.
 
 ---
