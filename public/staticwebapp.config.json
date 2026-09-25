@@ -1,17 +1,21 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "*.{css,js,svg,png,jpg,ico,woff,woff2}"]
+    "exclude": [
+      "/api/*",
+      "/assets/*",
+      "*.{css,js,svg,png,jpg,ico,woff,woff2}"
+    ]
   },
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin"
   },
-  "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html",
-      "statusCode": 200
+  "routes": [
+    {
+      "route": "/api/*",
+      "statusCode": 404
     }
-  }
+  ]
 }
