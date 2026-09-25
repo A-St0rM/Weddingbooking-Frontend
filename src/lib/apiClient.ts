@@ -40,5 +40,21 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     throw new ApiError(response.status, await response.text());
   }
 
-  return response.status === 204 ? (undefined as T) : ((await response.json()) as T);
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  // A 200 carrying HTML means something answered that is not the API — a SPA
+  // fallback, a login redirect, a proxy error page. Parsing it as JSON throws
+  // somewhere far from the cause, so say plainly what happened instead.
+  const contentType = response.headers.get('content-type') ?? '';
+  if (!contentType.includes('json')) {
+    throw new ApiError(
+      response.status,
+      `Forventede JSON fra ${path}, men fik ${contentType || 'ingen content-type'}. ` +
+        'Peger frontenden på det rigtige API?',
+    );
+  }
+
+  return (await response.json()) as T;
 }
