@@ -43,23 +43,23 @@ export function PaymentsCard({ booking }: { booking: Booking }) {
             {query.data.customerNumber && ` · Kundenr. ${query.data.customerNumber}`}
           </p>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-control bg-neutral-soft p-3">
+          <div className="mt-3 rounded-control bg-neutral-soft p-3">
             {query.data.quote ? (
-              <>
-                <p className="flex-1 text-sm">
-                  <span className="font-medium">Tilbud nr. {query.data.quote.number}</span> · {formatKroner(query.data.quote.amount)} ·{' '}
-                  {documentStatusLabels[query.data.quote.status]}
-                </p>
-                <PdfButton onClick={() => actions.downloadPdf.mutate(query.data.quote!.number)} />
-              </>
+              <p className="text-sm">
+                <span className="font-medium">Tilbud nr. {query.data.quote.number}</span> ·{' '}
+                <span className="tabular">{formatKroner(query.data.quote.amount)}</span> · {documentStatusLabels[query.data.quote.status]}
+              </p>
             ) : (
-              <p className="flex-1 text-sm text-ink-muted">Intet tilbud i regnskabet endnu.</p>
+              <p className="text-sm text-ink-muted">Intet tilbud i regnskabet endnu.</p>
             )}
-            {manages && (
-              <Button size="sm" variant="secondary" loading={actions.createQuote.isPending} onClick={() => actions.createQuote.mutate()}>
-                {query.data.quote ? 'Nyt tilbud' : 'Opret tilbud'}
-              </Button>
-            )}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {manages && (
+                <Button size="sm" variant="secondary" loading={actions.createQuote.isPending} onClick={() => actions.createQuote.mutate()}>
+                  {query.data.quote ? 'Nyt tilbud' : 'Opret tilbud'}
+                </Button>
+              )}
+              {query.data.quote && <PdfButton onClick={() => actions.downloadPdf.mutate(query.data.quote!.number)} />}
+            </div>
           </div>
 
           <ul className="mt-3 divide-y divide-line">
