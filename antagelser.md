@@ -66,3 +66,13 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Kok og event producer ser ikke betalingsbaserede statusser** ("Dato sikret", "Betaling forfalden"), fordi de ikke må se betalinger. De ser salgstrin og klargøring.
 - **Brugeradministration** er bygget her: event manager og ejere opretter brugere med e-mail og rolle og kan lukke adgangen. Ingen kan ændre sin egen rolle eller lukke sin egen adgang.
 - **Verifikation:** 42 domænetests og 21 integrationstests grønne — bl.a. at intet felt i kokkens svar (booking, liste, klargøring, kunde) indeholder en pris eller et beløb, at alle punkter færdige giver *Klar til afholdelse* uden at nogen sætter det, og at kokken kan rette mad men får 403 på opdækning. Set i browseren som kok. Migrationen `Readiness` anvendt; advisors rene.
+
+## Fase 6 — Kommunikation
+
+- **Mail går til en simuleret udbakke** (§11.8, `mail_sim.outbox`) og forlader ikke systemet. Siden *Udbakke* viser dem præcis, som de ville være sendt. En one.com-SMTP-adapter kan sættes ind bag `IMessageSender`.
+- **Afsenderen er den, der trykker Send**; svar går til vedkommendes e-mail (Reply-To).
+- **Fire standardtekster er lagt ind** — svar på forespørgsel, mødebekræftelse, tilbud og opfølgning — skrevet ud fra mødet. Johan retter dem under *Tekstbidder*.
+- **En pladsholder uden værdi bliver stående i teksten** (fx `{{fremvisning}}`, hvis der ikke er booket en fremvisning) og vises som en advarsel, så den ses før afsendelse i stedet for at blive sendt tom.
+- **Fremvisningens vært** vælges på bookingen; er ingen valgt, bruges den første aktive event producer (Bryan). Mødebekræftelsen sætter værten på CC og hans telefonnummer i teksten. At booke en fremvisning flytter en forespørgsel til *Fremvisning aftalt*.
+- **Noter kan skrives af alle roller** (Bryan noterer et opkald); mails sendes kun af event manager og ejere. Noter redigeres og slettes ikke — de er historikken.
+- **Verifikation:** 43 domænetests og 23 integrationstests grønne — mødebekræftelsen har Bryan på CC og hans nummer i teksten, et udkast sender intet, den redigerede tekst er det, der sendes, og mailen står i historikken med tid og modtagere. Set i browseren. Migrationerne `Communication` og `InitialSimulatedMail` anvendt; advisors rene.

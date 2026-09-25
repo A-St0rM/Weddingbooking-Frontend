@@ -736,6 +736,348 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/bookings/{id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NoteResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WriteNoteRequest"];
+                    "text/json": components["schemas"]["WriteNoteRequest"];
+                    "application/*+json": components["schemas"]["WriteNoteRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NoteResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/messages/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DraftRequest"];
+                    "text/json": components["schemas"]["DraftRequest"];
+                    "application/*+json": components["schemas"]["DraftRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MessageDraftResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/messages/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SendRequest"];
+                    "text/json": components["schemas"]["SendRequest"];
+                    "application/*+json": components["schemas"]["SendRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NoteResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/message-templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MessageTemplateResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MessageTemplateRequest"];
+                    "text/json": components["schemas"]["MessageTemplateRequest"];
+                    "application/*+json": components["schemas"]["MessageTemplateRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MessageTemplateResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/message-templates/placeholders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PlaceholderResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/message-templates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MessageTemplateRequest"];
+                    "text/json": components["schemas"]["MessageTemplateRequest"];
+                    "application/*+json": components["schemas"]["MessageTemplateRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MessageTemplateResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/outbox": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OutboxMessageResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me": {
         parameters: {
             query?: never;
@@ -1405,6 +1747,84 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/bookings/{id}/viewing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ScheduleViewingRequest"];
+                    "text/json": components["schemas"]["ScheduleViewingRequest"];
+                    "application/*+json": components["schemas"]["ScheduleViewingRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/viewing-hosts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ViewingHostResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings/{id}/agreement": {
         parameters: {
             query?: never;
@@ -1876,6 +2296,9 @@ export interface components {
             /** Format: date-time */
             signedAt: null | string;
             /** Format: date-time */
+            viewingAt: null | string;
+            viewingHost: null | components["schemas"]["ViewingHostResponse"];
+            /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
@@ -1990,6 +2413,10 @@ export interface components {
         DocumentStatus: "Draft" | "Sent" | "Booked" | "Paid";
         /** @enum {unknown} */
         DocumentType: "Quote" | "Invoice";
+        DraftRequest: {
+            /** Format: uuid */
+            templateId: string;
+        };
         EntityTagHeaderValue: {
             tag?: components["schemas"]["StringSegment"];
             isWeak?: boolean;
@@ -2040,6 +2467,55 @@ export interface components {
             role: components["schemas"]["Role"];
             phone: null | string;
         };
+        MessageDraftResponse: {
+            /** Format: uuid */
+            templateId: string;
+            to: string[];
+            cc: string[];
+            subject: string;
+            body: string;
+            missing: string[];
+            simulated: boolean;
+        };
+        MessageTemplateRequest: {
+            name: string;
+            subject: string;
+            body: string;
+            ccViewingHost: boolean;
+        };
+        MessageTemplateResponse: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            subject: string;
+            body: string;
+            ccViewingHost: boolean;
+        };
+        NoteResponse: {
+            /** Format: uuid */
+            id: string;
+            type: components["schemas"]["NoteType"];
+            text: string;
+            authorName: string;
+            /** Format: date-time */
+            createdAt: string;
+            recipients: null | string;
+            subject: null | string;
+        };
+        /** @enum {unknown} */
+        NoteType: "Call" | "Email" | "Internal";
+        OutboxMessageResponse: {
+            /** Format: uuid */
+            id: string;
+            fromName: string;
+            replyTo: null | string;
+            to: string;
+            cc: string;
+            subject: string;
+            body: string;
+            /** Format: date-time */
+            sentAt: string;
+        };
         /** @enum {unknown} */
         PackageKind: "Base" | "AddOn";
         PackageLineResponse: {
@@ -2085,6 +2561,10 @@ export interface components {
         };
         /** @enum {unknown} */
         PaymentTerms: "Old" | "New";
+        PlaceholderResponse: {
+            name: string;
+            description: string;
+        };
         PricedLineResponse: {
             /** Format: uuid */
             lineId: string;
@@ -2152,6 +2632,18 @@ export interface components {
         Role: "EventManager" | "Owner" | "Bookkeeper" | "Chef" | "EventProducer";
         /** @enum {unknown} */
         SalesStage: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "Cancelled" | "Lost";
+        ScheduleViewingRequest: {
+            /** Format: date-time */
+            at: null | string;
+            /** Format: uuid */
+            hostId: null | string;
+        };
+        SendRequest: {
+            to: string[];
+            cc: null | string[];
+            subject: string;
+            body: string;
+        };
         SetActiveRequest: {
             isActive: boolean;
         };
@@ -2228,6 +2720,16 @@ export interface components {
             hasSignedIn: boolean;
             /** Format: date-time */
             lastLoginAt: null | string;
+        };
+        ViewingHostResponse: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            phone: null | string;
+        };
+        WriteNoteRequest: {
+            type: components["schemas"]["NoteType"];
+            text: string;
         };
     };
     responses: never;

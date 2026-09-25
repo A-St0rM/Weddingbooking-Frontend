@@ -1,6 +1,9 @@
 import { createBrowserRouter, Link, Navigate } from 'react-router-dom';
 import { AppShell } from '@/app/layout/AppShell';
 import { AccessGate } from '@/features/auth/components/AccessGate';
+import { ComposePage } from '@/features/messages/components/ComposePage';
+import { OutboxPage } from '@/features/messages/components/OutboxPage';
+import { TemplatesPage } from '@/features/messages/components/TemplatesPage';
 import { UsersPage } from '@/features/users/components/UsersPage';
 import { MorePage } from '@/features/auth/components/MorePage';
 import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
@@ -26,11 +29,14 @@ export const router = createBrowserRouter([
       { path: 'bookinger', element: <BookingListPage /> },
       { path: 'bookinger/ny', element: <NewBookingPage /> },
       { path: 'bookinger/:id', element: <BookingPage /> },
+      { path: 'bookinger/:id/mail', element: <ComposePage /> },
       { path: 'kunder', element: <CustomerListPage /> },
       { path: 'kunder/:id', element: <CustomerPage /> },
       { path: 'pakker', element: <PackageListPage /> },
       { path: 'pakker/:id', element: <PackagePage /> },
       { path: 'regnskab', element: <AccountingSimPage /> },
+      { path: 'tekstbidder', element: <TemplatesPage /> },
+      { path: 'udbakke', element: <OutboxPage /> },
       { path: 'brugere', element: <UsersPage /> },
       { path: 'mere', element: <MorePage /> },
       { path: 'profil', element: <Navigate to="/mere" replace /> },

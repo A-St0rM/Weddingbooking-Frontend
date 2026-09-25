@@ -105,3 +105,12 @@ export function useBookingLines(id: string) {
     }),
   };
 }
+
+export function useScheduleViewing(id: string) {
+  const store = useStoreBooking();
+  return useMutation({
+    mutationFn: (body: components['schemas']['ScheduleViewingRequest']) =>
+      call(api.PUT('/api/bookings/{id}/viewing', { params: { path: { id } }, body })),
+    onSuccess: store,
+  });
+}
