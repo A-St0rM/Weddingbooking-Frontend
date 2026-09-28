@@ -105,3 +105,16 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Tastatur:** tabellens kolonneoverskrifter er knapper, og parrets navn i hver række er et link, så alt nås med Tab og Enter. Formularer var allerede rigtige formularer og sendes med Enter.
 - **Backend-repoet har ingen ændringer i denne fase**; `feature/fase9` er oprettet der for at holde navnene ens.
 - **Verifikation:** set i browseren med opdigtede data. Ved 1440 × 900 er bryllup, pris, status og hele betalingsplanen til og med "I alt" synlige uden at rulle (bunden ved 890 px). Tabellen sorterer stigende og faldende med `aria-sort`. Alle 14 sider har ingen vandret rulning på 375 og 1440 px. Typecheck og lint rene.
+
+## Fase 10 — Parret som to personer
+
+- **Klassen og tabellen hedder stadig `ContactPerson` / `contact_persons`.** De rummer nu præcis det, planen kalder en partner: fornavn, efternavn, e-mail, telefon, betaler og rækkefølge. At omdøbe til `Partner` overalt ville kun flytte navne. Ordlisten i planen er rettet.
+- **Adressen ligger på kunden, som betalerens adresse** — der er én adresse pr. par på fakturaen. Den kaldes "Betalerens adresse" i brugerfladen.
+- **Kundens navn gemmes ikke længere.** "Tobias og Cecilie" udledes af de to fornavne i den rækkefølge, de blev skrevet. Rækkefølgen er fast (`position`), så navnet ikke vender, når betaleren skiftes.
+- **Den først nævnte er betaler**, indtil nogen vælger den anden (§11.13). Betaleren kan skiftes, indtil der er bogført en faktura; derefter afviser API'et skiftet.
+- **Regnskabets kunde er betaleren**: fulde navn, e-mail, telefon og adressen. Tilbud og faktura i det simulerede regnskab står derfor i betalerens navn.
+- **Ny booking i hånden** beder om fornavn og efternavn på begge; e-mail og telefon tilføjes på kunden bagefter, så en booking stadig kan oprettes på under et minut. Et eksisterende par genkendes, mens navnene skrives.
+- **Søgning** på "tobias og cec" finder parret ved at matche hvert navn på sin egen person.
+- **Trello-importen** deler kortets navn i to personer; et kort, hvis navn ikke kan deles ("Bryllup 80 pax"), springes over med grunden.
+- **Migrationen er skrevet i hånden:** eksisterende personer deles i for- og efternavn; et par skrevet som ét navn deles på "og", "&" eller "+", og den manglende person tilføjes; den gamle primære kontakt bliver betaler. En kunde, der ikke kan deles, bliver stående og vises øverst på *Kunder* med grunden, hvor den manglende person kan tilføjes.
+- **Verifikation:** 63 domænetests og 30 integrationstests grønne, heriblandt en test, der kører migrationen på gamle data (fire kunder: ét samlet navn, én kontakt, et navn der ikke kan deles, to kontakter) og tjekker resultatet. Oprettelse, genkendelse og skift af betaler er afprøvet i browseren med opdigtede data. Migrationen `CoupleAsTwoPeople` er anvendt på Supabase, som ikke havde nogen kunder endnu; tabellerne er kontrolleret bagefter.

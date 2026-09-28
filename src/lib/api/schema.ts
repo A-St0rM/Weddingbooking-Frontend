@@ -1348,32 +1348,7 @@ export interface paths {
             };
         };
         put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateCustomerRequest"];
-                    "text/json": components["schemas"]["CreateCustomerRequest"];
-                    "application/*+json": components["schemas"]["CreateCustomerRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["CustomerDetailResponse"];
-                    };
-                };
-            };
-        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1444,6 +1419,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/customers/incomplete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["IncompleteCustomerResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/customers/{id}/contacts": {
         parameters: {
             query?: never;
@@ -1464,9 +1474,9 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["ContactRequest"];
-                    "text/json": components["schemas"]["ContactRequest"];
-                    "application/*+json": components["schemas"]["ContactRequest"];
+                    "application/json": components["schemas"]["PartnerRequest"];
+                    "text/json": components["schemas"]["PartnerRequest"];
+                    "application/*+json": components["schemas"]["PartnerRequest"];
                 };
             };
             responses: {
@@ -1507,9 +1517,9 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["ContactRequest"];
-                    "text/json": components["schemas"]["ContactRequest"];
-                    "application/*+json": components["schemas"]["ContactRequest"];
+                    "application/json": components["schemas"]["PartnerRequest"];
+                    "text/json": components["schemas"]["PartnerRequest"];
+                    "application/*+json": components["schemas"]["PartnerRequest"];
                 };
             };
             responses: {
@@ -1525,35 +1535,13 @@ export interface paths {
             };
         };
         post?: never;
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                    contactId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["CustomerDetailResponse"];
-                    };
-                };
-            };
-        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/customers/{id}/contacts/{contactId}/primary": {
+    "/api/customers/{id}/contacts/{contactId}/payer": {
         parameters: {
             query?: never;
             header?: never;
@@ -2569,18 +2557,17 @@ export interface components {
         ClarificationRequest: {
             clarification: null | string;
         };
-        ContactRequest: {
-            name: string;
-            email: null | string;
-            phone: null | string;
-        };
         ContactResponse: {
             /** Format: uuid */
             id: string;
-            name: string;
+            /** Format: int32 */
+            position: number;
+            firstName: string;
+            lastName: null | string;
+            fullName: string;
             email: null | string;
             phone: null | string;
-            isPrimary: boolean;
+            isPayer: boolean;
         };
         CopyPackageRequest: {
             /** Format: int32 */
@@ -2591,15 +2578,12 @@ export interface components {
         CreateBookingRequest: {
             /** Format: uuid */
             customerId: null | string;
-            customerName: null | string;
+            partners: null | components["schemas"]["PartnerRequest"][];
             /** Format: date */
             eventDate: string;
             /** Format: int32 */
             guestCount: number;
             paymentTerms: null | components["schemas"]["PaymentTerms"];
-        };
-        CreateCustomerRequest: {
-            name: string;
         };
         CreateInvoiceRequest: {
             kind: components["schemas"]["InstalmentKind"];
@@ -2628,7 +2612,7 @@ export interface components {
             id: string;
             name: string;
             city: null | string;
-            primaryContact: null | components["schemas"]["ContactResponse"];
+            payer: null | components["schemas"]["ContactResponse"];
             /** Format: int32 */
             bookingCount: number;
             /** Format: date */
@@ -2686,6 +2670,14 @@ export interface components {
             alreadyImported: number;
             /** Format: int32 */
             skipped: number;
+        };
+        IncompleteCustomerResponse: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** Format: int32 */
+            people: number;
+            reason: string;
         };
         /** @enum {unknown} */
         InstalmentKind: "ReservationFee" | "Instalment" | "FinalPayment";
@@ -2803,6 +2795,12 @@ export interface components {
             description: null | string;
             isActive: boolean;
             lines: components["schemas"]["PackageLineResponse"][];
+        };
+        PartnerRequest: {
+            firstName: string;
+            lastName: null | string;
+            email: null | string;
+            phone: null | string;
         };
         PaymentsResponse: {
             simulated: boolean;
@@ -2960,7 +2958,6 @@ export interface components {
             version: number;
         };
         UpdateCustomerRequest: {
-            name: string;
             address: null | string;
             postalCode: null | string;
             city: null | string;

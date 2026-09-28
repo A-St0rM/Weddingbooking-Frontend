@@ -25,7 +25,7 @@ export function useCustomer(id: string) {
 }
 
 export type CustomerDetails = components['schemas']['UpdateCustomerRequest'];
-export type ContactInput = components['schemas']['ContactRequest'];
+export type PartnerInput = components['schemas']['PartnerRequest'];
 
 /** Every change to a customer answers with the whole customer; store it and refresh what shows it. */
 export function useCustomerMutations(id: string) {
@@ -42,24 +42,24 @@ export function useCustomerMutations(id: string) {
       mutationFn: (body: CustomerDetails) => call(api.PUT('/api/customers/{id}', { params: { path }, body })),
       onSuccess,
     }),
-    addContact: useMutation({
-      mutationFn: (body: ContactInput) => call(api.POST('/api/customers/{id}/contacts', { params: { path }, body })),
-      onSuccess,
-    }),
-    updateContact: useMutation({
-      mutationFn: ({ contactId, ...body }: ContactInput & { contactId: string }) =>
+    updatePartner: useMutation({
+      mutationFn: ({ contactId, ...body }: PartnerInput & { contactId: string }) =>
         call(api.PUT('/api/customers/{id}/contacts/{contactId}', { params: { path: { id, contactId } }, body })),
       onSuccess,
     }),
-    makePrimary: useMutation({
-      mutationFn: (contactId: string) =>
-        call(api.POST('/api/customers/{id}/contacts/{contactId}/primary', { params: { path: { id, contactId } } })),
+    addMissingPartner: useMutation({
+      mutationFn: (body: PartnerInput) => call(api.POST('/api/customers/{id}/contacts', { params: { path }, body })),
       onSuccess,
     }),
-    removeContact: useMutation({
+    makePayer: useMutation({
       mutationFn: (contactId: string) =>
-        call(api.DELETE('/api/customers/{id}/contacts/{contactId}', { params: { path: { id, contactId } } })),
+        call(api.POST('/api/customers/{id}/contacts/{contactId}/payer', { params: { path: { id, contactId } } })),
       onSuccess,
     }),
   };
+}
+
+/** Customers left from before the couple was two people — the migration's report. Empty when all is well. */
+export function useIncompleteCustomers(enabled: boolean) {
+  return useQuery({ queryKey: ['customers', 'incomplete'], queryFn: () => call(api.GET('/api/customers/incomplete')), enabled });
 }

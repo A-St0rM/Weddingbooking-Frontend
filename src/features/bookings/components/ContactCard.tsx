@@ -23,8 +23,8 @@ export function ContactCard({ customer }: { customer: Customer }) {
           {customer.contacts.map((contact) => (
             <li key={contact.id}>
               <p className="font-medium">
-                {contact.name}
-                {contact.isPrimary && <span className="ml-2 text-sm font-normal text-ink-muted">Primær</span>}
+                {contact.fullName}
+                {contact.isPayer && <span className="ml-2 text-sm font-normal text-ink-muted">Betaler</span>}
               </p>
               <div className="mt-1 flex flex-wrap gap-2">
                 {contact.phone && (
