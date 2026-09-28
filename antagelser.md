@@ -118,3 +118,15 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Trello-importen** deler kortets navn i to personer; et kort, hvis navn ikke kan deles ("Bryllup 80 pax"), springes over med grunden.
 - **Migrationen er skrevet i hånden:** eksisterende personer deles i for- og efternavn; et par skrevet som ét navn deles på "og", "&" eller "+", og den manglende person tilføjes; den gamle primære kontakt bliver betaler. En kunde, der ikke kan deles, bliver stående og vises øverst på *Kunder* med grunden, hvor den manglende person kan tilføjes.
 - **Verifikation:** 63 domænetests og 30 integrationstests grønne, heriblandt en test, der kører migrationen på gamle data (fire kunder: ét samlet navn, én kontakt, et navn der ikke kan deles, to kontakter) og tjekker resultatet. Oprettelse, genkendelse og skift af betaler er afprøvet i browseren med opdigtede data. Migrationen `CoupleAsTwoPeople` er anvendt på Supabase, som ikke havde nogen kunder endnu; tabellerne er kontrolleret bagefter.
+
+## Fase 11 — Kalender
+
+- **Fremvisningen bliver på bookingen** (`ViewingAt` og vært fra fase 6) i stedet for en separat `ViewingAppointment`: én fremvisning pr. sag rækker til kalenderen. Status for en selvbestilt fremvisning tilføjes i fase 12. Datamodellen i planen er rettet.
+- **En fremvisning varer en time** (§11.10). Ledige tider findes i hele timer fra starten af hvert tidsrum i værtens ugeplan og aldrig i fortiden. Der vises tider op til 120 dage frem.
+- **Hvad optager en værts tid:** hans egne fremvisninger, blokeringer for ham eller for hele godset, og bryllupsdage, der er sikret (underskrevet eller med betalt gebyr). En fremvisning uden valgt vært optager tiden for alle værter, så intet dobbeltbookes. En forespørgsel på en dato optager ikke dagen.
+- **Undtagelser fra ugeplanen er blokeringer** — for én vært (fx fri) eller for hele godset (ferie, julemarked). Ugeplaner med gyldighedsperioder er ikke bygget.
+- **Ledige bryllupsdatoer er lørdage** i maj, juni, august og september, minus datoer med en sikret booking (§11.14). En fredag eller søndag kan stadig oprettes i hånden. Endepunktet er klar til bestillingsformularen i fase 12.
+- **Kalenderen kan ses af alle roller.** Kun event manager og ejere ser ledige tider, blokerer og retter ugeplaner. Kok og event producer ser en bryllupsdag som sikret, når den er underskrevet; betalt gebyr ser de ikke.
+- **Kalender er med i fanelinjen på telefonen**, og *Pakker* er flyttet under *Mere*, fordi der højst er plads til fem faner.
+- **Tidspunkter gemmes i UTC.** Blokeringer og fremvisninger, der sendes med dansk tidszone, omregnes, før de gemmes.
+- **Verifikation:** 67 domænetests og 32 integrationstests grønne — de fem ledige tider overlapper intet i kalenderen, og en ny fremvisning eller blokering fjerner sin tid fra forslagene med det samme. Måneds- og ugevisning set i browseren på 375 og 1440 px med opdigtede data. Migrationen `Calendar` anvendt på Supabase.

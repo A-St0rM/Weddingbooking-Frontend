@@ -7,6 +7,9 @@ import { errorMessage } from '@/lib/api/errorMessage';
 import type { Booking } from '@/lib/api/types';
 import { useScheduleViewing } from '@/features/bookings/api/bookings';
 import { useViewingHosts } from '@/features/messages/api/messages';
+import { useSlots } from '@/features/calendar/api/calendar';
+
+const slotFormat = new Intl.DateTimeFormat('da-DK', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 /** "2027-03-02T13:00:00Z" → "2027-03-02T14:00", the local time a datetime-local field shows. */
 function toLocalInput(iso: string | null | undefined) {
@@ -21,6 +24,7 @@ export function ViewingFields({ booking }: { booking: Booking }) {
   const schedule = useScheduleViewing(booking.id);
   const [at, setAt] = useState(toLocalInput(booking.viewingAt));
   const [hostId, setHostId] = useState(booking.viewingHost?.id ?? '');
+  const slots = useSlots(hostId || undefined, !booking.viewingAt);
   const dirty = at !== toLocalInput(booking.viewingAt) || hostId !== (booking.viewingHost?.id ?? '');
 
   return (
@@ -35,6 +39,18 @@ export function ViewingFields({ booking }: { booking: Booking }) {
           options={[{ value: '', label: 'Event produceren' }, ...(hosts.data ?? []).map((h) => ({ value: h.id, label: h.phone ? `${h.name} · ${h.phone}` : h.name }))]}
         />
       </div>
+      {slots.data && slots.data.length > 0 && (
+        <div>
+          <p className="mb-1.5 text-sm font-medium">Næste ledige tider</p>
+          <div className="flex flex-wrap gap-2">
+            {slots.data.map((s) => (
+              <Button key={s.start + s.hostId} size="sm" variant="secondary" onClick={() => { setAt(toLocalInput(s.start)); setHostId(s.hostId); }}>
+                {slotFormat.format(new Date(s.start))} · {s.hostName}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
       {schedule.isError && <Alert tone="danger">{errorMessage(schedule.error)}</Alert>}
       {dirty && (
         <Button size="sm" loading={schedule.isPending} onClick={() => schedule.mutate({ at: at ? new Date(at).toISOString() : null, hostId: hostId || null })}>

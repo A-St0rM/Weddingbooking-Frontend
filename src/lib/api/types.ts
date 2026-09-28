@@ -42,3 +42,7 @@ export type ViewingHost = Schemas['ViewingHostResponse'];
 export type SummaryResult = Schemas['SummaryResponse'];
 export type ImportReport = Schemas['ImportReport'];
 export type CardReport = Schemas['CardReport'];
+export type CalendarEvent = Schemas['CalendarEventResponse'];
+export type Slot = Schemas['SlotResponse'];
+export type HostWeek = Schemas['HostWeekResponse'];
+export type Window = Schemas['WindowDto'];
