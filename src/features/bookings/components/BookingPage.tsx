@@ -52,16 +52,24 @@ function BookingView({ booking }: { booking: Booking }) {
 
       <SameDateWarning bookings={booking.sameDateBookings} />
 
-      {/* Keyed on the version, so a saved change or someone else's resets the form to what is stored. */}
-      <BookingDetailsCard key={booking.version} booking={booking} />
-      <BookingLinesCard booking={booking} />
-      <ReadinessCard bookingId={booking.id} />
-      {seesPrices && <PaymentsCard booking={booking} />}
-      {seesPrices && <AgreementCard booking={booking} />}
-      {manages && <StageCard booking={booking} />}
-      <ContactCard customer={booking.customer} />
-      <SummaryCard bookingId={booking.id} />
-      <HistoryCard bookingId={booking.id} />
+      {/* Desktop: the wedding and what it contains on the left; where it stands — money, stage, people,
+          history — in a column on the right. Phone: one column, the left side first. */}
+      <div className="space-y-4 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-start lg:gap-6 lg:space-y-0">
+        <div className="space-y-4">
+          {/* Keyed on the version, so a saved change or someone else's resets the form to what is stored. */}
+          <BookingDetailsCard key={booking.version} booking={booking} />
+          <BookingLinesCard booking={booking} />
+          <ReadinessCard bookingId={booking.id} />
+          {seesPrices && <AgreementCard booking={booking} />}
+          <SummaryCard bookingId={booking.id} />
+        </div>
+        <div className="space-y-4">
+          {seesPrices && <PaymentsCard booking={booking} />}
+          {manages && <StageCard booking={booking} />}
+          <ContactCard customer={booking.customer} />
+          <HistoryCard bookingId={booking.id} />
+        </div>
+      </div>
     </div>
   );
 }

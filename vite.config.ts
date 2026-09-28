@@ -14,7 +14,8 @@ export default defineConfig({
     // In development the API is same-origin through this proxy: no CORS and no
     // base URL to configure. Deployed builds set VITE_API_BASE_URL instead.
     proxy: {
-      '/api': { target: 'http://localhost:5055', changeOrigin: true },
+      // API_PROXY points a second dev server at another API, e.g. a local test host.
+      '/api': { target: process.env.API_PROXY ?? 'http://localhost:5055', changeOrigin: true },
     },
   },
 });

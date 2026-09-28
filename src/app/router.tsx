@@ -30,9 +30,9 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'bookinger', element: <BookingListPage /> },
+      { path: 'bookinger', element: <BookingListPage />, handle: { wide: true } },
       { path: 'bookinger/ny', element: <NewBookingPage /> },
-      { path: 'bookinger/:id', element: <BookingPage /> },
+      { path: 'bookinger/:id', element: <BookingPage />, handle: { wide: true } },
       { path: 'bookinger/:id/mail', element: <ComposePage /> },
       { path: 'kunder', element: <CustomerListPage /> },
       { path: 'kunder/:id', element: <CustomerPage /> },
