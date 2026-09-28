@@ -88,7 +88,8 @@ Disse skal systemet kende og håndhæve — ikke bare vise.
 
 ### Kerne: én sag pr. bryllup
 
-- **Én samlet booking pr. bryllup**, oprettet én gang: brudeparret (navne, adresse, telefon, mail), dato, gæsteantal, valgte pakker og tilkøb.
+- **Én samlet booking pr. bryllup**, oprettet én gang: brudeparret, dato, gæsteantal, valgte pakker og tilkøb.
+- **Parret er to personer, ikke ét navn.** Hver har sit eget navn, sin e-mail og sit telefonnummer. De skrives aldrig sammen i ét felt, for når parret siger ja til stedet, skal den ene kunne udpeges som **betaleren** — den, der står på tilbud og faktura. Adressen hører til betaleren.
 - **Ét gæsteantal, der opdaterer alt, der afhænger af det** — pris, tilbud, aftalebekræftelse, køkkenets kuverttal. Det er projektets vigtigste enkeltkrav.
 - **Genkend tilbagevendende kunder.** Et par, der kommer igen, er den samme kunde, ikke en ny.
 - **Statusoverblik pr. booking**, så man kan se, hvor i forløbet et par er: forespørgsel → fremvisning → tilbud sendt → underskrevet → reservationsgebyr betalt → 33 %-rate → fuld betaling → afholdt → efterfaktureret.
@@ -96,6 +97,25 @@ Disse skal systemet kende og håndhæve — ikke bare vise.
 - **Notater og historik pr. booking** — hvem talte med parret, hvornår, om hvad.
 - **Rollestyret adgang** til medarbejderne. Kokken skal se menu og allergier; bogholderen skal se betaling; Johan og ejerne skal se alt.
 - **Mobilvenligt fra starten.** Ikke en tilpasning bagefter.
+
+### Bestilling udefra
+
+I dag skriver eller ringer parret, og Johan taster alt ind. Bookingen skal i stedet **komme fra parret selv** — Johan skal stadig kunne oprette en sag i hånden, når nogen ringer.
+
+- **To slags bestillinger**, som hjemmesiden linker til:
+  - **Bestil en fremvisning.** Parret vælger en ledig tid og kommer ud og ser godset.
+  - **Book brylluppet.** For par, der ved, de vil holde det på Engestofte, uanset om de har set stedet. Parret vælger en ledig dato.
+- **Begge personer udfylder navn, e-mail og telefon** hver for sig, plus ønsket dato og forventet gæsteantal.
+- **En bestilling er en ny sag, som Johan tager stilling til.** Den bekræftes eller afvises af et menneske; tiden eller datoen holdes imens, så ingen andre kan tage den.
+- **Fra fremvisning til booking.** Synes parret om stedet, åbner Johan fremvisningen og bekræfter den som booking. Sagen, de to personer og historikken følger med — der oprettes ikke en ny kunde. Derfra går bookingen gennem det almindelige forløb: pakker, tilbud, aftale, reservationsgebyr.
+- **Parret ser kun ledig og optaget** — aldrig hvem der har booket en dato.
+- **Intet svar sendes automatisk.** Parret får en kvittering på skærmen; bekræftelsen sender Johan selv, efter han har set teksten.
+
+### Kalender
+
+- **Én kalender over godset**, som Johan kan se fra telefonen: bryllupper, fremvisninger og blokeringer (ferie, andre arrangementer).
+- **Systemet finder tiden.** Ud fra hvornår værten (normalt Bryan) kan vise rundt, og hvad der allerede er optaget, foreslår systemet de næste ledige fremvisningstider — både til Johan og til parret i formularen.
+- **Ledige bryllupsdatoer** følger sæsonen — weekender i maj, juni, august og september; juli er lukket — minus de datoer, der allerede er sikret.
 
 ### Regnskab
 
@@ -121,7 +141,10 @@ Det, systemet skal kunne gennem grænsefladen:
 ### Trello
 
 - Der er allerede **bookinger frem til 2027 i Trello**, og de må ikke gå tabt eller skulle tastes ind igen.
-- Johan vil helst blive i Trello, *"hvis ikke det er meget upraktisk"*, men er åben for et andet system, der spiller bedre sammen med resten. **Afklar med mig**, om Trello skal blive ved siden af, synkroniseres, eller udfases efter en migrering.
+- Johan vil helst blive i Trello, *"hvis ikke det er meget upraktisk"*. **Besluttet: Trello bliver og synkroniseres.** Efter engangsimporten vises boardet inde i systemet, så ingen skal skifte til Trello:
+  - **Boardet som kanban i systemet** — lister, kort, labels og tjeklister, som man ser dem i Trello. Hentet gennem Trellos API.
+  - **Opgaver oprettes i systemet og lander i Trello** — og omvendt. Et kort flyttet, et punkt afkrydset eller en opgave oprettet det ene sted står også det andet sted.
+  - **Altid i sync.** Trello giver besked om ændringer, og en periodisk afstemning fanger dem, der går tabt.
 
 ### Kommunikation
 
@@ -168,7 +191,7 @@ Det blev også drøftet på mødet, men hører ikke til dette projekt:
 - **Overnatning og sommerhusudlejning** — også når brudepar booker husene til deres gæster.
 - **Julemarkedet** og administrationen af de ca. 110 stadeholdere.
 - **Konferencer og erhvervsarrangementer.**
-- **Hjemmesiden** og dens oversættelser.
+- **Hjemmesiden** og dens oversættelser. Bestillingsformularerne hører til bookingsystemet; hjemmesiden linker bare til dem.
 - **Køreplanen** Bryan laver med toastmasteren ugen før brylluppet.
 - Jagt, pop-up-restauranten, lager- og indkøbsstyring.
 - **Integration mod det rigtige e-conomic eller Dinero.** Grænsefladen skal være klar til det, men den rigtige forbindelse bygges ikke i denne omgang.
@@ -182,7 +205,7 @@ Disse er ikke afklaret på mødet. Spørg mig, før du bygger noget, der afhæng
 1. **Hvordan hænger reservationsgebyret og 33 %-raten sammen?** Johan siger, at de 25.000 kr. modregnes *"i den endelige faktura"*. Betyder det, at 33 %-raten beregnes af den fulde pris, og at gebyret først trækkes fra i restbetalingen? Eller trækkes det fra i 33 %-raten?
 2. **Hvilken rækkefølge gælder:** skal parret skrive under før eller efter, de betaler reservationsgebyret — eller er begge to krav, uanset rækkefølge, før datoen er sikret?
 3. **Hvilke eksisterende bookinger er på gamle, og hvilke på nye betingelser?**
-4. **Trello:** blive ved siden af, synkroniseres, eller migreres og udfases?
+4. ~~**Trello:** blive ved siden af, synkroniseres, eller migreres og udfases?~~ **Besvaret:** Trello synkroniseres, og boardet vises i systemet (se *Trello* ovenfor).
 5. **Hvem sender tilbuddet:** regnskabssystemet som i dag, eller bookingsystemet?
 6. **Underskrift:** fortsat PDF retur på mail, eller et digitalt underskriftsværktøj?
 
