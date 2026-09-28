@@ -203,8 +203,9 @@ Bookingerne frem til 2027 ligger i Trello. Første skridt er en **engangsimport*
 
 Derefter **synkroniseres Trello** (§11.6 er besvaret): boardet vises som kanban inde i systemet, og opgaver kan oprettes, flyttes og afkrydses begge steder (fase 14–15).
 
-- **Læs og skriv gennem Trellos REST API med nøgle og token**, som ligger i API'et — aldrig i browseren. Browseren taler med vores API, API'et med Trello.
-- **Boardet forbliver privat.** Trellos åbne `.json`-adresse virker kun for offentlige boards, og et offentligt board lægger parrenes navne, telefonnumre og allergier — helbredsoplysninger — frit på nettet.
+- **Boardet er offentligt** (§11.16, besluttet). Det læses derfor **uden nøgle** gennem Trellos åbne adresse, `https://trello.com/b/{board-id}.json`. Alle med linket kan læse kortene.
+- **At skrive kræver stadig nøgle og token** — oprette, flytte og afkrydse kort og registrere webhooks (fase 15). Trello tillader ingen skrivning uden, heller ikke på et offentligt board. Nøglen og tokenet ligger i API'et.
+- **Browseren taler med vores API, API'et med Trello** — også når der læses. API'et samler boardet ét sted, så telefoner og computere ikke hver især spørger Trello, og en adapter bag `ITrelloGateway` kan skifte til læsning med nøgle, hvis boardet senere gøres privat.
 - **Trello giver besked med webhooks** til et anonymt endepunkt, der tjekker Trellos signatur. Webhooks kan tabes, så en **periodisk afstemning** henter boardet og retter forskelle.
 - **Hvem ejer hvad:** bookingens data (dato, gæsteantal, priser) ejes af systemet og skrives til kortet; kortets egne opgaver og tjeklister kan rettes begge steder, og den seneste ændring vinder (§11.15).
 
@@ -498,7 +499,7 @@ En sag, der starter som fremvisning, bliver en booking med **Bekræft som bookin
 **Færdig når:**
 - boardet vises fra en telefon med samme lister, kort, labels og tjeklister som i Trello
 - en ændring lavet i Trello ses i systemet inden for et minut
-- Trello-nøglen findes kun i API'et; browseren taler aldrig direkte med Trello
+- boardet læses uden Trello-nøgle, gennem vores API — browseren taler aldrig direkte med Trello
 
 ### Fase 15 — Opgaver og synkronisering
 
@@ -541,4 +542,4 @@ Stil det spørgsmål, der gælder din fase, før du bygger den. Svarer jeg ikke,
 | 13 | Hvem er betaleren, hvis parret ikke vælger? | Den først nævnte; kan skiftes indtil første faktura er bogført | 10, 13 |
 | 14 | Skal bestillingsformularen vise ledige bryllupsdatoer, eller kun tage imod et ønske? | Den viser ledige weekenddage i sæsonen | 11, 12 |
 | 15 | Hvem vinder, når Trello og systemet er uenige? | Bookingens data ejes af systemet; for opgaver og tjeklister vinder den seneste ændring | 15 |
-| 16 | Må Trello-boardet gøres offentligt, så det kan læses uden nøgle? | Nej — privat board, læst med nøgle og token, fordi kortene rummer navne og allergier | 14 |
+| 16 | Må Trello-boardet gøres offentligt, så det kan læses uden nøgle? | **Besvaret:** ja, boardet er offentligt og læses uden nøgle. At skrive (fase 15) kræver stadig nøgle og token. | 14, 15 |
