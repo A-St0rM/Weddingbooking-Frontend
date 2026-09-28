@@ -17,6 +17,7 @@ import { ContactCard } from '@/features/bookings/components/ContactCard';
 import { SameDateWarning } from '@/features/bookings/components/SameDateWarning';
 import { StatusBadge } from '@/features/bookings/components/StatusBadge';
 import { StageCard } from '@/features/bookings/components/StageCard';
+import { RequestCard } from '@/features/bookings/components/RequestCard';
 
 export function BookingPage() {
   const { id = '' } = useParams();
@@ -50,6 +51,7 @@ function BookingView({ booking }: { booking: Booking }) {
         </p>
       </header>
 
+      {manages && booking.stage === 'Requested' && <RequestCard booking={booking} />}
       <SameDateWarning bookings={booking.sameDateBookings} />
 
       {/* Desktop: the wedding and what it contains on the left; where it stands — money, stage, people,

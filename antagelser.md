@@ -130,3 +130,17 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Kalender er med i fanelinjen på telefonen**, og *Pakker* er flyttet under *Mere*, fordi der højst er plads til fem faner.
 - **Tidspunkter gemmes i UTC.** Blokeringer og fremvisninger, der sendes med dansk tidszone, omregnes, før de gemmes.
 - **Verifikation:** 67 domænetests og 32 integrationstests grønne — de fem ledige tider overlapper intet i kalenderen, og en ny fremvisning eller blokering fjerner sin tid fra forslagene med det samme. Måneds- og ugevisning set i browseren på 375 og 1440 px med opdigtede data. Migrationen `Calendar` anvendt på Supabase.
+
+## Fase 12 — Bestilling udefra
+
+- **Formularerne ligger på `/bestil`** (vælg), **`/bestil/fremvisning`** og **`/bestil/bryllup`** og kræver ikke login. Hjemmesiden linker dertil.
+- **Begge personer skal give fornavn, efternavn, e-mail og telefon**, og samtykke skal krydses af. En booking oprettet i hånden kræver stadig kun navnene.
+- **En fremvisningsbestilling holder sin tid**, indtil Johan bekræfter eller afviser (§11.11). Parret vælger kun et tidspunkt; systemet giver den første ledige vært ved den tid. Værtens navn vises ikke i formularen.
+- **Fremvisningsbestillingen beder også om en ønsket bryllupsdato**, fordi hver sag har en dato. Den holder ikke datoen — det gør kun en bookingbestilling.
+- **En bookingbestilling holder sin dato i 14 dage** (§11.12). Derefter frigives den af sig selv, også selv om ingen har taget stilling.
+- **To par kan ikke få samme tid.** Tider og datoer tjekkes igen inde i en databaselås, lige før bestillingen gemmes; den, der kommer sidst, får "Tiden er lige blevet taget". Låsen er fælles for alle offentlige bestillinger — der kommer kun en håndfuld om dagen.
+- **Bestillingen bliver en ny sag med salgstrinnet *Ny bestilling*** og oprindelsen *Hjemmeside*. Johan tager imod (fremvisningen bliver *Fremvisning aftalt*, en datobestilling bliver en forespørgsel) eller afviser (sagen bliver *Tabt*, tiden frigives, og grunden står i historikken). Nye bestillinger vises øverst på *Oversigt*.
+- **Ingen mail sendes automatisk.** Parret får en kvittering med en reference på skærmen; Johan sender bekræftelsen med tekstbidderne.
+- **Et par, der kommer igen, bliver en ny kunde**, når de bestiller via hjemmesiden. Johan kan se det på navnene; der er ikke bygget automatisk sammenlægning.
+- **Spam:** 30 kald i minuttet pr. adresse og et skjult honeypot-felt. En bot, der udfylder feltet, får en kvittering, men intet gemmes.
+- **Verifikation:** 67 domænetests og 36 integrationstests grønne — bestilling uden login, sagen med begge personer, tiden optaget i kalenderen og væk fra formularen, to samtidige bestillinger af samme tid giver én 201 og én 409 (kørt fem gange), en datobestilling holder datoen til den afvises, og udbakken er uændret. Hele flowet er afprøvet i browseren på 375 px med opdigtede data. Migrationen `BookingOrigin` anvendt på Supabase.

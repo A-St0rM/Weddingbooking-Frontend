@@ -40,7 +40,7 @@ type SortKey = 'eventDate' | 'customerName' | 'guestCount' | 'status';
 
 // Most pressing first, the same order the API uses to pick the one word.
 const statusOrder: DisplayStatus[] = [
-  'PaymentOverdue', 'AwaitingPostEventInvoice', 'ReadyForEvent', 'DateSecured', 'Signed', 'QuoteSent', 'Viewing', 'Inquiry', 'Held', 'Cancelled', 'Lost',
+  'Requested', 'PaymentOverdue', 'AwaitingPostEventInvoice', 'ReadyForEvent', 'DateSecured', 'Signed', 'QuoteSent', 'Viewing', 'Inquiry', 'Held', 'Cancelled', 'Lost',
 ];
 
 const compare: Record<SortKey, (a: BookingSummary, b: BookingSummary) => number> = {

@@ -116,3 +116,21 @@ export function useScheduleViewing(id: string) {
     onSuccess: store,
   });
 }
+
+export function useRequestDecision(id: string) {
+  const store = useStoreBooking();
+  const queryClient = useQueryClient();
+  return {
+    accept: useMutation({
+      mutationFn: () => call(api.POST('/api/bookings/{id}/request/accept', { params: { path: { id } } })),
+      onSuccess: store,
+    }),
+    decline: useMutation({
+      mutationFn: (reason: string) => call(api.POST('/api/bookings/{id}/request/decline', { params: { path: { id } }, body: { reason: reason || null } })),
+      onSuccess: (booking) => {
+        store(booking);
+        void queryClient.invalidateQueries({ queryKey: ['notes', id] });
+      },
+    }),
+  };
+}
