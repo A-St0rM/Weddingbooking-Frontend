@@ -96,7 +96,7 @@ Disse skal systemet kende og håndhæve — ikke bare vise.
 - **Klargøring pr. booking** — det, Trello-kortets grønne felter gør i dag: kontakt, opdækning og opstilling, pynt og blomster, mad og allergier. **"Klar til afholdelse" skal være noget, systemet kan se, når alt er færdigt**, ikke noget nogen sætter i hånden.
 - **Notater og historik pr. booking** — hvem talte med parret, hvornår, om hvad.
 - **Rollestyret adgang** til medarbejderne. Kokken skal se menu og allergier; bogholderen skal se betaling; Johan og ejerne skal se alt.
-- **Mobilvenligt fra starten.** Ikke en tilpasning bagefter.
+- **Computeren først, telefonen med.** Det meste arbejde sker ved skrivebordet, så systemet designes til en almindelig computerskærm og skal udnytte bredden. Det skal stadig kunne bruges fuldt ud fra en telefon, fordi personalet bruger den under opstilling og afvikling (se *Problemerne*, punkt 6).
 
 ### Bestilling udefra
 

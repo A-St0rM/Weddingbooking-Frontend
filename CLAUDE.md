@@ -9,7 +9,7 @@ React-frontenden til bryllupsbookingen på Engestofte Gods. API'et ligger i søs
 - **Vis totaler, betalingsplan og status præcis som API'et leverer dem.** Frontenden har ingen prisregler af sin egen — to implementeringer af samme regel giver to svar.
 - **Tal med API'et gennem `lib/apiClient`.** Supabase bruges til login og intet andet.
 - **Brug typerne genereret fra API'ets OpenAPI-beskrivelse**, så et omdøbt felt fejler ved build og ikke i browseren.
-- **Design til 375 px først.** Personalet bruger systemet fra telefonen under opstilling og afvikling.
+- **Design til computeren først (1440 px), og tilpas ned til 375 px.** Det meste arbejde sker ved skrivebordet; på telefonen skal alt stadig kunne gøres, fordi personalet bruger den under opstilling og afvikling.
 - **Brugerfladen er på dansk, koden på engelsk.** Oversættelsen af domænebegreberne står i `readyprompt.md` §7.
 - **"Du har ikke adgang" vises kun ved 403.** Alle andre fejl siger, at serveren ikke svarer, og viser statuskoden.
 
@@ -21,7 +21,7 @@ Kald skill'en, før du skriver koden til det, den dækker:
 - **`apple-design`** — når en interaktion skal føles fysisk: sheets, swipe, træk, overgange mellem sider, dybde.
 - **`animate`** — når noget skal bevæge sig. Den afgør først, om det overhovedet skal animeres, og derefter hvordan.
 
-Systemet er et arbejdsværktøj for fem medarbejdere, der bruger det fra telefonen — ofte stående, med én hånd, i dagslys og under tidspres. Design efter det: roligt, hurtigt, store trykflader og høj kontrast. Det er et værktøj, ikke en markedsføringsside. Bevægelse respekterer `prefers-reduced-motion`.
+Systemet er et arbejdsværktøj for fem medarbejdere — mest ved skrivebordet, men også fra telefonen, stående, med én hånd og under tidspres. Design efter det: på computeren tætte tabeller, sidekolonner og tastatur; på telefonen én kolonne og store trykflader. Roligt, hurtigt og høj kontrast begge steder. Det er et værktøj, ikke en markedsføringsside. Bevægelse respekterer `prefers-reduced-motion`.
 
 ## Deployment
 
