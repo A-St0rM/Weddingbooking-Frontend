@@ -535,6 +535,158 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/public/viewing-times": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["FreeTimeResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/wedding-dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/requests/viewing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ViewingRequest"];
+                    "text/json": components["schemas"]["ViewingRequest"];
+                    "application/*+json": components["schemas"]["ViewingRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/public/requests/wedding": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WeddingRequest"];
+                    "text/json": components["schemas"]["WeddingRequest"];
+                    "application/*+json": components["schemas"]["WeddingRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings/{id}/payments": {
         parameters: {
             query?: never;
@@ -2282,6 +2434,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/bookings/{id}/request/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/request/decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DeclineRequest"];
+                    "text/json": components["schemas"]["DeclineRequest"];
+                    "application/*+json": components["schemas"]["DeclineRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings/{id}/agreement": {
         parameters: {
             query?: never;
@@ -2755,6 +2987,8 @@ export interface components {
             minimumQuantity: null | number;
             sourcePackageName: null | string;
         };
+        /** @enum {unknown} */
+        BookingOrigin: "Staff" | "Website" | "Trello";
         BookingResponse: {
             /** Format: uuid */
             id: string;
@@ -2764,6 +2998,7 @@ export interface components {
             guestCount: number;
             paymentTerms: components["schemas"]["PaymentTerms"];
             stage: components["schemas"]["SalesStage"];
+            origin: components["schemas"]["BookingOrigin"];
             status: components["schemas"]["DisplayStatus"];
             /** Format: date-time */
             signedAt: null | string;
@@ -2910,8 +3145,11 @@ export interface components {
         };
         /** @enum {unknown} */
         DayOfWeek: "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
+        DeclineRequest: {
+            reason: null | string;
+        };
         /** @enum {unknown} */
-        DisplayStatus: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "DateSecured" | "ReadyForEvent" | "Held" | "AwaitingPostEventInvoice" | "PaymentOverdue" | "Cancelled" | "Lost";
+        DisplayStatus: "Requested" | "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "DateSecured" | "ReadyForEvent" | "Held" | "AwaitingPostEventInvoice" | "PaymentOverdue" | "Cancelled" | "Lost";
         DocumentResponse: {
             number: string;
             type: components["schemas"]["DocumentType"];
@@ -2946,6 +3184,12 @@ export interface components {
             lastModified?: null | string;
             entityTag?: null | components["schemas"]["EntityTagHeaderValue"];
             enableRangeProcessing?: boolean;
+        };
+        FreeTimeResponse: {
+            /** Format: date-time */
+            start: string;
+            /** Format: date-time */
+            end: string;
         };
         HostWeekResponse: {
             /** Format: uuid */
@@ -3149,6 +3393,12 @@ export interface components {
         };
         /** @enum {unknown} */
         ProductGroup: "Reception" | "Ceremony" | "DinnerAndParty" | "LateNight" | "Bar" | "Breakfast" | "FridayEvent" | "Other";
+        PublicPerson: {
+            firstName: string;
+            lastName: string;
+            email: string;
+            phone: string;
+        };
         /** @enum {unknown} */
         ReadinessCategory: "Contact" | "TableSetting" | "Decoration" | "Food" | "PostEventInvoicing";
         ReadinessItemResponse: {
@@ -3172,6 +3422,13 @@ export interface components {
         };
         /** @enum {unknown} */
         ReadinessStatus: "NotStarted" | "InProgress" | "Done";
+        ReceiptResponse: {
+            reference: string;
+            /** Format: date */
+            eventDate: string;
+            /** Format: date-time */
+            viewingAt: null | string;
+        };
         RegisterPaymentRequest: {
             /** Format: double */
             amount: number;
@@ -3181,7 +3438,7 @@ export interface components {
         /** @enum {unknown} */
         Role: "EventManager" | "Owner" | "Bookkeeper" | "Chef" | "EventProducer";
         /** @enum {unknown} */
-        SalesStage: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "Cancelled" | "Lost";
+        SalesStage: "Requested" | "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "Cancelled" | "Lost";
         ScheduleViewingRequest: {
             /** Format: date-time */
             at: null | string;
@@ -3297,6 +3554,26 @@ export interface components {
             id: string;
             name: string;
             phone: null | string;
+        };
+        ViewingRequest: {
+            people: components["schemas"]["PublicPerson"][];
+            /** Format: date-time */
+            start: string;
+            /** Format: date */
+            wishedDate: string;
+            /** Format: int32 */
+            guestCount: number;
+            consent: boolean;
+            website: null | string;
+        };
+        WeddingRequest: {
+            people: components["schemas"]["PublicPerson"][];
+            /** Format: date */
+            eventDate: string;
+            /** Format: int32 */
+            guestCount: number;
+            consent: boolean;
+            website: null | string;
         };
         WindowDto: {
             day: components["schemas"]["DayOfWeek"];

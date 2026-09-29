@@ -13,6 +13,7 @@ import type {
 } from '@/lib/api/types';
 
 export const stageLabels: Record<SalesStage, string> = {
+  Requested: 'Ny bestilling',
   Inquiry: 'Forespørgsel',
   Viewing: 'Fremvisning aftalt',
   QuoteSent: 'Tilbud sendt',
@@ -22,6 +23,7 @@ export const stageLabels: Record<SalesStage, string> = {
 };
 
 export const stageTones: Record<SalesStage, Tone> = {
+  Requested: 'warn',
   Inquiry: 'neutral',
   Viewing: 'info',
   QuoteSent: 'info',
@@ -60,6 +62,7 @@ export const packageKindLabels: Record<PackageKind, string> = {
 };
 
 export const statusLabels: Record<DisplayStatus, string> = {
+  Requested: 'Ny bestilling',
   Inquiry: 'Forespørgsel',
   Viewing: 'Fremvisning aftalt',
   QuoteSent: 'Tilbud sendt',
@@ -74,6 +77,7 @@ export const statusLabels: Record<DisplayStatus, string> = {
 };
 
 export const statusTones: Record<DisplayStatus, Tone> = {
+  Requested: 'warn',
   Inquiry: 'neutral',
   Viewing: 'info',
   QuoteSent: 'info',

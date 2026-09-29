@@ -7,6 +7,7 @@ import { TemplatesPage } from '@/features/messages/components/TemplatesPage';
 import { StandaloneSummaryPage } from '@/features/summaries/components/StandaloneSummaryPage';
 import { TrelloImportPage } from '@/features/trello/components/TrelloImportPage';
 import { CalendarPage } from '@/features/calendar/components/CalendarPage';
+import { RequestStartPage, ViewingRequestPage, WeddingRequestPage } from '@/features/public/components/RequestForms';
 import { UsersPage } from '@/features/users/components/UsersPage';
 import { MorePage } from '@/features/auth/components/MorePage';
 import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
@@ -23,6 +24,10 @@ import { EmptyState } from '@/components/ui/EmptyState';
 export const router = createBrowserRouter([
   // Open without login: the standalone AI summary.
   { path: '/resume', element: <StandaloneSummaryPage /> },
+  // Open without login: the forms the website links to.
+  { path: '/bestil', element: <RequestStartPage /> },
+  { path: '/bestil/fremvisning', element: <ViewingRequestPage /> },
+  { path: '/bestil/bryllup', element: <WeddingRequestPage /> },
   {
     element: (
       <AccessGate>

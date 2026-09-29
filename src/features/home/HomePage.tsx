@@ -13,6 +13,17 @@ export function HomePage() {
   return (
     <>
       <PageHeader title={`Velkommen, ${me.name}`} description={roleLabels[me.role]} actions={<NewBookingLink />} />
+      <QueryState query={upcoming}>
+        {(bookings) => {
+          const requests = bookings.filter((b) => b.status === 'Requested');
+          return requests.length === 0 ? null : (
+            <section className="mb-6">
+              <h2 className="mb-2 text-lg font-semibold">Nye bestillinger fra hjemmesiden</h2>
+              <BookingList bookings={requests} />
+            </section>
+          );
+        }}
+      </QueryState>
       <section>
         <h2 className="mb-2 text-lg font-semibold">Kommende bryllupper</h2>
         <QueryState query={upcoming}>
