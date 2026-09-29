@@ -9,7 +9,7 @@ import { useDebounced } from '@/lib/hooks/useDebounced';
 import type { BookingSummary } from '@/lib/api/types';
 import { useBookings } from '@/features/bookings/api/bookings';
 import { usePermissions } from '@/features/auth/permissions';
-import { BookingList } from '@/features/bookings/components/BookingRow';
+import { BookingList, BookingTable } from '@/features/bookings/components/BookingRow';
 
 const monthYear = new Intl.DateTimeFormat('da-DK', { month: 'long', year: 'numeric' });
 
@@ -45,8 +45,10 @@ export function BookingListPage() {
   return (
     <>
       <PageHeader title="Bookinger" actions={<NewBookingLink />} />
-      <div className="space-y-3">
-        <SearchInput label="Søg på parrets navn" value={search} onChange={setSearch} />
+      <div className="space-y-3 lg:flex lg:items-center lg:gap-6 lg:space-y-0">
+        <div className="lg:w-96">
+          <SearchInput label="Søg på parrets navn" value={search} onChange={setSearch} />
+        </div>
         <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm">
           <input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} className="size-5 accent-primary" />
           Vis også afholdte, afbestilte og tabte
@@ -59,14 +61,19 @@ export function BookingListPage() {
             bookings.length === 0 ? (
               <EmptyState title={term ? `Ingen bookinger matcher "${term}"` : 'Ingen kommende bookinger'} action={<NewBookingLink />} />
             ) : (
-              <div className="space-y-6">
-                {byMonth(bookings).map((group) => (
-                  <section key={group.label}>
-                    <h2 className="mb-2 text-sm font-semibold text-ink-muted first-letter:uppercase">{group.label}</h2>
-                    <BookingList bookings={group.items} />
-                  </section>
-                ))}
-              </div>
+              <>
+                <div className="hidden lg:block">
+                  <BookingTable bookings={bookings} />
+                </div>
+                <div className="space-y-6 lg:hidden">
+                  {byMonth(bookings).map((group) => (
+                    <section key={group.label}>
+                      <h2 className="mb-2 text-sm font-semibold text-ink-muted first-letter:uppercase">{group.label}</h2>
+                      <BookingList bookings={group.items} />
+                    </section>
+                  ))}
+                </div>
+              </>
             )
           }
         </QueryState>

@@ -43,7 +43,7 @@ export function PaymentsCard({ booking }: { booking: Booking }) {
             {query.data.customerNumber && ` · Kundenr. ${query.data.customerNumber}`}
           </p>
 
-          <div className="mt-3 rounded-control bg-neutral-soft p-3">
+          <div className="mt-3 rounded-control bg-neutral-soft p-3 lg:flex lg:items-center lg:justify-between lg:gap-3">
             {query.data.quote ? (
               <p className="text-sm">
                 <span className="font-medium">Tilbud nr. {query.data.quote.number}</span> ·{' '}
@@ -52,7 +52,7 @@ export function PaymentsCard({ booking }: { booking: Booking }) {
             ) : (
               <p className="text-sm text-ink-muted">Intet tilbud i regnskabet endnu.</p>
             )}
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-wrap gap-2 lg:mt-0 lg:shrink-0">
               {manages && (
                 <Button size="sm" variant="secondary" loading={actions.createQuote.isPending} onClick={() => actions.createQuote.mutate()}>
                   {query.data.quote ? 'Nyt tilbud' : 'Opret tilbud'}
@@ -101,7 +101,7 @@ function InstalmentRow({ instalment, canInvoice, pending, onInvoice, onBook, onP
 }) {
   const invoice = instalment.invoice;
   return (
-    <li className="py-3">
+    <li className="py-3 lg:py-2">
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <p className="font-medium">{instalmentLabels[instalment.kind]}</p>
@@ -119,7 +119,7 @@ function InstalmentRow({ instalment, canInvoice, pending, onInvoice, onBook, onP
         </div>
       </div>
       {instalment.amount < 0 && <p className="mt-1 text-sm text-warn">Negativt beløb: prisen er faldet under det, der allerede er faktureret.</p>}
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap gap-2 lg:mt-1">
         {canInvoice && !invoice && instalment.amount > 0 && (
           <Button size="sm" variant="secondary" loading={pending} onClick={onInvoice}>
             Fakturér

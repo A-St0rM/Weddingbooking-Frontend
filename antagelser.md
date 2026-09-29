@@ -96,3 +96,12 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Trellos labels (fx "faktura betalt") og beskrivelsen gemmes som en note** på bookingen. Betalingsstatus tages ikke fra labels, men fra regnskabet.
 - **Importen kan køres igen**: et kort, der allerede er importeret, genkendes på sit Trello-id og springes over.
 - **Verifikation:** 52 domænetests (fortolkningen af navne, datoer, felter og tjeklister) og 27 integrationstests grønne — med opdigtede eksporter af *Bryllup 26*, *27* og *28* står alle 7 kort enten som importeret eller i tørløbsrapporten med en grund, og en ny kørsel importerer intet. Migrationen `TrelloOrigin` anvendt; advisors rene. **Importen er ikke kørt mod de rigtige Trello-bord**, som jeg ikke har adgang til.
+
+## Fase 9 — Computer og telefon
+
+- **Kun sider, der har brug for bredden, bliver brede** (bookinglisten og bookingsiden, op til 1280 px indhold). Formularer og de øvrige sider bliver ved 896 px, fordi et felt over hele skærmen er sværere at læse. En side gøres bred med `handle: { wide: true }` på sin route.
+- **Bookingsiden på computer:** bryllup, indhold, klargøring, aftale og resumé til venstre; betaling, salgstrin, kontakt og historik til højre. Sidekolonnen er ikke låst fast, fordi betaling og historik tilsammen er højere end skærmen; den ruller med siden.
+- **Kun bookinglisten er en tabel** — det er den, kriterierne kræver. Kunder, pakker og regnskab er stadig lister, der fylder bredden; de kan få samme tabel, når der er behov.
+- **Tastatur:** tabellens kolonneoverskrifter er knapper, og parrets navn i hver række er et link, så alt nås med Tab og Enter. Formularer var allerede rigtige formularer og sendes med Enter.
+- **Backend-repoet har ingen ændringer i denne fase**; `feature/fase9` er oprettet der for at holde navnene ens.
+- **Verifikation:** set i browseren med opdigtede data. Ved 1440 × 900 er bryllup, pris, status og hele betalingsplanen til og med "I alt" synlige uden at rulle (bunden ved 890 px). Tabellen sorterer stigende og faldende med `aria-sort`. Alle 14 sider har ingen vandret rulning på 375 og 1440 px. Typecheck og lint rene.
