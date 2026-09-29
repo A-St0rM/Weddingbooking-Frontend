@@ -31,3 +31,19 @@ export const termsDescriptions: Record<PaymentTerms, string> = {
   New: '33 % seks måneder før, resten 30 dage før',
   Old: 'Hele beløbet 30 dage før',
 };
+
+export const productGroupLabels: Record<import('@/lib/api/types').ProductGroup, string> = {
+  Reception: 'Reception',
+  Ceremony: 'Vielse',
+  DinnerAndParty: 'Middag og fest',
+  LateNight: 'Natmad',
+  Bar: 'Bar',
+  Breakfast: 'Morgenmad',
+  FridayEvent: 'Fredagsarrangement',
+  Other: 'Andet',
+};
+
+export const packageKindLabels: Record<import('@/lib/api/types').PackageKind, string> = {
+  Base: 'Grundpakke',
+  AddOn: 'Tilkøb',
+};

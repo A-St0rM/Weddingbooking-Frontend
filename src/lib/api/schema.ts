@@ -37,6 +37,279 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/settings/pricing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PricingSettingsResponse"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PricingSettingsRequest"];
+                    "text/json": components["schemas"]["PricingSettingsRequest"];
+                    "application/*+json": components["schemas"]["PricingSettingsRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PricingSettingsResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/packages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    year?: number;
+                    includeInactive?: boolean;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PackageResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PackageRequest"];
+                    "text/json": components["schemas"]["PackageRequest"];
+                    "application/*+json": components["schemas"]["PackageRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PackageResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/packages/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PackageResponse"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PackageRequest"];
+                    "text/json": components["schemas"]["PackageRequest"];
+                    "application/*+json": components["schemas"]["PackageRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PackageResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/packages/{id}/active": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SetActiveRequest"];
+                    "text/json": components["schemas"]["SetActiveRequest"];
+                    "application/*+json": components["schemas"]["SetActiveRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PackageResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/packages/{id}/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CopyPackageRequest"];
+                    "text/json": components["schemas"]["CopyPackageRequest"];
+                    "application/*+json": components["schemas"]["CopyPackageRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PackageResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me": {
         parameters: {
             query?: never;
@@ -345,6 +618,158 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/bookings/{id}/packages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AddPackageRequest"];
+                    "text/json": components["schemas"]["AddPackageRequest"];
+                    "application/*+json": components["schemas"]["AddPackageRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/lines": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["LineRequest"];
+                    "text/json": components["schemas"]["LineRequest"];
+                    "application/*+json": components["schemas"]["LineRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/lines/{lineId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    lineId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["LineRequest"];
+                    "text/json": components["schemas"]["LineRequest"];
+                    "application/*+json": components["schemas"]["LineRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    lineId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings": {
         parameters: {
             query?: never;
@@ -558,6 +983,22 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AddPackageRequest: {
+            /** Format: uuid */
+            packageId: string;
+        };
+        BookingLineResponse: {
+            /** Format: uuid */
+            id: string;
+            description: string;
+            group: components["schemas"]["ProductGroup"];
+            pricing: components["schemas"]["LinePricing"];
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int32 */
+            minimumQuantity: null | number;
+            sourcePackageName: null | string;
+        };
         BookingResponse: {
             /** Format: uuid */
             id: string;
@@ -574,6 +1015,8 @@ export interface components {
             /** Format: uint32 */
             version: number;
             customer: components["schemas"]["CustomerResponse"];
+            lines: components["schemas"]["BookingLineResponse"][];
+            price: null | components["schemas"]["PriceResponse"];
             sameDateBookings: components["schemas"]["BookingSummaryResponse"][];
         };
         BookingSummaryResponse: {
@@ -604,6 +1047,12 @@ export interface components {
             email: null | string;
             phone: null | string;
             isPrimary: boolean;
+        };
+        CopyPackageRequest: {
+            /** Format: int32 */
+            year: number;
+            /** Format: double */
+            priceChangePercent: number;
         };
         CreateBookingRequest: {
             /** Format: uuid */
@@ -642,6 +1091,19 @@ export interface components {
             /** Format: date */
             nextEventDate: null | string;
         };
+        /** @enum {unknown} */
+        LinePricing: "PerGuest" | "Fixed";
+        LineRequest: {
+            description: string;
+            group: components["schemas"]["ProductGroup"];
+            pricing: components["schemas"]["LinePricing"];
+            /** Format: double */
+            unitPrice: number;
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int32 */
+            minimumQuantity: null | number;
+        };
         MeResponse: {
             /** Format: uuid */
             id: string;
@@ -651,11 +1113,89 @@ export interface components {
             phone: null | string;
         };
         /** @enum {unknown} */
+        PackageKind: "Base" | "AddOn";
+        PackageLineResponse: {
+            /** Format: uuid */
+            id: string;
+            description: string;
+            group: components["schemas"]["ProductGroup"];
+            pricing: components["schemas"]["LinePricing"];
+            /** Format: double */
+            unitPrice: number;
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int32 */
+            minimumQuantity: null | number;
+        };
+        PackageRequest: {
+            name: string;
+            kind: components["schemas"]["PackageKind"];
+            /** Format: int32 */
+            year: number;
+            description: null | string;
+            lines: components["schemas"]["LineRequest"][];
+        };
+        PackageResponse: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            kind: components["schemas"]["PackageKind"];
+            /** Format: int32 */
+            year: number;
+            description: null | string;
+            isActive: boolean;
+            lines: components["schemas"]["PackageLineResponse"][];
+        };
+        /** @enum {unknown} */
         PaymentTerms: "Old" | "New";
+        PricedLineResponse: {
+            /** Format: uuid */
+            lineId: string;
+            /** Format: double */
+            unitPrice: number;
+            /** Format: int32 */
+            units: number;
+            /** Format: double */
+            total: number;
+        };
+        PriceResponse: {
+            lines: components["schemas"]["PricedLineResponse"][];
+            /** Format: double */
+            subtotal: number;
+            surcharge: components["schemas"]["SurchargeResponse"];
+            /** Format: double */
+            total: number;
+        };
+        PricingSettingsRequest: {
+            /** Format: int32 */
+            smallWeddingThreshold: number;
+            /** Format: double */
+            smallWeddingSurcharge: number;
+        };
+        PricingSettingsResponse: {
+            /** Format: int32 */
+            smallWeddingThreshold: number;
+            /** Format: double */
+            smallWeddingSurcharge: number;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        /** @enum {unknown} */
+        ProductGroup: "Reception" | "Ceremony" | "DinnerAndParty" | "LateNight" | "Bar" | "Breakfast" | "FridayEvent" | "Other";
         /** @enum {unknown} */
         Role: "EventManager" | "Owner" | "Bookkeeper" | "Chef" | "EventProducer";
         /** @enum {unknown} */
         SalesStage: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "Cancelled" | "Lost";
+        SetActiveRequest: {
+            isActive: boolean;
+        };
+        SurchargeResponse: {
+            /** Format: int32 */
+            threshold: number;
+            /** Format: double */
+            amount: number;
+            applies: boolean;
+        };
         UpdateBookingRequest: {
             /** Format: date */
             eventDate: string;
