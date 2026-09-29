@@ -144,3 +144,13 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Et par, der kommer igen, bliver en ny kunde**, når de bestiller via hjemmesiden. Johan kan se det på navnene; der er ikke bygget automatisk sammenlægning.
 - **Spam:** 30 kald i minuttet pr. adresse og et skjult honeypot-felt. En bot, der udfylder feltet, får en kvittering, men intet gemmes.
 - **Verifikation:** 67 domænetests og 36 integrationstests grønne — bestilling uden login, sagen med begge personer, tiden optaget i kalenderen og væk fra formularen, to samtidige bestillinger af samme tid giver én 201 og én 409 (kørt fem gange), en datobestilling holder datoen til den afvises, og udbakken er uændret. Hele flowet er afprøvet i browseren på 375 px med opdigtede data. Migrationen `BookingOrigin` anvendt på Supabase.
+
+## Fase 13 — Fra fremvisning til booking
+
+- **Sagen har en `kind`: fremvisning eller bryllup.** En fremvisning bestilt på hjemmesiden er en fremvisning, til parret siger ja; alt andet — oprettet i hånden, en datobestilling, importeret fra Trello — er et bryllup fra start. Eksisterende fremvisninger fra hjemmesiden blev markeret i migrationen.
+- **Bekræft som booking** sætter dato, gæsteantal, betingelser og betaler og gør sagen til et bryllup på samme række. Salgstrinnet bliver *Forespørgsel*; derfra går den det almindelige forløb (pakker, tilbud, aftale, gebyr).
+- **En datobestilling fra hjemmesiden bekræftes med samme formular** i stedet for et enkelt "tag imod".
+- **"Nej tak"** lukker en ny bestilling eller en fremvisning som *Tabt* med grunden i historikken; tiden eller datoen frigives. Afvisningen har nu ét endepunkt (`/decline`) for begge.
+- **En fremvisning viser ikke pris, betaling, aftale og klargøring**, før den er bekræftet — kun det, der hører til fremvisningen. API'et forhindrer det ikke; en pakke kan i princippet lægges på via API'et, men brugerfladen tilbyder det ikke.
+- **En fremvisnings ønskedato står ikke som bryllup i kalenderen**, fordi det kun er et ønske.
+- **Verifikation:** 69 domænetests og 38 integrationstests grønne — en bekræftet fremvisning har samme id, kunde, to personer og historik, der er kun én sag på kunden, og den kan få pakke, tilbud (i betalerens navn), faktura på gebyret og aftale; en afvist fremvisning er *Tabt* med grunden, og tiden er tilbage i formularen og væk fra kalenderen. Afprøvet i browseren på 1440 px. Migrationen `BookingKind` anvendt på Supabase.

@@ -8,6 +8,7 @@ import { errorMessage } from '@/lib/api/errorMessage';
 import type { Booking } from '@/lib/api/types';
 import { formatDateTime, formatLongDate } from '@/lib/format';
 import { useRequestDecision } from '@/features/bookings/api/bookings';
+import { ConfirmWeddingCard } from '@/features/bookings/components/ConfirmWeddingCard';
 
 /**
  * A request from the website waits for a person. Accepting books the viewing (or takes the date
@@ -35,7 +36,11 @@ export function RequestCard({ booking }: { booking: Booking }) {
         </div>
       </div>
 
-      {declining ? (
+      {!isViewing ? (
+        <div className="mt-3">
+          <ConfirmWeddingCard booking={booking} title="Svar på bestillingen" />
+        </div>
+      ) : declining ? (
         <div className="mt-3 space-y-3">
           <TextArea label="Hvorfor? (kommer i historikken)" rows={2} value={reason} onChange={(e) => setReason(e.target.value)} />
           <div className="flex flex-wrap gap-2">

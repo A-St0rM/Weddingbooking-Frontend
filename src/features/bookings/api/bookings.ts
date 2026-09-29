@@ -125,8 +125,13 @@ export function useRequestDecision(id: string) {
       mutationFn: () => call(api.POST('/api/bookings/{id}/request/accept', { params: { path: { id } } })),
       onSuccess: store,
     }),
+    confirmAsWedding: useMutation({
+      mutationFn: (body: components['schemas']['ConfirmAsWeddingRequest']) =>
+        call(api.POST('/api/bookings/{id}/confirm-as-wedding', { params: { path: { id } }, body })),
+      onSuccess: store,
+    }),
     decline: useMutation({
-      mutationFn: (reason: string) => call(api.POST('/api/bookings/{id}/request/decline', { params: { path: { id } }, body: { reason: reason || null } })),
+      mutationFn: (reason: string) => call(api.POST('/api/bookings/{id}/decline', { params: { path: { id } }, body: { reason: reason || null } })),
       onSuccess: (booking) => {
         store(booking);
         void queryClient.invalidateQueries({ queryKey: ['notes', id] });

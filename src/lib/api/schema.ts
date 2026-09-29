@@ -2471,7 +2471,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/bookings/{id}/request/decline": {
+    "/api/bookings/{id}/confirm-as-wedding": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ConfirmAsWeddingRequest"];
+                    "text/json": components["schemas"]["ConfirmAsWeddingRequest"];
+                    "application/*+json": components["schemas"]["ConfirmAsWeddingRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bookings/{id}/decline": {
         parameters: {
             query?: never;
             header?: never;
@@ -2975,6 +3018,8 @@ export interface components {
             year: null | number;
             cards: components["schemas"]["CardReport"][];
         };
+        /** @enum {unknown} */
+        BookingKind: "Viewing" | "Wedding";
         BookingLineResponse: {
             /** Format: uuid */
             id: string;
@@ -2999,6 +3044,7 @@ export interface components {
             paymentTerms: components["schemas"]["PaymentTerms"];
             stage: components["schemas"]["SalesStage"];
             origin: components["schemas"]["BookingOrigin"];
+            kind: components["schemas"]["BookingKind"];
             status: components["schemas"]["DisplayStatus"];
             /** Format: date-time */
             signedAt: null | string;
@@ -3081,6 +3127,15 @@ export interface components {
         };
         ClarificationRequest: {
             clarification: null | string;
+        };
+        ConfirmAsWeddingRequest: {
+            /** Format: date */
+            eventDate: string;
+            /** Format: int32 */
+            guestCount: number;
+            paymentTerms: components["schemas"]["PaymentTerms"];
+            /** Format: uuid */
+            payerId: string;
         };
         ContactResponse: {
             /** Format: uuid */
