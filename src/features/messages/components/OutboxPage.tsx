@@ -18,7 +18,7 @@ export function OutboxPage() {
           ) : (
             <ul className="space-y-3">
               {messages.map((m) => (
-                <li key={m.id} className="rounded-card border border-line bg-surface p-4 shadow-card">
+                <li key={m.id} className="rounded-card bg-surface p-5 shadow-card ring-1 ring-line/60">
                   <p className="text-xs text-ink-muted">{formatDateTime(m.sentAt)} · fra {m.fromName}{m.replyTo && ` <${m.replyTo}>`}</p>
                   <p className="text-sm [overflow-wrap:anywhere]">Til: {m.to}{m.cc && ` · CC: ${m.cc}`}</p>
                   <p className="mt-1 font-semibold">{m.subject}</p>

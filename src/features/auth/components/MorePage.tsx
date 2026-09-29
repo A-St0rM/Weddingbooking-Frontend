@@ -17,7 +17,7 @@ export function MorePage() {
     <>
       <PageHeader title="Mere" />
       {more.length > 0 && (
-        <ul className="mb-6 divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+        <ul className="mb-6 divide-y divide-line overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
           {more.map(({ to, label, icon: Icon }) => (
             <li key={to}>
               <Link to={to} className="flex min-h-14 items-center gap-3 px-4 hover:bg-neutral-soft">

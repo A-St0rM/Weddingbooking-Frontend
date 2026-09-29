@@ -89,7 +89,7 @@ function Report({ report }: { report: ImportReport }) {
       {report.boards.map((board) => (
         <section key={board.name}>
           <h2 className="eyebrow mb-3 font-sans">{board.name}</h2>
-          <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+          <ul className="divide-y divide-line overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
             {board.cards.map((card) => {
               const [label, tone] = actionLabels[card.action];
               return (

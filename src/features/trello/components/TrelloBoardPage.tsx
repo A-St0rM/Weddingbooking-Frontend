@@ -76,9 +76,9 @@ export function TrelloBoardPage() {
         <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-4 lg:mx-0 lg:px-0">
           {board.data.lists.map((list) => (
             <section key={list.id} aria-label={list.name} className="w-[85vw] max-w-80 shrink-0 snap-start rounded-card bg-neutral-soft p-2 sm:w-72">
-              <h2 className="flex items-center justify-between px-2 py-1.5 text-sm font-semibold">
+              <h2 className="flex items-center justify-between px-2 pt-1.5 pb-2.5 text-lg font-medium">
                 {list.name}
-                <span className="font-normal text-ink-muted tabular">{list.cards.length}</span>
+                <span className="font-sans text-sm font-normal text-ink-muted tabular">{list.cards.length}</span>
               </h2>
               <ul className="space-y-2">
                 {list.cards.map((card) => (

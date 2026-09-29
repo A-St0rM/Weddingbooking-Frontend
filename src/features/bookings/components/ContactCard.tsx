@@ -28,12 +28,12 @@ export function ContactCard({ customer }: { customer: Customer }) {
               </p>
               <div className="mt-1 flex flex-wrap gap-2">
                 {contact.phone && (
-                  <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="inline-flex min-h-11 items-center gap-2 rounded-control border border-line px-3 text-sm font-medium">
+                  <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="inline-flex min-h-11 items-center gap-2 rounded-control bg-canvas px-3 text-sm font-medium ring-1 ring-line transition-colors hover:ring-control">
                     <Phone aria-hidden="true" className="size-4" /> {contact.phone}
                   </a>
                 )}
                 {contact.email && (
-                  <a href={`mailto:${contact.email}`} className="inline-flex min-h-11 min-w-0 items-center gap-2 rounded-control border border-line px-3 text-sm font-medium [overflow-wrap:anywhere]">
+                  <a href={`mailto:${contact.email}`} className="inline-flex min-h-11 min-w-0 items-center gap-2 rounded-control bg-canvas px-3 text-sm font-medium ring-1 ring-line transition-colors hover:ring-control [overflow-wrap:anywhere]">
                     <Envelope aria-hidden="true" className="size-4 shrink-0" /> {contact.email}
                   </a>
                 )}

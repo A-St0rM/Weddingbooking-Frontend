@@ -24,6 +24,11 @@ export function Journey({ status }: { status: DisplayStatus }) {
   if (at === undefined) return null;
   const troubled = status === 'PaymentOverdue' || status === 'AwaitingPostEventInvoice';
   return (
+    <div>
+    <p className="mb-2 text-sm md:hidden">
+      <span className="text-ink-muted">Trin {Math.min(at + 1, steps.length)} af {steps.length}: </span>
+      <span className="font-medium">{steps[at]}</span>
+    </p>
     <ol aria-label="Sagens forløb" className="grid grid-cols-8 gap-1">
       {steps.map((step, i) => {
         const done = i < at || (i === at && status === 'Held');
@@ -50,5 +55,6 @@ export function Journey({ status }: { status: DisplayStatus }) {
         );
       })}
     </ol>
+    </div>
   );
 }

@@ -40,7 +40,7 @@ export function CustomerListPage() {
                 Kunder oprettes sammen med deres første booking.
               </EmptyState>
             ) : (
-              <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+              <ul className="divide-y divide-line overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
                 {customers.map((customer) => (
                   <li key={customer.id}>
                     <Link to={`/kunder/${customer.id}`} className="flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-neutral-soft">

@@ -79,7 +79,7 @@ function Overview({ bookings }: { bookings: BookingSummary[] }) {
 
   return (
     <div className="stagger space-y-10">
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
         {next ? <NextWedding booking={next} /> : <NoWeddings />}
         <ToDo items={todo} />
       </div>
@@ -220,11 +220,12 @@ function ThisWeek() {
   return (
     <section>
       <SectionTitle title="De næste syv dage" link={{ to: '/kalender', label: 'Kalenderen' }} />
-      <ol className="grid grid-cols-1 gap-2 sm:grid-cols-7">
+      <ol className="grid grid-cols-[minmax(0,1fr)] gap-2 sm:grid-cols-7">
         {days.map((day, i) => {
           const list = eventsOn(day);
           return (
-            <li key={i} className={cn('min-h-32 rounded-card p-3 ring-1', i === 0 ? 'bg-surface ring-primary/40 shadow-card' : 'bg-surface/60 ring-line')}>
+            // Phone: only days with something on, and today. Desktop: the whole week as columns.
+            <li key={i} className={cn('rounded-card p-3 ring-1 sm:min-h-32', i === 0 ? 'bg-surface ring-primary/40 shadow-card' : 'bg-surface/60 ring-line', list.length === 0 && i !== 0 && 'hidden sm:block')}>
               <p className="flex items-baseline gap-2 sm:block">
                 <span className="eyebrow">{i === 0 ? 'I dag' : weekday.format(day).replace('.', '')}</span>
                 <span className="font-display text-2xl font-medium tabular sm:block">{day.getDate()}</span>

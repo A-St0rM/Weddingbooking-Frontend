@@ -57,7 +57,7 @@ function BookingView({ booking }: { booking: Booking }) {
           )}
           {!booking.trelloCardId && manages && !isViewing && <CreateTrelloCard id={booking.id} />}
         </div>
-        <h1 className="text-5xl leading-[0.95] font-medium tracking-tight lg:text-7xl">
+        <h1 className="text-4xl leading-[0.95] font-medium tracking-tight [overflow-wrap:anywhere] sm:text-5xl lg:text-7xl">
           <Link to={`/kunder/${booking.customer.id}`} className="decoration-line decoration-2 underline-offset-8 hover:underline">
             {first}
             {second && (

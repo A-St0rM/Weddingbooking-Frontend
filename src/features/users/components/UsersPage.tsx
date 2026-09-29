@@ -54,7 +54,7 @@ function UserRow({ user }: { user: StaffUser }) {
   const [editing, setEditing] = useState(false);
   if (editing) return <li><UserForm user={user} onDone={() => setEditing(false)} /></li>;
   return (
-    <li className="flex items-start gap-3 rounded-card border border-line bg-surface p-4 shadow-card">
+    <li className="flex items-start gap-3 rounded-card bg-surface p-5 shadow-card ring-1 ring-line/60">
       <div className="min-w-0 flex-1">
         <p className="font-medium">{user.name}</p>
         <p className="text-sm text-ink-muted [overflow-wrap:anywhere]">{[user.email, user.phone].filter(Boolean).join(' · ')}</p>

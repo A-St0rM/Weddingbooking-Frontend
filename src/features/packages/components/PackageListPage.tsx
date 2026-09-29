@@ -60,7 +60,7 @@ export function PackageListPage() {
                 {byYear(packages).map(([year, items]) => (
                   <section key={year}>
                     <h2 className="eyebrow mb-3 font-sans">{year}</h2>
-                    <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+                    <ul className="divide-y divide-line overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
                       {items.map((pkg) => (
                         <li key={pkg.id}>
                           <Link to={`/pakker/${pkg.id}`} className="flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-neutral-soft">
