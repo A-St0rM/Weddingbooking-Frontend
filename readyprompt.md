@@ -128,7 +128,7 @@ erDiagram
 | **Customer** | de to personer, betaleren | Overlever sine bookinger. Et par, der kommer igen, er samme kunde. Visningsnavnet ("Tobias og Cecilie") **udledes** af de to fornavne og gemmes ikke. |
 | **ContactPerson** (personen i parret) | fornavn, efternavn, e-mail, telefon, `isPayer`, `position` (1 eller 2) | **Præcis to pr. kunde**, hver for sig. Højst én betaler; vælges senest, når sagen bekræftes som booking. Betaleren er den, der oprettes i regnskabet. |
 | **Booking** | kunde, `kind` (`Viewing`/`Wedding`), `origin` (`Website`/`Staff`/`Trello`), bryllupsdato, **gæsteantal**, `paymentTerms` (`Old`/`New`), salgstrin, oprettet | Gæsteantallet findes kun her. En sag starter som `Viewing` eller `Wedding`; en fremvisning bekræftes til `Wedding` på samme række. |
-| **ViewingAppointment** | booking, start, varighed, vært, status (`Requested`/`Confirmed`/`Held`/`Cancelled`) | En fremvisning i kalenderen. `Requested` optager tiden, indtil Johan har bekræftet eller afvist. |
+| **Fremvisning** (i dag `Booking.ViewingAt` + `ViewingHostId`) | tidspunkt, vært; varighed 1 time | Én fremvisning pr. sag, på bookingen. Status (`Requested`/`Confirmed`) kommer med i fase 12, når parret selv kan bestille. |
 | **HostAvailability** | vært, ugedag, fra–til, gyldig fra/til | Ugeplanen for, hvornår en vært kan vise rundt. |
 | **CalendarBlock** | fra–til, årsag | Ferie, andre arrangementer — tid, der ikke kan bookes. |
 | **TrelloCardLink** | booking, Trello-kort-id, board, sidst synkroniseret | Hvilket kort, der hører til hvilken booking. |

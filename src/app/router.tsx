@@ -6,6 +6,7 @@ import { OutboxPage } from '@/features/messages/components/OutboxPage';
 import { TemplatesPage } from '@/features/messages/components/TemplatesPage';
 import { StandaloneSummaryPage } from '@/features/summaries/components/StandaloneSummaryPage';
 import { TrelloImportPage } from '@/features/trello/components/TrelloImportPage';
+import { CalendarPage } from '@/features/calendar/components/CalendarPage';
 import { UsersPage } from '@/features/users/components/UsersPage';
 import { MorePage } from '@/features/auth/components/MorePage';
 import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
@@ -34,6 +35,7 @@ export const router = createBrowserRouter([
       { path: 'bookinger/ny', element: <NewBookingPage /> },
       { path: 'bookinger/:id', element: <BookingPage />, handle: { wide: true } },
       { path: 'bookinger/:id/mail', element: <ComposePage /> },
+      { path: 'kalender', element: <CalendarPage />, handle: { wide: true } },
       { path: 'kunder', element: <CustomerListPage /> },
       { path: 'kunder/:id', element: <CustomerPage /> },
       { path: 'pakker', element: <PackageListPage /> },

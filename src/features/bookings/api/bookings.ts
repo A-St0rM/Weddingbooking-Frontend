@@ -49,6 +49,8 @@ function useStoreBooking() {
     void queryClient.invalidateQueries({ queryKey: ['customers'] });
     // The payment plan follows the price; ask the accounting system again.
     void queryClient.invalidateQueries({ queryKey: ['payments', booking.id] });
+    // A date or a viewing changes what the calendar shows and which times are free.
+    void queryClient.invalidateQueries({ queryKey: ['calendar'] });
   };
 }
 

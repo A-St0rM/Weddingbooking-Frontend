@@ -1579,6 +1579,270 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    from?: string;
+                    to?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CalendarEventResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendar/slots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    hostId?: string;
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SlotResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendar/wedding-dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    from?: string;
+                    to?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendar/availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["HostWeekResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendar/availability/{hostId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    hostId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WindowDto"][];
+                    "text/json": components["schemas"]["WindowDto"][];
+                    "application/*+json": components["schemas"]["WindowDto"][];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendar/blocks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BlockRequest"];
+                    "text/json": components["schemas"]["BlockRequest"];
+                    "application/*+json": components["schemas"]["BlockRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendar/blocks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings/{id}/packages": {
         parameters: {
             query?: never;
@@ -2464,6 +2728,15 @@ export interface components {
             signedAt: null | string;
             signedUploadedBy: null | string;
         };
+        BlockRequest: {
+            /** Format: date-time */
+            start: string;
+            /** Format: date-time */
+            end: string;
+            reason: string;
+            /** Format: uuid */
+            hostId: null | string;
+        };
         BoardReport: {
             name: string;
             /** Format: int32 */
@@ -2524,6 +2797,23 @@ export interface components {
             stage: components["schemas"]["SalesStage"];
             status: components["schemas"]["DisplayStatus"];
             paymentTerms: components["schemas"]["PaymentTerms"];
+        };
+        /** @enum {unknown} */
+        CalendarEventKind: "Wedding" | "Viewing" | "Block";
+        CalendarEventResponse: {
+            kind: components["schemas"]["CalendarEventKind"];
+            /** Format: date-time */
+            start: string;
+            /** Format: date-time */
+            end: string;
+            allDay: boolean;
+            title: string;
+            /** Format: uuid */
+            bookingId: null | string;
+            /** Format: uuid */
+            blockId: null | string;
+            hostName: null | string;
+            confirmed: boolean;
         };
         /** @enum {unknown} */
         CardAction: "Import" | "Imported" | "AlreadyImported" | "Skip";
@@ -2619,6 +2909,8 @@ export interface components {
             nextEventDate: null | string;
         };
         /** @enum {unknown} */
+        DayOfWeek: "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
+        /** @enum {unknown} */
         DisplayStatus: "Inquiry" | "Viewing" | "QuoteSent" | "Signed" | "DateSecured" | "ReadyForEvent" | "Held" | "AwaitingPostEventInvoice" | "PaymentOverdue" | "Cancelled" | "Lost";
         DocumentResponse: {
             number: string;
@@ -2654,6 +2946,12 @@ export interface components {
             lastModified?: null | string;
             entityTag?: null | components["schemas"]["EntityTagHeaderValue"];
             enableRangeProcessing?: boolean;
+        };
+        HostWeekResponse: {
+            /** Format: uuid */
+            hostId: string;
+            hostName: string;
+            windows: components["schemas"]["WindowDto"][];
         };
         /** Format: binary */
         IFormFile: string;
@@ -2919,6 +3217,15 @@ export interface components {
             /** Format: int32 */
             attachmentCount: number;
         };
+        SlotResponse: {
+            /** Format: date-time */
+            start: string;
+            /** Format: date-time */
+            end: string;
+            /** Format: uuid */
+            hostId: string;
+            hostName: string;
+        };
         StandaloneSummaryRequest: {
             text: string;
         };
@@ -2990,6 +3297,13 @@ export interface components {
             id: string;
             name: string;
             phone: null | string;
+        };
+        WindowDto: {
+            day: components["schemas"]["DayOfWeek"];
+            /** Format: time */
+            from: string;
+            /** Format: time */
+            to: string;
         };
         WriteNoteRequest: {
             type: components["schemas"]["NoteType"];

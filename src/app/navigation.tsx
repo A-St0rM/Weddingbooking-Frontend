@@ -1,5 +1,5 @@
 import type { Icon } from '@phosphor-icons/react';
-import { CalendarBlank, DotsThreeOutline, DownloadSimple, EnvelopeSimple, House, IdentificationCard, Package, Receipt, Sparkle, TextAlignLeft, UsersThree } from '@phosphor-icons/react';
+import { CalendarBlank, DotsThreeOutline, Notebook, DownloadSimple, EnvelopeSimple, House, IdentificationCard, Package, Receipt, Sparkle, TextAlignLeft, UsersThree } from '@phosphor-icons/react';
 import type { Role } from '@/lib/api/types';
 import { permissionsFor } from '@/features/auth/permissions';
 
@@ -18,9 +18,10 @@ const manages = (role: Role) => permissionsFor(role).manages;
 
 export const navItems: NavItem[] = [
   { to: '/', label: 'Oversigt', icon: House, inTabBar: true },
-  { to: '/bookinger', label: 'Bookinger', icon: CalendarBlank, inTabBar: true },
+  { to: '/bookinger', label: 'Bookinger', icon: Notebook, inTabBar: true },
+  { to: '/kalender', label: 'Kalender', icon: CalendarBlank, inTabBar: true },
   { to: '/kunder', label: 'Kunder', icon: UsersThree, inTabBar: true },
-  { to: '/pakker', label: 'Pakker', icon: Package, inTabBar: true, visibleTo: seesPrices },
+  { to: '/pakker', label: 'Pakker', icon: Package, inTabBar: false, visibleTo: seesPrices },
   { to: '/regnskab', label: 'Regnskab', icon: Receipt, inTabBar: false, visibleTo: seesPrices },
   { to: '/resume', label: 'Resumé af en sag', icon: Sparkle, inTabBar: false },
   { to: '/tekstbidder', label: 'Tekstbidder', icon: TextAlignLeft, inTabBar: false, visibleTo: manages },
