@@ -4,6 +4,7 @@ import { QueryState } from '@/components/ui/QueryState';
 import type { Booking } from '@/lib/api/types';
 import { formatKroner, formatLongDate } from '@/lib/format';
 import { useBooking } from '@/features/bookings/api/bookings';
+import { AgreementCard } from '@/features/agreements/components/AgreementCard';
 import { PaymentsCard } from '@/features/payments/components/PaymentsCard';
 import { usePermissions } from '@/features/auth/permissions';
 import { BookingLinesCard } from '@/features/bookings/components/BookingLinesCard';
@@ -49,6 +50,7 @@ function BookingView({ booking }: { booking: Booking }) {
       <BookingDetailsCard key={booking.version} booking={booking} />
       <BookingLinesCard booking={booking} />
       {seesPrices && <PaymentsCard booking={booking} />}
+      {seesPrices && <AgreementCard booking={booking} />}
       <StageCard booking={booking} />
       <ContactCard customer={booking.customer} />
     </div>

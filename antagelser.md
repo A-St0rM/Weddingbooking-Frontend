@@ -46,3 +46,13 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Nyt tilbud** laver et nyt tilbudsnummer; det nyeste er det gældende.
 - **Integrationstests** (§10, "når der er tid") er skrevet: det rigtige API mod en rigtig Postgres, med tokens signeret af en testnøgle i stedet for Supabase. De springes over uden en testdatabase og kører ikke i pipelinen.
 - **Verifikation:** 31 domænetests (bl.a. raterne summerer til totalen for 1–350 gæster med begge betingelser) og 14 integrationstests grønne mod en midlertidig lokal Postgres — heriblandt hele forløbet til fuld betaling og at bookingtabellerne ingen status- eller beløbskolonner har. Migrationerne `AccountingReferences` og `InitialSimulatedAccounting` er anvendt på Supabase; advisors uden sikkerhedsfund.
+
+## Fase 4 — Aftalebekræftelse
+
+- **Underskriften sker på PDF, der sendes retur på mail** (§11.7). Den underskrevne PDF uploades på bookingen; det sætter salgstrinnet *Underskrevet* og tidspunktet, som 33 %-raten bruger for et sent bookedet bryllup.
+- **Filerne gemmes i Postgres** (`app.stored_files`) bag API'ets adgangskontrol, **ikke i Supabase Storage**. API'et skal så ikke have en storage-nøgle, og mængden er lille (få hundrede aftaler om året). En Storage-adapter kan sættes ind bag `IFileStore` uden andre ændringer.
+- **Aftalen viser priser og betalingsplan**, fordi den afløser det dokument, der vedhæftes tilbuddet. Den er derfor kun for rollerne, der ser priser.
+- **Præciseringen gemmes på bookingen** og kopieres ind i hver version, så man ser, hvad der stod i den version, der blev skrevet under.
+- **"Vedhæft til tilbud"** lægger aftalen på det nyeste tilbud i regnskabet og afvises, når tilbuddet ikke længere er en kladde — som i e-conomic.
+- **QuestPDF bruges under Community-licensen** (§11.9); licensen skal afklares, før godset bruger det i drift.
+- **Verifikation:** 17 integrationstests grønne (ny version efter rettet gæsteantal bevarer den gamle; underskrevet PDF uploades og hentes byte for byte; en fil, der ikke er PDF, afvises; bilag afvises på et sendt tilbud). En genereret aftale er læst igennem: parret, adresse, kontakter, dato, 94 gæster, hver linje, præciseringen og raterne står der. Migrationen `Agreements` anvendt; advisors rene.
