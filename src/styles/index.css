@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/*
+ * Design tokens — the single source for colour, type and shape.
+ *
+ * A work tool for five people on phones, often standing and in daylight:
+ * warm stone neutrals, a deep estate green, high contrast throughout. Every
+ * text pair below is ≥4.5:1 and every control border ≥3:1 (verified).
+ * Inter is self-hosted: loading it from Google's servers sends visitors' IP
+ * addresses to Google, which EU courts have found unlawful.
+ */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-canvas: #fafaf9;
+  --color-surface: #ffffff;
+  --color-ink: #1c1917;
+  --color-ink-muted: #57534e;
+  --color-line: #e7e5e4;
+  --color-control: #8c8580;
+
+  --color-primary: #1f4d3a;
+  --color-primary-hover: #183d2e;
+  --color-primary-soft: #e8f0ec;
+  --color-on-primary: #ffffff;
+
+  --color-ok: #166534;
+  --color-ok-soft: #dcfce7;
+  --color-warn: #92400e;
+  --color-warn-soft: #fef3c7;
+  --color-danger: #991b1b;
+  --color-danger-soft: #fee2e2;
+  --color-danger-solid: #b91c1c;
+  --color-info: #1e40af;
+  --color-info-soft: #dbeafe;
+  --color-neutral: #44403c;
+  --color-neutral-soft: #f5f5f4;
+
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.06), 0 1px 3px rgb(28 25 23 / 0.05);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* 16px keeps iOS from zooming into inputs on focus. */
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  button,
+  a,
+  [role='button'] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Safe areas: the notch and the home indicator are not places to tap. */
+@utility safe-x {
+  padding-left: max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
