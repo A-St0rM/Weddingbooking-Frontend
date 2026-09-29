@@ -26,7 +26,7 @@ export function SummaryCard({ bookingId }: { bookingId: string }) {
 
   return (
     <Card>
-      <h2 className="mb-3 text-lg font-semibold">Resumé</h2>
+      <h2 className="mb-3 text-xl font-medium">Resumé</h2>
       {showExtra ? (
         <TextArea label="Indsæt en mailtråd (gemmes ikke)" rows={5} value={extra} onChange={(e) => setExtra(e.target.value)} className="mb-3" />
       ) : (

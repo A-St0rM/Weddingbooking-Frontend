@@ -34,7 +34,7 @@ export function ConfirmWeddingCard({ booking, title }: { booking: Booking; title
 
   return (
     <Card className="border-primary/40">
-      <h2 className="text-lg font-semibold">{title}</h2>
+      <h2 className="text-xl font-medium">{title}</h2>
       <form onSubmit={submit} className="mt-3 space-y-4">
         <Segmented label="Hvad siger parret?" value={answer} onChange={setAnswer} options={[{ value: 'yes', label: 'Ja — book brylluppet' }, { value: 'no', label: 'Nej tak' }]} />
         {answer === 'yes' ? (

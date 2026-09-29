@@ -9,7 +9,7 @@ export function ContactCard({ customer }: { customer: Customer }) {
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">Kontakt</h2>
+        <h2 className="text-xl font-medium">Kontakt</h2>
         {manages && (
           <Link to={`/kunder/${customer.id}`} className="inline-flex min-h-11 items-center font-medium text-primary">
             Ret kunde

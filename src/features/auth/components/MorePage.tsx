@@ -30,7 +30,7 @@ export function MorePage() {
         </ul>
       )}
 
-      <h2 className="mb-2 text-sm font-semibold text-ink-muted">Din profil</h2>
+      <h2 className="eyebrow mb-3 font-sans">Din profil</h2>
       <Card>
         <dl className="divide-y divide-line">
           <Row label="Navn" value={me.name} />

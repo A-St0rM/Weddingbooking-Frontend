@@ -21,7 +21,7 @@ export function AgreementCard({ booking }: { booking: Booking }) {
   const query = useAgreement(booking.id);
   return (
     <Card>
-      <h2 className="mb-3 text-lg font-semibold">Aftalebekræftelse</h2>
+      <h2 className="mb-3 text-xl font-medium">Aftalebekræftelse</h2>
       {query.isPending && <Spinner label="Henter" />}
       {query.isError && <Alert tone="danger">{errorMessage(query.error)}</Alert>}
       {query.data && <AgreementBody key={query.data.clarification ?? ''} booking={booking} agreement={query.data} />}

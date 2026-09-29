@@ -3,7 +3,10 @@ import { Alert } from '@/components/ui/Alert';
 import { BackLink } from '@/components/ui/BackLink';
 import { QueryState } from '@/components/ui/QueryState';
 import type { Booking } from '@/lib/api/types';
-import { formatKroner, formatLongDate } from '@/lib/format';
+import type { ReactNode } from 'react';
+import { Kanban } from '@phosphor-icons/react';
+import { formatKroner, formatLongDate, relativeDays } from '@/lib/format';
+import { Journey } from '@/features/bookings/components/Journey';
 import { useBooking, useCreateTrelloCard } from '@/features/bookings/api/bookings';
 import { Button } from '@/components/ui/Button';
 import { errorMessage } from '@/lib/api/errorMessage';
@@ -39,29 +42,38 @@ function BookingView({ booking }: { booking: Booking }) {
   const sent = (useLocation().state as { sent?: boolean } | null)?.sent;
   // A viewing is not a wedding yet: no price, payments or agreement until the couple says yes.
   const isViewing = booking.kind === 'Viewing';
+  const [first, second] = booking.customer.name.split(' og ');
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {sent && <Alert tone="ok">Mailen er sendt og står i historikken.</Alert>}
-      <header>
+      <header className="space-y-6">
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={booking.status} />
           {isViewing && <Badge tone="info">Fremvisning</Badge>}
           {booking.trelloCardId && (
-            <a href={`https://trello.com/c/${booking.trelloCardId}`} target="_blank" rel="noreferrer" className="inline-flex min-h-9 items-center text-sm font-medium text-primary underline">
-              Trello-kort
+            <a href={`https://trello.com/c/${booking.trelloCardId}`} target="_blank" rel="noreferrer" className="inline-flex min-h-9 items-center gap-1 rounded-md px-2 text-sm font-medium text-primary hover:bg-primary-soft">
+              <Kanban aria-hidden="true" className="size-4" /> Trello-kort
             </a>
           )}
           {!booking.trelloCardId && manages && !isViewing && <CreateTrelloCard id={booking.id} />}
         </div>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-balance">
-          <Link to={`/kunder/${booking.customer.id}`} className="hover:underline">
-            {booking.customer.name}
+        <h1 className="text-5xl leading-[0.95] font-medium tracking-tight lg:text-7xl">
+          <Link to={`/kunder/${booking.customer.id}`} className="decoration-line decoration-2 underline-offset-8 hover:underline">
+            {first}
+            {second && (
+              <>
+                {' '}<em className="font-normal text-ink-muted">&amp;</em> {second}
+              </>
+            )}
           </Link>
         </h1>
-        <p className="text-ink-muted first-letter:uppercase">
-          {isViewing && 'Ønsker '}{formatLongDate(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
-          {booking.price && booking.lines.length > 0 && <> · <span className="tabular">{formatKroner(booking.price.total)}</span></>}
-        </p>
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-4 border-y border-line py-5 sm:grid-cols-4">
+          <Fact label={isViewing ? 'Ønsket dato' : 'Dato'} value={<span className="inline-block first-letter:uppercase">{formatLongDate(booking.eventDate)}</span>} small />
+          <Fact label="Nedtælling" value={relativeDays(booking.eventDate)} />
+          <Fact label="Gæster" value={<span className="tabular">{booking.guestCount}</span>} />
+          {booking.price && booking.lines.length > 0 && <Fact label="Total" value={<span className="tabular">{formatKroner(booking.price.total)}</span>} />}
+        </dl>
+        <Journey status={booking.status} />
       </header>
 
       {manages && booking.stage === 'Requested' && <RequestCard booking={booking} />}
@@ -104,5 +116,14 @@ function CreateTrelloCard({ id }: { id: string }) {
       <Button size="sm" variant="ghost" loading={create.isPending} onClick={() => create.mutate()}>Opret Trello-kort</Button>
       {create.isError && <span className="text-sm text-danger">{errorMessage(create.error)}</span>}
     </>
+  );
+}
+
+function Fact({ label, value, small }: { label: string; value: ReactNode; small?: boolean }) {
+  return (
+    <div className="min-w-0">
+      <dt className="eyebrow">{label}</dt>
+      <dd className={small ? 'mt-1 font-medium' : 'mt-0.5 font-display text-3xl font-medium'}>{value}</dd>
+    </div>
   );
 }

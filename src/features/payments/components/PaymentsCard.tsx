@@ -29,7 +29,7 @@ export function PaymentsCard({ booking }: { booking: Booking }) {
   return (
     <Card>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Betaling</h2>
+        <h2 className="text-xl font-medium">Betaling</h2>
         <SimulatedBadge />
       </div>
 

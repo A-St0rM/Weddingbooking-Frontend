@@ -33,7 +33,7 @@ function CustomerView({ detail }: { detail: CustomerDetail }) {
       <DetailsCard key={JSON.stringify(customer)} customer={customer} />
       <ContactsCard customer={customer} />
       <section>
-        <h2 className="mb-2 text-lg font-semibold">Bookinger</h2>
+        <h2 className="mb-2 text-xl font-medium">Bookinger</h2>
         {bookings.length === 0 ? <EmptyState title="Ingen bookinger" /> : <BookingList bookings={bookings} />}
       </section>
     </div>
@@ -61,7 +61,7 @@ function DetailsCard({ customer }: { customer: Customer }) {
 
   return (
     <Card>
-      <h2 className="mb-4 text-lg font-semibold">Betalerens adresse</h2>
+      <h2 className="mb-4 text-xl font-medium">Betalerens adresse</h2>
       <form onSubmit={submit} className="space-y-4">
         <fieldset disabled={!manages} className="space-y-4">
         <Field label="Adresse" autoComplete="street-address" value={form.address} onChange={set('address')} />

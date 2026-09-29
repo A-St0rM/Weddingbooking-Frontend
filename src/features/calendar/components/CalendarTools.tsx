@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
-import { Plus, Trash } from '@phosphor-icons/react';
+import type { ReactNode } from 'react';
+import { CaretDown, Plus, Trash } from '@phosphor-icons/react';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -30,7 +31,7 @@ export function SlotsCard() {
 
   return (
     <Card>
-      <h2 className="text-lg font-semibold">Næste ledige fremvisninger</h2>
+      <h2 className="text-xl font-medium">Næste ledige fremvisninger</h2>
       <Select
         className="mt-3"
         label="Vært"
@@ -74,9 +75,8 @@ export function BlockCard() {
   }
 
   return (
-    <Card>
-      <h2 className="text-lg font-semibold">Blokér tid</h2>
-      <form onSubmit={submit} className="mt-3 space-y-3">
+    <Foldout title="Blokér tid" hint="Ferie, julemarked, en vært der er væk.">
+      <form onSubmit={submit} className="space-y-3">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           <Field label="Fra" type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} required />
           <Field label="Til" type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} required />
@@ -91,7 +91,7 @@ export function BlockCard() {
         {block.isError && <Alert tone="danger">{errorMessage(block.error)}</Alert>}
         <Button type="submit" size="sm" loading={block.isPending} disabled={!valid}>Blokér</Button>
       </form>
-    </Card>
+    </Foldout>
   );
 }
 
@@ -99,14 +99,12 @@ export function BlockCard() {
 export function AvailabilityCard() {
   const weeks = useAvailability();
   return (
-    <Card>
-      <h2 className="text-lg font-semibold">Ugeplan for fremvisninger</h2>
-      <p className="mt-1 text-sm text-ink-muted">En fremvisning tager en time. Ledige tider findes i hele timer inden for tidsrummene.</p>
+    <Foldout title="Ugeplan for fremvisninger" hint="En fremvisning tager en time. Ledige tider findes i hele timer inden for tidsrummene.">
       {weeks.isPending && <Spinner label="Henter" />}
       <div className="mt-3 space-y-5">
         {weeks.data?.map((week) => <HostWeekForm key={week.hostId + JSON.stringify(week.windows)} week={week} />)}
       </div>
-    </Card>
+    </Foldout>
   );
 }
 
@@ -143,5 +141,21 @@ function HostWeekForm({ week }: { week: HostWeek }) {
         <Button type="submit" size="sm" variant="secondary" loading={setAvailability.isPending}>Gem ugeplan</Button>
       </div>
     </form>
+  );
+}
+
+/** A tool you reach for now and then: folded until you need it, on the same page. */
+function Foldout({ title, hint, children }: { title: string; hint: string; children: ReactNode }) {
+  return (
+    <details className="group rounded-card bg-surface shadow-card ring-1 ring-line/60">
+      <summary className="flex min-h-16 cursor-pointer list-none items-center gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
+        <span className="flex-1">
+          <span className="block font-display text-xl font-medium">{title}</span>
+          <span className="block text-sm text-ink-muted">{hint}</span>
+        </span>
+        <CaretDown aria-hidden="true" className="size-4 shrink-0 text-ink-muted transition-transform duration-200 group-open:rotate-180" />
+      </summary>
+      <div className="px-5 pb-5">{children}</div>
+    </details>
   );
 }

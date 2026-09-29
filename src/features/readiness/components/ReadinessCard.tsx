@@ -30,7 +30,7 @@ export function ReadinessCard({ bookingId }: { bookingId: string }) {
   return (
     <Card>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Klargøring</h2>
+        <h2 className="text-xl font-medium">Klargøring</h2>
         {query.data &&
           (query.data.readyForEvent ? (
             <Badge tone="ok">Klar til afholdelse</Badge>

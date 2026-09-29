@@ -27,7 +27,7 @@ export function BookingLinesCard({ booking }: { booking: Booking }) {
 
   return (
     <Card>
-      <h2 className="mb-3 text-lg font-semibold">{price ? 'Indhold og pris' : 'Indhold'}</h2>
+      <h2 className="mb-3 text-xl font-medium">{price ? 'Indhold og pris' : 'Indhold'}</h2>
 
       {booking.lines.length === 0 ? (
         <p className="text-ink-muted">Ingen pakker eller linjer endnu.</p>

@@ -18,7 +18,7 @@ export function ContactsCard({ customer }: { customer: Customer }) {
 
   return (
     <Card>
-      <h2 className="mb-3 text-lg font-semibold">Parret</h2>
+      <h2 className="mb-3 text-xl font-medium">Parret</h2>
       <ul className="divide-y divide-line">
         {customer.contacts.map((person) =>
           editing === person.id ? (

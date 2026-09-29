@@ -32,7 +32,7 @@ function SurchargeForm({ settings }: { settings: PricingSettings }) {
 
   return (
     <Card>
-      <h2 className="text-lg font-semibold">Tillæg for små bryllupper</h2>
+      <h2 className="text-xl font-medium">Tillæg for små bryllupper</h2>
       <p className="mt-1 text-sm text-ink-muted">
         {formatKroner(settings.smallWeddingSurcharge)} oven i prisen under {settings.smallWeddingThreshold} gæster. Gælder nye bookinger; eksisterende beholder det tillæg, de blev oprettet med.
       </p>

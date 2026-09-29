@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Segmented } from '@/components/ui/Segmented';
 import { Spinner } from '@/components/ui/Spinner';
 import { cn } from '@/lib/cn';
 import type { CalendarEvent } from '@/lib/api/types';
@@ -19,10 +17,16 @@ const dayTitle = new Intl.DateTimeFormat('da-DK', { weekday: 'long', day: 'numer
 const time = new Intl.DateTimeFormat('da-DK', { hour: '2-digit', minute: '2-digit' });
 
 const kindStyle: Record<CalendarEvent['kind'], string> = {
-  Wedding: 'bg-primary-soft text-primary',
+  Wedding: 'bg-primary text-on-primary',
   Viewing: 'bg-info-soft text-info',
-  Block: 'bg-neutral-soft text-neutral',
+  Block: 'bg-neutral-soft text-neutral bg-[repeating-linear-gradient(135deg,transparent_0_6px,rgb(77_71_62/0.07)_6px_12px)]',
 };
+
+const legend: { kind: CalendarEvent['kind']; label: string }[] = [
+  { kind: 'Wedding', label: 'Bryllup' },
+  { kind: 'Viewing', label: 'Fremvisning' },
+  { kind: 'Block', label: 'Blokeret' },
+];
 
 /**
  * The estate's calendar: weddings, viewings and blocked time. The month shows
@@ -47,27 +51,38 @@ export function CalendarPage() {
 
   return (
     <>
-      <PageHeader title="Kalender" />
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-start lg:gap-6">
-        <section aria-label="Kalender" className="space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="w-48">
-              <Segmented label="Visning" value={view} onChange={setView} options={[{ value: 'month', label: 'Måned' }, { value: 'week', label: 'Uge' }]} />
-            </div>
-            <div className="ml-auto flex items-center gap-1 self-end">
-              <Button size="sm" variant="ghost" aria-label="Forrige" onClick={() => step(-1)}><CaretLeft aria-hidden="true" className="size-5" /></Button>
-              <Button size="sm" variant="secondary" onClick={() => { setAnchor(new Date()); setSelected(new Date()); }}>I dag</Button>
-              <Button size="sm" variant="ghost" aria-label="Næste" onClick={() => step(1)}><CaretRight aria-hidden="true" className="size-5" /></Button>
-            </div>
+      <PageHeader eyebrow="Kalender" title={title.charAt(0).toUpperCase() + title.slice(1)} actions={
+        <div className="flex items-center gap-2">
+          <div role="group" aria-label="Visning" className="flex rounded-control bg-neutral-soft p-1">
+            {(['month', 'week'] as const).map((v) => (
+              <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)}
+                className={cn('min-h-9 cursor-pointer rounded-lg px-4 text-sm font-medium transition-colors', view === v ? 'bg-surface text-ink shadow-card' : 'text-ink-muted hover:text-ink')}>
+                {v === 'month' ? 'Måned' : 'Uge'}
+              </button>
+            ))}
           </div>
-          <h2 className="text-lg font-semibold first-letter:uppercase" aria-live="polite">
-            {title} {events.isFetching && <Spinner className="ml-2 align-middle" />}
-          </h2>
+          <div className="flex items-center rounded-control ring-1 ring-line">
+            <button type="button" aria-label="Forrige" onClick={() => step(-1)} className="grid size-11 cursor-pointer place-items-center rounded-l-control hover:bg-surface"><CaretLeft aria-hidden="true" className="size-4" /></button>
+            <button type="button" onClick={() => { setAnchor(new Date()); setSelected(new Date()); }} className="min-h-11 cursor-pointer border-x border-line px-4 text-sm font-medium hover:bg-surface">I dag</button>
+            <button type="button" aria-label="Næste" onClick={() => step(1)} className="grid size-11 cursor-pointer place-items-center rounded-r-control hover:bg-surface"><CaretRight aria-hidden="true" className="size-4" /></button>
+          </div>
+        </div>
+      } />
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start lg:gap-8">
+        <section aria-label="Kalender" className="space-y-4">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-muted" aria-live="polite">
+            {legend.map((l) => (
+              <span key={l.kind} className="inline-flex items-center gap-2">
+                <span aria-hidden="true" className={cn('size-3 rounded ring-1 ring-ink/15', kindStyle[l.kind])} /> {l.label}
+              </span>
+            ))}
+            {events.isFetching && <Spinner className="ml-auto" label="Henter" />}
+          </div>
 
           {view === 'month' ? (
             <MonthGrid days={days} month={anchor.getMonth()} selected={selected} onSelect={setSelected} eventsOn={on} />
           ) : (
-            <ol className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+            <ol className="divide-y divide-line overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
               {days.map((day) => (
                 <li key={iso(day)} className="px-4 py-3">
                   <DayEvents day={day} events={on(day)} />
@@ -77,7 +92,7 @@ export function CalendarPage() {
           )}
 
           {view === 'month' && (
-            <div className="rounded-card border border-line bg-surface p-4 shadow-card">
+            <div className="rounded-card bg-surface p-5 shadow-card ring-1 ring-line/60">
               <DayEvents day={selected} events={on(selected)} />
             </div>
           )}
@@ -104,9 +119,9 @@ function MonthGrid({ days, month, selected, onSelect, eventsOn }: {
 }) {
   const today = iso(new Date());
   return (
-    <div className="overflow-hidden rounded-card border border-line bg-surface shadow-card">
-      <div className="grid grid-cols-7 border-b border-line bg-neutral-soft text-center text-xs font-medium text-ink-muted">
-        {weekdayNames.map((name) => <div key={name} className="py-2">{name}</div>)}
+    <div className="overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
+      <div className="grid grid-cols-7 border-b border-line text-center text-[0.7rem] font-semibold tracking-wider text-ink-muted uppercase">
+        {weekdayNames.map((name) => <div key={name} className={cn('py-3', name === 'Lør' && 'text-primary')}>{name}</div>)}
       </div>
       <div className="grid grid-cols-7">
         {days.map((day) => {
@@ -120,12 +135,13 @@ function MonthGrid({ days, month, selected, onSelect, eventsOn }: {
               aria-pressed={isSelected}
               aria-label={`${dayTitle.format(day)}: ${list.length === 0 ? 'intet' : list.map((e) => e.title).join(', ')}`}
               className={cn(
-                'flex min-h-14 cursor-pointer flex-col items-stretch gap-0.5 border-r border-b border-line p-1 text-left last:border-r-0 hover:bg-neutral-soft lg:min-h-24',
-                day.getMonth() !== month && 'text-ink-muted/60',
-                isSelected && 'bg-primary-soft/60',
+                'flex min-h-16 cursor-pointer flex-col items-stretch gap-1 border-r border-b border-line p-1.5 text-left transition-colors duration-150 [&:nth-child(7n)]:border-r-0 hover:bg-canvas lg:min-h-28 lg:p-2',
+                day.getDay() === 6 && 'bg-primary-soft/25',
+                day.getMonth() !== month && 'text-ink-muted/50',
+                isSelected && 'bg-primary-soft/70 ring-2 ring-primary/40 ring-inset',
               )}
             >
-              <span className={cn('self-start rounded px-1 text-xs font-medium tabular', iso(day) === today && 'bg-primary text-on-primary')}>
+              <span className={cn('grid size-7 place-items-center self-start rounded-full font-display text-sm font-medium tabular lg:text-base', iso(day) === today && 'bg-estate text-on-estate')}>
                 {day.getDate()}
               </span>
               {/* Phone: a mark per event. Desktop: the first titles. */}
@@ -136,7 +152,7 @@ function MonthGrid({ days, month, selected, onSelect, eventsOn }: {
               </span>
               <span className="hidden space-y-0.5 lg:block">
                 {list.slice(0, 3).map((e, i) => (
-                  <span key={i} className={cn('block truncate rounded px-1 text-xs', kindStyle[e.kind], e.kind === 'Wedding' && !e.confirmed && 'opacity-70')}>
+                  <span key={i} className={cn('block truncate rounded-md px-1.5 py-0.5 text-xs font-medium', kindStyle[e.kind], e.kind === 'Wedding' && !e.confirmed && 'opacity-60')}>
                     {e.title}
                   </span>
                 ))}
@@ -155,7 +171,7 @@ function DayEvents({ day, events }: { day: Date; events: CalendarEvent[] }) {
   const { unblock } = useCalendarActions();
   return (
     <div>
-      <h3 className="font-semibold first-letter:uppercase">{dayTitle.format(day)}</h3>
+      <h3 className="font-display text-lg font-medium first-letter:uppercase">{dayTitle.format(day)}</h3>
       {events.length === 0 ? (
         <p className="text-sm text-ink-muted">Intet i kalenderen.</p>
       ) : (

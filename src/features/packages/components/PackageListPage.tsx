@@ -59,7 +59,7 @@ export function PackageListPage() {
               <div className="space-y-6">
                 {byYear(packages).map(([year, items]) => (
                   <section key={year}>
-                    <h2 className="mb-2 text-sm font-semibold text-ink-muted">{year}</h2>
+                    <h2 className="eyebrow mb-3 font-sans">{year}</h2>
                     <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
                       {items.map((pkg) => (
                         <li key={pkg.id}>

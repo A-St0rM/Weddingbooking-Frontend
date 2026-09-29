@@ -34,7 +34,7 @@ export function HistoryCard({ bookingId }: { bookingId: string }) {
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Historik</h2>
+        <h2 className="text-xl font-medium">Historik</h2>
         {manages && (
           <Link
             to={`/bookinger/${bookingId}/mail`}

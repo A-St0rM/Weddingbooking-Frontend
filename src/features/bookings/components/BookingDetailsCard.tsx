@@ -56,7 +56,7 @@ function BookingForm({ booking }: { booking: Booking }) {
 
   return (
     <Card>
-      <h2 className="mb-4 text-lg font-semibold">Bryllup</h2>
+      <h2 className="mb-4 text-xl font-medium">Bryllup</h2>
       <form onSubmit={submit} className="space-y-4" noValidate>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Dato" type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} required />

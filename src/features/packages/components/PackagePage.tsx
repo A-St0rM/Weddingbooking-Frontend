@@ -118,7 +118,7 @@ function PackageActions({ pkg }: { pkg: Package }) {
   return (
     <div className="mt-8 space-y-4">
       <Card>
-        <h2 className="text-lg font-semibold">Kopiér til et nyt år</h2>
+        <h2 className="text-xl font-medium">Kopiér til et nyt år</h2>
         <p className="mt-1 text-sm text-ink-muted">Samme linjer, med priserne ændret med en procentsats og rundet til hele kroner.</p>
         <div className="mt-4 grid grid-cols-2 gap-3">
           <Field label="År" type="number" inputMode="numeric" value={year} onChange={(e) => setYear(e.target.value)} />
