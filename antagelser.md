@@ -154,3 +154,14 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **En fremvisning viser ikke pris, betaling, aftale og klargøring**, før den er bekræftet — kun det, der hører til fremvisningen. API'et forhindrer det ikke; en pakke kan i princippet lægges på via API'et, men brugerfladen tilbyder det ikke.
 - **En fremvisnings ønskedato står ikke som bryllup i kalenderen**, fordi det kun er et ønske.
 - **Verifikation:** 69 domænetests og 38 integrationstests grønne — en bekræftet fremvisning har samme id, kunde, to personer og historik, der er kun én sag på kunden, og den kan få pakke, tilbud (i betalerens navn), faktura på gebyret og aftale; en afvist fremvisning er *Tabt* med grunden, og tiden er tilbage i formularen og væk fra kalenderen. Afprøvet i browseren på 1440 px. Migrationen `BookingKind` anvendt på Supabase.
+
+## Fase 14 — Trello-boardet i systemet
+
+- **Boardet læses fra sin åbne adresse**, `trello.com/b/{id}.json`, uden nøgle (§11.16). Er `Trello__ApiKey` og `Trello__Token` sat, læses gennem Trellos API i stedet, som også når private boards. Importen fra fase 8 kan nu også hente et offentligt board direkte.
+- **Hvilke boards der vises, står i konfigurationen**: `Trello__BoardIds__0`, `__1`, … (fx Bryllup 26, 27, 28). API'et læser kun de boards, så det ikke kan bruges til at læse et hvilket som helst board.
+- **"Inden for et minut":** API'et gemmer et board i 20 sekunder, og siden spørger igen hvert 30. sekund. Mange telefoner på boardet spørger derfor Trello én gang, og en ændring i Trello ses efter højst ca. 50 sekunder. Trellos webhooks kommer med i fase 15.
+- **Arkiverede lister og kort vises ikke**, som i Trello.
+- **Linket mellem kort og booking er `Booking.TrelloCardId`** fra importen, i stedet for en separat `TrelloCardLink`-tabel. Et kort, der hører til en booking, har et link til den, og bookingen har et link til kortet i Trello. Nye bookinger får deres kort i fase 15.
+- **Alle roller kan se boardet** — det kan de også i dag i Trello. Import er stadig kun for event manager og ejere, nu under *Trello → Import*.
+- **På telefonen** ruller listerne sidelæns, én ad gangen, som i Trellos app; siden selv ruller ikke vandret. Et kort foldes ud med et tryk og viser beskrivelse og tjeklister.
+- **Verifikation:** 69 domænetests og 42 integrationstests grønne — boardet læses fra den åbne adresse uden nøgle og vises med lister, kort, labels og tjeklister; en ændring i Trello ses, når de 20 sekunder er gået; et board uden for konfigurationen giver 404; et importeret kort linker til sin booking og omvendt. Set i browseren på 375 px med de opdigtede boards fra testene: browseren kaldte aldrig trello.com. **Det er ikke prøvet mod et rigtigt Trello-board**, som jeg ikke har.
