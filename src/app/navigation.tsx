@@ -1,5 +1,5 @@
 import type { Icon } from '@phosphor-icons/react';
-import { CalendarBlank, DotsThreeOutline, EnvelopeSimple, House, IdentificationCard, Package, Receipt, TextAlignLeft, UsersThree } from '@phosphor-icons/react';
+import { CalendarBlank, DotsThreeOutline, EnvelopeSimple, House, IdentificationCard, Package, Receipt, Sparkle, TextAlignLeft, UsersThree } from '@phosphor-icons/react';
 import type { Role } from '@/lib/api/types';
 import { permissionsFor } from '@/features/auth/permissions';
 
@@ -22,6 +22,7 @@ export const navItems: NavItem[] = [
   { to: '/kunder', label: 'Kunder', icon: UsersThree, inTabBar: true },
   { to: '/pakker', label: 'Pakker', icon: Package, inTabBar: true, visibleTo: seesPrices },
   { to: '/regnskab', label: 'Regnskab', icon: Receipt, inTabBar: false, visibleTo: seesPrices },
+  { to: '/resume', label: 'Resumé af en sag', icon: Sparkle, inTabBar: false },
   { to: '/tekstbidder', label: 'Tekstbidder', icon: TextAlignLeft, inTabBar: false, visibleTo: manages },
   { to: '/udbakke', label: 'Udbakke', icon: EnvelopeSimple, inTabBar: false, visibleTo: manages },
   { to: '/brugere', label: 'Brugere', icon: IdentificationCard, inTabBar: false, visibleTo: manages },

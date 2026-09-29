@@ -39,3 +39,4 @@ export type MessageTemplate = Schemas['MessageTemplateResponse'];
 export type MessageDraft = Schemas['MessageDraftResponse'];
 export type OutboxMessage = Schemas['OutboxMessageResponse'];
 export type ViewingHost = Schemas['ViewingHostResponse'];
+export type SummaryResult = Schemas['SummaryResponse'];
