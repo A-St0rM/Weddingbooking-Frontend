@@ -45,7 +45,7 @@ export function CustomerListPage() {
                   <li key={customer.id}>
                     <Link to={`/kunder/${customer.id}`} className="flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-neutral-soft">
                       <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium">{customer.name}</p>
+                        <p className="truncate font-display text-lg font-medium">{customer.name}</p>
                         <p className="truncate text-sm text-ink-muted">
                           {[
                             customer.payer?.email ?? customer.payer?.phone,
