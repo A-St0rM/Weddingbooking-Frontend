@@ -22,7 +22,7 @@ De ligger side om side, og sessionen startes fra `~/Repos`, så begge kan læses
 
 ## 1. Overblik
 
-Et bookingsystem til bryllupper, hvor **hver oplysning tastes ind ét sted**, og alt andet udledes af den. Johan (event manager) opretter et bryllup én gang; kunde, tilbud, betalingsplan, aftalebekræftelse og køkkenets kuverttal følger af sig selv. Personalet bruger det fra mobilen.
+Et bookingsystem til bryllupper, hvor **hver oplysning tastes ind ét sted**, og alt andet udledes af den. Johan (event manager) opretter et bryllup én gang; kunde, tilbud, betalingsplan, aftalebekræftelse og køkkenets kuverttal følger af sig selv. Det bruges mest fra en computer og skal også kunne bruges fuldt ud fra telefonen.
 
 Regnskabssystemet er **simuleret** i projektet: kunden bruger e-conomic, men vi har ikke adgang. Integrationen ligger bag en grænseflade, så det rigtige system kan sættes ind senere.
 
@@ -83,7 +83,7 @@ Controllerne er tynde: de validerer input, kalder domænet og mapper til DTO'er.
 - **React Router** til sider, **TanStack Query** til alt, der hentes fra API'et, **Supabase JS** kun til login.
 - Mapper pr. feature (`bookings`, `customers`, `packages`, `readiness`, `notes`, `messages`, `auth`), hver med sine egne `api/`, `components/` og `hooks/`.
 - **Typerne genereres fra API'ets OpenAPI-beskrivelse** med `openapi-typescript`. Kontrakten har én kilde, så frontend og backend ikke kan drive fra hinanden, når et felt omdøbes.
-- **Mobil først.** Hver side designes til 375 px og skaleres op.
+- **Computeren først, telefonen med.** Hver side designes til en almindelig computerskærm (1440 px) og tilpasses ned til 375 px, hvor alt stadig skal kunne gøres (fase 9).
 - **Det visuelle bygges med skills'ene `ui-ux-pro-max`, `apple-design` og `animate`.** Hvornår hver af dem bruges, står i frontend-repoets `CLAUDE.md`.
 
 ---
@@ -99,6 +99,8 @@ De få regler, der bærer designet. Hver af dem findes, fordi det modsatte var �
 5. **At være logget ind er ikke det samme som at have adgang.** Enhver med en Supabase-konto på projektet kan få et gyldigt token. Adgang kræver en række i `users`, oprettet af en administrator.
 6. **Mennesker sender, systemet foreslår.** Ingen mail forlader systemet uden, at Johan har set teksten og trykket send. AI-resuméet foreslår og viser; det handler aldrig.
 7. **Frontenden regner ikke.** Den viser det, API'et har udregnet. To implementeringer af en prisregel giver to svar.
+8. **Det offentlige ser kun ledig og optaget.** Bestillingsformularerne er åbne uden login; de viser aldrig et andet pars navn, og alt, de modtager, er en bestilling, et menneske tager stilling til.
+9. **Én sag fra første kontakt.** En fremvisning, der bliver til et bryllup, er den samme sag med de samme to personer og den samme historik — ikke en ny.
 
 ---
 
@@ -106,8 +108,12 @@ De få regler, der bærer designet. Hver af dem findes, fordi det modsatte var �
 
 ```mermaid
 erDiagram
-    Customer ||--o{ ContactPerson : "har (normalt 2)"
+    Customer ||--|{ Partner : "består af præcis 2"
     Customer ||--o{ Booking : "har over tid"
+    Booking ||--o{ ViewingAppointment : "vises rundt ved"
+    Booking ||--o| TrelloCardLink : "spejles som kort"
+    User ||--o{ HostAvailability : "kan vise rundt"
+    User ||--o{ ViewingAppointment : "er vært for"
     Booking ||--|{ BookingLine : "består af"
     Booking ||--o{ ReadinessItem : "klargøres via"
     Booking ||--o{ Note : "har historik"
@@ -119,9 +125,13 @@ erDiagram
 
 | Entitet | Vigtigste felter | Bemærk |
 |---|---|---|
-| **Customer** | navn (parret som én enhed), adresse, postnr., by | Overlever sine bookinger. Et par, der kommer igen, er samme kunde. |
-| **ContactPerson** | navn, e-mail, telefon, `isPrimary` | Præcis én primær pr. kunde; den første tilføjede bliver det. |
-| **Booking** | kunde, bryllupsdato, **gæsteantal**, `paymentTerms` (`Old`/`New`), salgstrin, oprettet | Gæsteantallet findes kun her. |
+| **Customer** | de to personer, betaleren | Overlever sine bookinger. Et par, der kommer igen, er samme kunde. Visningsnavnet ("Tobias og Cecilie") **udledes** af de to fornavne og gemmes ikke. |
+| **Partner** (i dag `ContactPerson`) | fornavn, efternavn, e-mail, telefon, `isPayer`, adresse (kun betaleren) | **Præcis to pr. kunde**, hver for sig. Højst én betaler; vælges senest, når sagen bekræftes som booking. Betaleren er den, der oprettes i regnskabet. |
+| **Booking** | kunde, `kind` (`Viewing`/`Wedding`), `origin` (`Website`/`Staff`/`Trello`), bryllupsdato, **gæsteantal**, `paymentTerms` (`Old`/`New`), salgstrin, oprettet | Gæsteantallet findes kun her. En sag starter som `Viewing` eller `Wedding`; en fremvisning bekræftes til `Wedding` på samme række. |
+| **ViewingAppointment** | booking, start, varighed, vært, status (`Requested`/`Confirmed`/`Held`/`Cancelled`) | En fremvisning i kalenderen. `Requested` optager tiden, indtil Johan har bekræftet eller afvist. |
+| **HostAvailability** | vært, ugedag, fra–til, gyldig fra/til | Ugeplanen for, hvornår en vært kan vise rundt. |
+| **CalendarBlock** | fra–til, årsag | Ferie, andre arrangementer — tid, der ikke kan bookes. |
+| **TrelloCardLink** | booking, Trello-kort-id, board, sidst synkroniseret | Hvilket kort, der hører til hvilken booking. |
 | **BookingLine** | beskrivelse, varegruppe, `pricing` (`PerGuest`/`Fixed`), enhedspris, antal | Kopieret fra en pakke eller tilføjet i hånden. |
 | **Package / PackageLine** | navn, gyldigt år, linjer med pris | Grundpakke og tilkøb. |
 | **ReadinessItem** | kategori, status (`NotStarted`/`InProgress`/`Done`), ansvarlig | Erstatter Trello-kortets grønne felter. |
@@ -189,14 +199,26 @@ OpenAI via konfiguration; en fast adapter, når der ingen nøgle er. Input: book
 
 ### Trello — `ITrelloGateway`
 
-Bookingerne frem til 2027 ligger i Trello. Første skridt er en **engangsimport**, der kører som tørløb først og rapporterer, hvad den ville importere, og hvad den ikke kan. Om Trello derefter skal spejles, synkroniseres eller udfases, er et åbent spørgsmål (§11).
+Bookingerne frem til 2027 ligger i Trello. Første skridt er en **engangsimport**, der kører som tørløb først og rapporterer, hvad den ville importere, og hvad den ikke kan (fase 8).
+
+Derefter **synkroniseres Trello** (§11.6 er besvaret): boardet vises som kanban inde i systemet, og opgaver kan oprettes, flyttes og afkrydses begge steder (fase 14–15).
+
+- **Boardet er offentligt** (§11.16, besluttet). Det læses derfor **uden nøgle** gennem Trellos åbne adresse, `https://trello.com/b/{board-id}.json`. Alle med linket kan læse kortene.
+- **At skrive kræver stadig nøgle og token** — oprette, flytte og afkrydse kort og registrere webhooks (fase 15). Trello tillader ingen skrivning uden, heller ikke på et offentligt board. Nøglen og tokenet ligger i API'et.
+- **Browseren taler med vores API, API'et med Trello** — også når der læses. API'et samler boardet ét sted, så telefoner og computere ikke hver især spørger Trello, og en adapter bag `ITrelloGateway` kan skifte til læsning med nøgle, hvis boardet senere gøres privat.
+- **Trello giver besked med webhooks** til et anonymt endepunkt, der tjekker Trellos signatur. Webhooks kan tabes, så en **periodisk afstemning** henter boardet og retter forskelle.
+- **Hvem ejer hvad:** bookingens data (dato, gæsteantal, priser) ejes af systemet og skrives til kortet; kortets egne opgaver og tjeklister kan rettes begge steder, og den seneste ændring vinder (§11.15).
 
 ---
 
 ## 6. Login, roller og adgang
 
 - **Login er Supabase.** API'et validerer tokens mod `{SUPABASE_URL}/auth/v1` — udstederen er `/auth/v1`, ikke projektets rod — med de ES256-nøgler, Supabase offentliggør der. API'et har ingen delt hemmelighed.
-- **En fallback-politik** kræver login på alle endepunkter; `/health` melder fra.
+- **En fallback-politik** kræver login på alle endepunkter. Kun disse melder udtrykkeligt fra, og hver af dem er rate-begrænset:
+  - `/health`
+  - det selvstændige AI-resumé (fase 7)
+  - bestillingsformularerne: ledige tider og datoer, og at sende en bestilling (fase 12) — med honeypot-felt mod spam
+  - Trellos webhook, som kun modtages med gyldig signatur (fase 15)
 - **En middleware** slår den indloggede op i `users` og svarer **403 med en forklaring**, hvis personen ikke findes. Det er det ene sted, forskellen på "logget ind" og "har adgang" håndhæves.
 - **Rollerne:**
 
@@ -232,6 +254,11 @@ Bookingerne frem til 2027 ligger i Trello. Første skridt er en **engangsimport*
 | Klargøring · klar til afholdelse | `Readiness` · `ReadyForEvent` |
 | Efterfakturering | `PostEventInvoice` |
 | Tekstbid | `MessageTemplate` |
+| Person i parret · betaler | `Partner` · `Payer` |
+| Fremvisning (i kalenderen) · vært | `ViewingAppointment` · `Host` |
+| Bestilling (fra hjemmesiden) | `Request` (med `origin = Website`) |
+| Bekræft som booking | `ConfirmAsWedding` |
+| Ledig tid · blokering | `AvailableSlot` · `CalendarBlock` |
 
 Engelske identifikatorer holder æøå ude af filstier, databasekolonner og JSON, hvor de giver problemer med værktøjer.
 
@@ -398,11 +425,97 @@ Efter svaret på §11.6. Engangsimport med tørløb først.
 **Færdig når:**
 - hvert kort på *Bryllup 26*, *27* og *28* enten er importeret eller står i tørløbsrapporten med grunden til, at det ikke kunne
 
+### Fase 9 — Computer og telefon
+
+Systemet bruges mest ved skrivebordet, så **computeren kommer først**: hver side designes til en almindelig skærm (1440 × 900) og skal udnytte bredden. Telefonen skal stadig virke fuldt ud, fordi personalet bruger den under opstilling og afvikling — samme funktioner, bare i én kolonne. Brudpunkterne er 375, 768, 1024 og 1440 px.
+
+På computeren:
+
+- **Bookingsiden i to kolonner:** bryllup, indhold og klargøring til venstre; status, betaling, kontakt og historik i en fast sidekolonne til højre.
+- **Lister som tabeller** — bookinger, kunder, pakker, regnskab — med kolonner, der kan sorteres (dato, par, gæster, status, total), og en række, der åbner ved klik.
+- **Menuen i en fast sidebjælke**, og formularer i flere kolonner, hvor felterne hører sammen.
+- **Tastaturet virker:** alt kan nås med Tab, en formular sendes med Enter, og fokus er altid synligt.
+
+På telefonen er det det layout, der findes i dag: én kolonne, fanelinje i bunden og store trykflader.
+
+Fasen laver fase 0–8's sider om til computeren først; fase 10–15 bygges sådan fra start.
+
+**Færdig når:**
+- bookingsiden viser på en 1440 × 900-skærm bryllup, pris, betalingsplan og status uden at rulle
+- bookinglisten er en tabel, der kan sorteres på dato, par, gæster og status
+- hver funktion, der findes på computeren, kan også bruges på en telefon på 375 px — intet skåret af, ingen vandret rulning
+- alle handlinger kan udføres med tastaturet alene
+
+### Fase 10 — Parret som to personer
+
+Parret er to `Partner`e med hver sit fornavn, efternavn, e-mail og telefon — aldrig ét samlet navn. Kundens visningsnavn udledes af de to fornavne. Den ene udpeges som **betaler**; betaleren har adressen, oprettes som kunde i regnskabet og står på tilbud, faktura og aftalebekræftelse. Oprettelsen i hånden fra fase 1 beder om begge personer.
+
+Eksisterende kunder flyttes med en **håndskrevet migration**: det samlede navn deles på "og" eller "&", kontaktpersonerne bliver partnere, og en kunde, der ikke kan deles, står i en rapport i stedet for at blive gættet.
+
+**Færdig når:**
+- en ny booking kræver to personer, og ingen af dem står sammen med den anden i ét felt
+- betaleren kan vælges og skiftes, og tilbud og faktura i det simulerede regnskab står i betalerens navn og adresse
+- hver eksisterende kunde har to personer efter migrationen, eller står i rapporten med grunden
+
+### Fase 11 — Kalender
+
+Én kalender for godset: bryllupper (hele dagen), fremvisninger (med vært) og blokeringer. Hver vært har en **ugeplan** for, hvornår han kan vise rundt, med undtagelser. **Systemet finder tiden**: ledige fremvisningstider er ugeplanen minus alt, der er optaget; ledige bryllupsdatoer er sæsonens weekender — maj, juni, august og september, juli lukket — minus datoer med en sikret booking. Reglen for ledige tider er en ren funktion i `Domain`.
+
+**Færdig når:**
+- event manageren ser en måneds- og en ugevisning fra telefonen med bryllupper, fremvisninger og blokeringer
+- systemet foreslår de næste fem ledige fremvisningstider, og ingen af dem overlapper noget i kalenderen
+- en ny blokering eller en ny fremvisning fjerner tiden fra forslagene med det samme
+
+### Fase 12 — Bestilling udefra
+
+To offentlige formularer uden login, som hjemmesiden linker til:
+
+- **Bestil en fremvisning** — parret vælger en af de ledige tider fra fase 11.
+- **Book brylluppet** — for par, der vil holde det på godset uden fremvisning; parret vælger en ledig dato.
+
+Begge beder om **begge personers** navn, e-mail og telefon hver for sig, forventet gæsteantal og samtykke til, at oplysningerne behandles. En bestilling bliver en ny sag med `origin = Website` og salgstrinnet *Ny bestilling*, som event manageren tager stilling til. Tiden eller datoen **holdes**, mens den venter (§11.11–12). Formularerne viser kun ledig og optaget (princip 8), er rate-begrænsede og har et honeypot-felt.
+
+Der sendes **ingen automatisk mail** (princip 6): parret får en kvittering på skærmen, og Johan sender bekræftelsen med tekstbidderne fra fase 6.
+
+**Færdig når:**
+- et par kan fra en telefon og uden login bestille en fremvisning på en ledig tid på under to minutter
+- bestillingen står hos event manageren som ny sag med begge personer, og tiden er optaget i kalenderen
+- samme tid kan ikke bestilles to gange, heller ikke når to par trykker samtidig
+- ingen mail forlader systemet, før Johan har set teksten og trykket *Send*
+
+### Fase 13 — Fra fremvisning til booking
+
+En sag, der starter som fremvisning, bliver en booking med **Bekræft som booking**: Johan vælger bryllupsdato, gæsteantal, betingelser og betaler, og sagen skifter fra `Viewing` til `Wedding` på samme række. Kunden, de to personer og historikken følger med (princip 9). Derfra går den gennem det almindelige forløb fra fase 2–6. En direkte bookingbestilling fra fase 12 bekræftes på samme måde. Siger parret nej, lukkes sagen som *Tabt* med en grund, og den holdte tid frigives.
+
+**Færdig når:**
+- en fremvisning bekræftet som booking har samme kunde, de samme to personer og hele historikken — og der er ikke oprettet en ny sag
+- den bekræftede booking kan få pakker, tilbud, aftale og reservationsgebyr præcis som en booking oprettet i hånden
+- en afvist fremvisning frigiver tiden i kalenderen og står som *Tabt* med grunden
+
+### Fase 14 — Trello-boardet i systemet
+
+Årsboardene vises som **kanban inde i systemet** — lister, kort, labels, tjeklister og forfaldsdatoer, som i Trello — så ingen skal skifte til Trello. `ITrelloGateway` læser gennem Trellos API med nøgle og token i API'et. Et kort, der hører til en booking (`TrelloCardLink`), linker til den, og bookingen linker til kortet.
+
+**Færdig når:**
+- boardet vises fra en telefon med samme lister, kort, labels og tjeklister som i Trello
+- en ændring lavet i Trello ses i systemet inden for et minut
+- boardet læses uden Trello-nøgle, gennem vores API — browseren taler aldrig direkte med Trello
+
+### Fase 15 — Opgaver og synkronisering
+
+Fra boardet i systemet kan man **oprette et kort, flytte det mellem lister og afkrydse tjeklistepunkter**, og det skrives til Trello. Den anden vej fortæller Trellos webhooks om ændringer; en periodisk afstemning fanger dem, der tabes. Klargøringspunkterne fra fase 5 og tjeklisterne på bookingens kort holdes enige, og en ændring af gæsteantal eller dato på bookingen opdaterer kortet.
+
+**Færdig når:**
+- et kort oprettet i systemet står i Trello, og et kort oprettet i Trello står i systemet
+- et punkt afkrydset det ene sted er afkrydset det andet sted
+- et rettet gæsteantal på bookingen står på Trello-kortet uden at nogen taster det ind
+- en tabt webhook rettes af afstemningen, uden at nogen gør noget
+
 ---
 
 ## 10. Test
 
-**Minimum:** unit-tests af de rene beregninger i `Domain` — pris, betalingsplan og visningsstatus. Det er reglerne, der afgør, hvad et brudepar bliver opkrævet, og de kan testes uden database på millisekunder. Skriv dem som tabeller af tilfælde: gæsteantal, betingelser, datoer ind — rater og status ud.
+**Minimum:** unit-tests af de rene beregninger i `Domain` — pris, betalingsplan, visningsstatus og ledige tider. Det er reglerne, der afgør, hvad et brudepar bliver opkrævet, og de kan testes uden database på millisekunder. Skriv dem som tabeller af tilfælde: gæsteantal, betingelser, datoer ind — rater og status ud.
 
 **Når der er tid:** integrationstests gennem det rigtige API med `WebApplicationFactory` mod en testdatabase — én pr. acceptkriterium, der handler om adgang eller data.
 
@@ -419,7 +532,14 @@ Stil det spørgsmål, der gælder din fase, før du bygger den. Svarer jeg ikke,
 | 3 | Hvilke eksisterende bookinger er på gamle, og hvilke på nye betingelser? | Nye bookinger: nye betingelser | 3 |
 | 4 | Hvor stort er tillægget under 60 gæster? | Konfigurerbart beløb, sat af en ejer | 2 |
 | 5 | Bookes et bryllup under 6 måneder før — hvornår forfalder 33 %-raten? | Ved underskrift | 3 |
-| 6 | Trello efter importen: spejles, synkroniseres eller udfases? | Engangsimport, derefter udfasning | 8 |
+| 6 | Trello efter importen: spejles, synkroniseres eller udfases? | **Besvaret:** synkroniseres, og boardet vises i systemet | 8, 14, 15 |
 | 7 | Underskrift: PDF retur på mail, eller et digitalt værktøj? | PDF retur på mail | 4 |
 | 8 | Bruger Johan virkelig one.com — og kan vi få SMTP-adgang? | Simuleret udbakke | 6 |
 | 9 | Kan QuestPDF's licens bruges af godset i produktion? | Ja til projektet; afklares før drift | 4 |
+| 10 | Hvor længe varer en fremvisning, og hvornår kan Bryan vise rundt? | 1 time; ugeplanen sættes af event manageren pr. vært | 11 |
+| 11 | Er en fremvisning, parret selv bestiller, bekræftet med det samme, eller først når Johan har set den? | Den holder tiden som *Afventer*, og Johan bekræfter | 12 |
+| 12 | Hvor længe holdes en dato for en direkte bookingbestilling, der ikke bliver bekræftet? | 14 dage, derefter frigives den | 12 |
+| 13 | Hvem er betaleren, hvis parret ikke vælger? | Den først nævnte; kan skiftes indtil første faktura er bogført | 10, 13 |
+| 14 | Skal bestillingsformularen vise ledige bryllupsdatoer, eller kun tage imod et ønske? | Den viser ledige weekenddage i sæsonen | 11, 12 |
+| 15 | Hvem vinder, når Trello og systemet er uenige? | Bookingens data ejes af systemet; for opgaver og tjeklister vinder den seneste ændring | 15 |
+| 16 | Må Trello-boardet gøres offentligt, så det kan læses uden nøgle? | **Besvaret:** ja, boardet er offentligt og læses uden nøgle. At skrive (fase 15) kræver stadig nøgle og token. | 14, 15 |

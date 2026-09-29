@@ -85,3 +85,14 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **Uden OpenAI-nøgle** bruges en fast adapter, der tager bookingens data og tekstens egne sætninger efter enkle regler — tydeligt mærket "Uden AI". Med nøglen (`OpenAI__ApiKey` i App Service) bruges OpenAI med struktureret output (model `gpt-4.1-mini`, kan ændres med `OpenAI__Model`). **Jeg har ingen OpenAI-nøgle og har derfor ikke kaldt OpenAI**; adapterens forespørgsel og svarparsing er testet mod en stub.
 - **Kok og event producer** får resuméet uden pris- og betalingslinjer.
 - **Verifikation:** 26 integrationstests grønne (siden uden login, bookingens tal fra bookingen, intet gemt); siden set i browseren uden login.
+
+## Fase 8 — Trello
+
+- **Engangsimport, derefter udfasning** (§11.6). Trello læses kun; intet skrives tilbage.
+- **Kilden er bordets JSON-eksport** (Trello → Eksportér som JSON), som virker uden nøgle. Er `Trello__ApiKey` og `Trello__Token` sat, kan bordet også hentes direkte med bord-id. Begge veje giver samme format og samme import.
+- **Sådan læses et kort:** gæsteantal fra et brugerdefineret felt (fx "Antal gæster") ellers "80 pax"/"80 gæster" i navn eller beskrivelse; dato fra et datofelt, kortets forfaldsdato eller en dato i navn/beskrivelse ("12.06.2027", "14/8", "3. juli" — året fra bordets navn); parrets navn fra kortets navn uden "Bryllup", antal og dato; e-mails og telefonnumre fra beskrivelsen bliver kontaktpersoner. Tjeklister bliver klargøringspunkter: alle punkter tjekket = *Færdig*, nogle = *I gang*.
+- **Et kort uden dato eller gæsteantal importeres ikke**, men står i rapporten med grunden — hellere et kort, Johan retter i Trello og importerer igen, end en booking med et gættet gæsteantal. Arkiverede kort og skabelonkort springes også over med grunden.
+- **Kort i en liste, der hedder noget med "bekræft", "underskrev", "booket", "afholdt" eller "klar"**, importeres som *Underskrevet*; resten som forespørgsel. Alle importerede bookinger får nye betingelser; gamle betingelser rettes pr. booking (§11.3).
+- **Trellos labels (fx "faktura betalt") og beskrivelsen gemmes som en note** på bookingen. Betalingsstatus tages ikke fra labels, men fra regnskabet.
+- **Importen kan køres igen**: et kort, der allerede er importeret, genkendes på sit Trello-id og springes over.
+- **Verifikation:** 52 domænetests (fortolkningen af navne, datoer, felter og tjeklister) og 27 integrationstests grønne — med opdigtede eksporter af *Bryllup 26*, *27* og *28* står alle 7 kort enten som importeret eller i tørløbsrapporten med en grund, og en ny kørsel importerer intet. Migrationen `TrelloOrigin` anvendt; advisors rene. **Importen er ikke kørt mod de rigtige Trello-bord**, som jeg ikke har adgang til.

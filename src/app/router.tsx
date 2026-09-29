@@ -5,6 +5,7 @@ import { ComposePage } from '@/features/messages/components/ComposePage';
 import { OutboxPage } from '@/features/messages/components/OutboxPage';
 import { TemplatesPage } from '@/features/messages/components/TemplatesPage';
 import { StandaloneSummaryPage } from '@/features/summaries/components/StandaloneSummaryPage';
+import { TrelloImportPage } from '@/features/trello/components/TrelloImportPage';
 import { UsersPage } from '@/features/users/components/UsersPage';
 import { MorePage } from '@/features/auth/components/MorePage';
 import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
       { path: 'regnskab', element: <AccountingSimPage /> },
       { path: 'tekstbidder', element: <TemplatesPage /> },
       { path: 'udbakke', element: <OutboxPage /> },
+      { path: 'trello', element: <TrelloImportPage /> },
       { path: 'brugere', element: <UsersPage /> },
       { path: 'mere', element: <MorePage /> },
       { path: 'profil', element: <Navigate to="/mere" replace /> },

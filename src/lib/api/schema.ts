@@ -140,6 +140,127 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/trello/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TrelloStatusResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        files?: components["schemas"]["IFormFile"][];
+                    } & {
+                        boardIds?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ImportReport"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        files?: components["schemas"]["IFormFile"][];
+                    } & {
+                        boardIds?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ImportReport"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/summary/standalone": {
         parameters: {
             query?: never;
@@ -2355,6 +2476,12 @@ export interface components {
             signedAt: null | string;
             signedUploadedBy: null | string;
         };
+        BoardReport: {
+            name: string;
+            /** Format: int32 */
+            year: null | number;
+            cards: components["schemas"]["CardReport"][];
+        };
         BookingLineResponse: {
             /** Format: uuid */
             id: string;
@@ -2409,6 +2536,26 @@ export interface components {
             stage: components["schemas"]["SalesStage"];
             status: components["schemas"]["DisplayStatus"];
             paymentTerms: components["schemas"]["PaymentTerms"];
+        };
+        /** @enum {unknown} */
+        CardAction: "Import" | "Imported" | "AlreadyImported" | "Skip";
+        CardReport: {
+            cardId: string;
+            cardName: string;
+            listName: string;
+            action: components["schemas"]["CardAction"];
+            reason: null | string;
+            coupleName: null | string;
+            /** Format: date */
+            eventDate: null | string;
+            /** Format: int32 */
+            guestCount: null | number;
+            existingCustomer: boolean;
+            labels: string[];
+            /** Format: int32 */
+            readinessItems: number;
+            /** Format: uuid */
+            bookingId: null | string;
         };
         CaseSummary: {
             status: string;
@@ -2526,6 +2673,20 @@ export interface components {
         };
         /** Format: binary */
         IFormFile: string;
+        ImportReport: {
+            dryRun: boolean;
+            boards: components["schemas"]["BoardReport"][];
+            /** Format: int32 */
+            cards: number;
+            /** Format: int32 */
+            importable: number;
+            /** Format: int32 */
+            imported: number;
+            /** Format: int32 */
+            alreadyImported: number;
+            /** Format: int32 */
+            skipped: number;
+        };
         /** @enum {unknown} */
         InstalmentKind: "ReservationFee" | "Instalment" | "FinalPayment";
         InstalmentResponse: {
@@ -2785,6 +2946,9 @@ export interface components {
             /** Format: double */
             amount: number;
             applies: boolean;
+        };
+        TrelloStatusResponse: {
+            apiConfigured: boolean;
         };
         UpdateBookingRequest: {
             /** Format: date */
