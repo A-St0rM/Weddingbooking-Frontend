@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { Alert } from '@/components/ui/Alert';
 import { BackLink } from '@/components/ui/BackLink';
 import { QueryState } from '@/components/ui/QueryState';
 import type { Booking } from '@/lib/api/types';
@@ -6,6 +7,7 @@ import { formatKroner, formatLongDate } from '@/lib/format';
 import { useBooking } from '@/features/bookings/api/bookings';
 import { AgreementCard } from '@/features/agreements/components/AgreementCard';
 import { ReadinessCard } from '@/features/readiness/components/ReadinessCard';
+import { HistoryCard } from '@/features/notes/components/HistoryCard';
 import { PaymentsCard } from '@/features/payments/components/PaymentsCard';
 import { usePermissions } from '@/features/auth/permissions';
 import { BookingLinesCard } from '@/features/bookings/components/BookingLinesCard';
@@ -28,8 +30,10 @@ export function BookingPage() {
 
 function BookingView({ booking }: { booking: Booking }) {
   const { seesPrices, manages } = usePermissions();
+  const sent = (useLocation().state as { sent?: boolean } | null)?.sent;
   return (
     <div className="space-y-4">
+      {sent && <Alert tone="ok">Mailen er sendt og står i historikken.</Alert>}
       <header>
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={booking.status} />
@@ -55,6 +59,7 @@ function BookingView({ booking }: { booking: Booking }) {
       {seesPrices && <AgreementCard booking={booking} />}
       {manages && <StageCard booking={booking} />}
       <ContactCard customer={booking.customer} />
+      <HistoryCard bookingId={booking.id} />
     </div>
   );
 }

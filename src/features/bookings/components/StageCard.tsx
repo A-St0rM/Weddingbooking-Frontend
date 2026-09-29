@@ -5,6 +5,7 @@ import { errorMessage } from '@/lib/api/errorMessage';
 import type { Booking, SalesStage } from '@/lib/api/types';
 import { manualStages, stageLabels } from '@/lib/labels';
 import { useChangeStage } from '@/features/bookings/api/bookings';
+import { ViewingFields } from '@/features/bookings/components/ViewingFields';
 
 export function StageCard({ booking }: { booking: Booking }) {
   const change = useChangeStage(booking.id);
@@ -29,6 +30,9 @@ export function StageCard({ booking }: { booking: Booking }) {
         hint={signed ? 'Sat af den underskrevne aftale.' : '"Underskrevet" sættes, når den underskrevne aftale uploades.'}
       />
       {change.isError && <Alert tone="danger" className="mt-3">{errorMessage(change.error)}</Alert>}
+      <div className="mt-4">
+        <ViewingFields key={booking.version} booking={booking} />
+      </div>
     </Card>
   );
 }
