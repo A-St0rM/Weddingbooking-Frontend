@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowSquareOut, CheckSquare, Clock } from '@phosphor-icons/react';
+import { ArrowSquareOut, CheckSquare, Clock, Plus } from '@phosphor-icons/react';
 import { Alert } from '@/components/ui/Alert';
+import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Segmented } from '@/components/ui/Segmented';
@@ -11,9 +12,10 @@ import { errorMessage } from '@/lib/api/errorMessage';
 import type { components } from '@/lib/api/schema';
 import { formatDateTime, formatShortDate } from '@/lib/format';
 import { usePermissions } from '@/features/auth/permissions';
-import { useTrelloBoard, useTrelloBoards } from '@/features/trello/api/board';
+import { useCheckItem, useCreateCard, useMoveCard, useTrelloBoard, useTrelloBoards } from '@/features/trello/api/board';
 
 type Card = components['schemas']['CardResponse'];
+type List = components['schemas']['ListResponse'];
 
 // Trello's label colours, with dark text on each — readable in daylight.
 const labelColours: Record<string, string> = {
@@ -66,6 +68,9 @@ export function TrelloBoardPage() {
       )}
 
       {board.isError && <Alert tone="danger">{errorMessage(board.error)}</Alert>}
+      {board.data && !board.data.canWrite && (
+        <p className="mb-3 text-sm text-ink-muted">Boardet kan kun læses: API'et har ingen Trello-nøgle. Sæt Trello__ApiKey og Trello__Token for at oprette kort og afkrydse punkter herfra.</p>
+      )}
       {board.data && (
         // The board scrolls sideways, the page does not — as in Trello, one list at a time on a phone.
         <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-4 lg:mx-0 lg:px-0">
@@ -76,8 +81,11 @@ export function TrelloBoardPage() {
                 <span className="font-normal text-ink-muted tabular">{list.cards.length}</span>
               </h2>
               <ul className="space-y-2">
-                {list.cards.map((card) => <TrelloCard key={card.id} card={card} />)}
+                {list.cards.map((card) => (
+                  <TrelloCard key={card.id} card={card} boardId={board.data.id} lists={board.data.lists} listId={list.id} canWrite={board.data.canWrite} />
+                ))}
               </ul>
+              {board.data.canWrite && <NewCard boardId={board.data.id} listId={list.id} />}
             </section>
           ))}
         </div>
@@ -86,7 +94,46 @@ export function TrelloBoardPage() {
   );
 }
 
-function TrelloCard({ card }: { card: Card }) {
+function NewCard({ boardId, listId }: { boardId: string; listId: string }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const create = useCreateCard(boardId, listId);
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
+    if (!name.trim()) return;
+    create.mutate({ name: name.trim(), description: null }, { onSuccess: () => { setName(''); setOpen(false); } });
+  };
+
+  if (!open) {
+    return (
+      <button type="button" onClick={() => setOpen(true)} className="mt-2 flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-control px-2 text-sm text-ink-muted hover:bg-surface">
+        <Plus aria-hidden="true" className="size-4" /> Tilføj et kort
+      </button>
+    );
+  }
+  return (
+    <form onSubmit={submit} className="mt-2 space-y-2">
+      <label className="sr-only" htmlFor={`new-${listId}`}>Kortets navn</label>
+      <textarea
+        id={`new-${listId}`} autoFocus rows={2} value={name} maxLength={500}
+        onChange={(e) => setName(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) submit(e); if (e.key === 'Escape') setOpen(false); }}
+        placeholder="Hvad skal gøres?"
+        className="w-full rounded-control border border-control bg-surface p-2 text-sm"
+      />
+      {create.isError && <p className="text-sm text-danger">{errorMessage(create.error)}</p>}
+      <div className="flex gap-2">
+        <Button type="submit" size="sm" loading={create.isPending}>Opret i Trello</Button>
+        <Button size="sm" variant="ghost" onClick={() => setOpen(false)}>Annuller</Button>
+      </div>
+    </form>
+  );
+}
+
+function TrelloCard({ card, boardId, lists, listId, canWrite }: { card: Card; boardId: string; lists: List[]; listId: string; canWrite: boolean }) {
+  const move = useMoveCard(boardId, card.id);
+  const check = useCheckItem(boardId, card.id);
+  const error = move.error ?? check.error;
   const items = card.checklists.flatMap((c) => c.items);
   const done = items.filter((i) => i.complete).length;
   return (
@@ -119,20 +166,36 @@ function TrelloCard({ card }: { card: Card }) {
         </summary>
         <div className="space-y-3 border-t border-line p-3 text-sm">
           {card.description && <p className="whitespace-pre-line text-ink-muted [overflow-wrap:anywhere]">{card.description}</p>}
-          {card.checklists.map((checklist, i) => (
-            <div key={i}>
+          {card.checklists.map((checklist) => (
+            <div key={checklist.id}>
               <p className="font-medium">{checklist.name}</p>
               <ul className="mt-1 space-y-0.5">
-                {checklist.items.map((item, j) => (
-                  <li key={j} className={cn('flex gap-2', item.complete && 'text-ink-muted line-through')}>
-                    <span aria-hidden="true">{item.complete ? '☑' : '☐'}</span>
-                    <span className="sr-only">{item.complete ? 'Færdig: ' : 'Ikke færdig: '}</span>
-                    {item.name}
+                {checklist.items.map((item) => (
+                  <li key={item.id}>
+                    <label className={cn('flex min-h-9 items-center gap-2', canWrite && 'cursor-pointer', item.complete && 'text-ink-muted line-through')}>
+                      <input
+                        type="checkbox" className="size-4 shrink-0 accent-primary" checked={item.complete} disabled={!canWrite || check.isPending}
+                        onChange={(e) => check.mutate({ checkItemId: item.id, complete: e.target.checked })}
+                      />
+                      {item.name}
+                    </label>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+          {error && <p className="text-danger">{errorMessage(error)}</p>}
+          {canWrite && (
+            <label className="flex items-center gap-2">
+              <span className="text-ink-muted">Liste</span>
+              <select
+                value={listId} disabled={move.isPending} onChange={(e) => move.mutate(e.target.value)}
+                className="min-h-11 flex-1 rounded-control border border-control bg-surface px-2"
+              >
+                {lists.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
+              </select>
+            </label>
+          )}
           <div className="flex flex-wrap gap-3">
             {card.bookingId && <Link to={`/bookinger/${card.bookingId}`} className="inline-flex min-h-11 items-center font-medium text-primary">Åbn booking</Link>}
             {card.url && (

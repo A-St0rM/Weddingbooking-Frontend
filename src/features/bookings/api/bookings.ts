@@ -74,6 +74,15 @@ export function useUpdateBooking(id: string) {
   });
 }
 
+/** A card on the Trello board for the booking's year, with its date, guests and readiness. */
+export function useCreateTrelloCard(id: string) {
+  const store = useStoreBooking();
+  return useMutation({
+    mutationFn: () => call(api.POST('/api/bookings/{id}/trello-card', { params: { path: { id } } })),
+    onSuccess: store,
+  });
+}
+
 export function useChangeStage(id: string) {
   const store = useStoreBooking();
   return useMutation({

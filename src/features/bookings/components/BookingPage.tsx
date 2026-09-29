@@ -4,7 +4,9 @@ import { BackLink } from '@/components/ui/BackLink';
 import { QueryState } from '@/components/ui/QueryState';
 import type { Booking } from '@/lib/api/types';
 import { formatKroner, formatLongDate } from '@/lib/format';
-import { useBooking } from '@/features/bookings/api/bookings';
+import { useBooking, useCreateTrelloCard } from '@/features/bookings/api/bookings';
+import { Button } from '@/components/ui/Button';
+import { errorMessage } from '@/lib/api/errorMessage';
 import { AgreementCard } from '@/features/agreements/components/AgreementCard';
 import { ReadinessCard } from '@/features/readiness/components/ReadinessCard';
 import { HistoryCard } from '@/features/notes/components/HistoryCard';
@@ -49,6 +51,7 @@ function BookingView({ booking }: { booking: Booking }) {
               Trello-kort
             </a>
           )}
+          {!booking.trelloCardId && manages && !isViewing && <CreateTrelloCard id={booking.id} />}
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-balance">
           <Link to={`/kunder/${booking.customer.id}`} className="hover:underline">
@@ -91,5 +94,15 @@ function BookingView({ booking }: { booking: Booking }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function CreateTrelloCard({ id }: { id: string }) {
+  const create = useCreateTrelloCard(id);
+  return (
+    <>
+      <Button size="sm" variant="ghost" loading={create.isPending} onClick={() => create.mutate()}>Opret Trello-kort</Button>
+      {create.isError && <span className="text-sm text-danger">{errorMessage(create.error)}</span>}
+    </>
   );
 }

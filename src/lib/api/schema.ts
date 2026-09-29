@@ -212,6 +212,139 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/trello/boards/{boardId}/lists/{listId}/cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    boardId: string;
+                    listId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateCardRequest"];
+                    "text/json": components["schemas"]["CreateCardRequest"];
+                    "application/*+json": components["schemas"]["CreateCardRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BoardResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/boards/{boardId}/cards/{cardId}/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    boardId: string;
+                    cardId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MoveCardRequest"];
+                    "text/json": components["schemas"]["MoveCardRequest"];
+                    "application/*+json": components["schemas"]["MoveCardRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BoardResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/boards/{boardId}/cards/{cardId}/check-items/{checkItemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    boardId: string;
+                    cardId: string;
+                    checkItemId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CheckItemRequest"];
+                    "text/json": components["schemas"]["CheckItemRequest"];
+                    "application/*+json": components["schemas"]["CheckItemRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BoardResponse"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/trello/status": {
         parameters: {
             query?: never;
@@ -323,6 +456,91 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["ImportReport"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/webhook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/webhooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WebhooksResponse"];
                     };
                 };
             };
@@ -2385,6 +2603,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/bookings/{id}/trello-card": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BookingResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings/{id}/stage": {
         parameters: {
             query?: never;
@@ -3096,6 +3351,7 @@ export interface components {
             url: null | string;
             /** Format: date-time */
             fetchedAt: string;
+            canWrite: boolean;
             lists: components["schemas"]["ListResponse"][];
         };
         BoardSummaryResponse: {
@@ -3223,11 +3479,16 @@ export interface components {
         ChangeStageRequest: {
             stage: components["schemas"]["SalesStage"];
         };
+        CheckItemRequest: {
+            complete: boolean;
+        };
         CheckItemResponse: {
+            id: string;
             name: string;
             complete: boolean;
         };
         ChecklistResponse: {
+            id: string;
             name: string;
             items: components["schemas"]["CheckItemResponse"][];
         };
@@ -3270,6 +3531,10 @@ export interface components {
             /** Format: int32 */
             guestCount: number;
             paymentTerms: null | components["schemas"]["PaymentTerms"];
+        };
+        CreateCardRequest: {
+            name: string;
+            description: null | string;
         };
         CreateInvoiceRequest: {
             kind: components["schemas"]["InstalmentKind"];
@@ -3448,6 +3713,9 @@ export interface components {
             subject: string;
             body: string;
             ccViewingHost: boolean;
+        };
+        MoveCardRequest: {
+            listId: string;
         };
         NoteResponse: {
             /** Format: uuid */
@@ -3735,6 +4003,11 @@ export interface components {
             guestCount: number;
             consent: boolean;
             website: null | string;
+        };
+        WebhooksResponse: {
+            callbackUrl: string;
+            registered: string[];
+            refused: string[];
         };
         WeddingRequest: {
             people: components["schemas"]["PublicPerson"][];
