@@ -4,11 +4,13 @@ import { QueryState } from '@/components/ui/QueryState';
 import type { Booking } from '@/lib/api/types';
 import { formatKroner, formatLongDate } from '@/lib/format';
 import { useBooking } from '@/features/bookings/api/bookings';
+import { PaymentsCard } from '@/features/payments/components/PaymentsCard';
+import { usePermissions } from '@/features/auth/permissions';
 import { BookingLinesCard } from '@/features/bookings/components/BookingLinesCard';
 import { BookingDetailsCard } from '@/features/bookings/components/BookingDetailsCard';
 import { ContactCard } from '@/features/bookings/components/ContactCard';
 import { SameDateWarning } from '@/features/bookings/components/SameDateWarning';
-import { StageBadge } from '@/features/bookings/components/StageBadge';
+import { StatusBadge } from '@/features/bookings/components/StatusBadge';
 import { StageCard } from '@/features/bookings/components/StageCard';
 
 export function BookingPage() {
@@ -23,11 +25,12 @@ export function BookingPage() {
 }
 
 function BookingView({ booking }: { booking: Booking }) {
+  const { seesPrices } = usePermissions();
   return (
     <div className="space-y-4">
       <header>
         <div className="flex flex-wrap items-center gap-2">
-          <StageBadge stage={booking.stage} />
+          <StatusBadge status={booking.status} />
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-balance">
           <Link to={`/kunder/${booking.customer.id}`} className="hover:underline">
@@ -45,6 +48,7 @@ function BookingView({ booking }: { booking: Booking }) {
       {/* Keyed on the version, so a saved change or someone else's resets the form to what is stored. */}
       <BookingDetailsCard key={booking.version} booking={booking} />
       <BookingLinesCard booking={booking} />
+      {seesPrices && <PaymentsCard booking={booking} />}
       <StageCard booking={booking} />
       <ContactCard customer={booking.customer} />
     </div>

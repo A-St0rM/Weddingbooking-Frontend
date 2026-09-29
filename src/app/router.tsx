@@ -1,7 +1,8 @@
-import { createBrowserRouter, Link } from 'react-router-dom';
+import { createBrowserRouter, Link, Navigate } from 'react-router-dom';
 import { AppShell } from '@/app/layout/AppShell';
 import { AccessGate } from '@/features/auth/components/AccessGate';
-import { ProfilePage } from '@/features/auth/components/ProfilePage';
+import { MorePage } from '@/features/auth/components/MorePage';
+import { AccountingSimPage } from '@/features/accounting-sim/components/AccountingSimPage';
 import { HomePage } from '@/features/home/HomePage';
 import { BookingListPage } from '@/features/bookings/components/BookingListPage';
 import { BookingPage } from '@/features/bookings/components/BookingPage';
@@ -28,7 +29,9 @@ export const router = createBrowserRouter([
       { path: 'kunder/:id', element: <CustomerPage /> },
       { path: 'pakker', element: <PackageListPage /> },
       { path: 'pakker/:id', element: <PackagePage /> },
-      { path: 'profil', element: <ProfilePage /> },
+      { path: 'regnskab', element: <AccountingSimPage /> },
+      { path: 'mere', element: <MorePage /> },
+      { path: 'profil', element: <Navigate to="/mere" replace /> },
       {
         path: '*',
         element: (

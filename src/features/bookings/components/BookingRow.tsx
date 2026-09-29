@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { CaretRight } from '@phosphor-icons/react';
 import type { BookingSummary } from '@/lib/api/types';
 import { formatLongDate } from '@/lib/format';
-import { StageBadge } from '@/features/bookings/components/StageBadge';
+import { StatusBadge } from '@/features/bookings/components/StatusBadge';
 
 export function BookingRow({ booking }: { booking: BookingSummary }) {
   return (
@@ -17,7 +17,7 @@ export function BookingRow({ booking }: { booking: BookingSummary }) {
             {formatLongDate(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
           </p>
         </div>
-        <StageBadge stage={booking.stage} />
+        <StatusBadge status={booking.status} />
         <CaretRight aria-hidden="true" className="size-4 shrink-0 text-ink-muted" />
       </Link>
     </li>

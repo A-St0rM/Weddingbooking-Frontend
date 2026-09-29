@@ -1,5 +1,14 @@
 import type { Tone } from '@/components/ui/Badge';
-import type { PaymentTerms, SalesStage } from '@/lib/api/types';
+import type {
+  DisplayStatus,
+  DocumentStatus,
+  InstalmentKind,
+  InstalmentState,
+  PackageKind,
+  PaymentTerms,
+  ProductGroup,
+  SalesStage,
+} from '@/lib/api/types';
 
 export const stageLabels: Record<SalesStage, string> = {
   Inquiry: 'Forespørgsel',
@@ -32,7 +41,7 @@ export const termsDescriptions: Record<PaymentTerms, string> = {
   Old: 'Hele beløbet 30 dage før',
 };
 
-export const productGroupLabels: Record<import('@/lib/api/types').ProductGroup, string> = {
+export const productGroupLabels: Record<ProductGroup, string> = {
   Reception: 'Reception',
   Ceremony: 'Vielse',
   DinnerAndParty: 'Middag og fest',
@@ -43,7 +52,64 @@ export const productGroupLabels: Record<import('@/lib/api/types').ProductGroup, 
   Other: 'Andet',
 };
 
-export const packageKindLabels: Record<import('@/lib/api/types').PackageKind, string> = {
+export const packageKindLabels: Record<PackageKind, string> = {
   Base: 'Grundpakke',
   AddOn: 'Tilkøb',
+};
+
+export const statusLabels: Record<DisplayStatus, string> = {
+  Inquiry: 'Forespørgsel',
+  Viewing: 'Fremvisning aftalt',
+  QuoteSent: 'Tilbud sendt',
+  Signed: 'Underskrevet',
+  DateSecured: 'Dato sikret',
+  ReadyForEvent: 'Klar til afholdelse',
+  Held: 'Afholdt',
+  AwaitingPostEventInvoice: 'Afventer efterfakturering',
+  PaymentOverdue: 'Betaling forfalden',
+  Cancelled: 'Afbestilt',
+  Lost: 'Tabt',
+};
+
+export const statusTones: Record<DisplayStatus, Tone> = {
+  Inquiry: 'neutral',
+  Viewing: 'info',
+  QuoteSent: 'info',
+  Signed: 'primary',
+  DateSecured: 'primary',
+  ReadyForEvent: 'ok',
+  Held: 'neutral',
+  AwaitingPostEventInvoice: 'warn',
+  PaymentOverdue: 'danger',
+  Cancelled: 'danger',
+  Lost: 'neutral',
+};
+
+export const instalmentLabels: Record<InstalmentKind, string> = {
+  ReservationFee: 'Reservationsgebyr',
+  Instalment: '33 %-rate',
+  FinalPayment: 'Restbetaling',
+};
+
+export const instalmentStateLabels: Record<InstalmentState, string> = {
+  NotInvoiced: 'Ikke faktureret',
+  Draft: 'Kladde',
+  Booked: 'Faktureret',
+  Paid: 'Betalt',
+  Overdue: 'Forfalden',
+};
+
+export const instalmentStateTones: Record<InstalmentState, Tone> = {
+  NotInvoiced: 'neutral',
+  Draft: 'warn',
+  Booked: 'info',
+  Paid: 'ok',
+  Overdue: 'danger',
+};
+
+export const documentStatusLabels: Record<DocumentStatus, string> = {
+  Draft: 'Kladde',
+  Sent: 'Sendt',
+  Booked: 'Bogført',
+  Paid: 'Betalt',
 };

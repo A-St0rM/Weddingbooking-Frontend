@@ -139,7 +139,10 @@ function AddPackage({ booking }: { booking: Booking }) {
   const packages = usePackages();
   const { addPackage } = useBookingLines(booking.id);
   const year = Number(booking.eventDate.slice(0, 4));
-  const available = (packages.data ?? []).slice().sort((a, b) => Math.abs(a.year - year) - Math.abs(b.year - year));
+  // Nearest year first, the base package before the add-ons.
+  const available = (packages.data ?? [])
+    .slice()
+    .sort((a, b) => Math.abs(a.year - year) - Math.abs(b.year - year) || (a.kind === b.kind ? a.name.localeCompare(b.name, 'da') : a.kind === 'Base' ? -1 : 1));
   const [chosen, setChosen] = useState('');
   const selected = chosen || available[0]?.id || '';
 
