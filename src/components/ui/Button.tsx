@@ -6,8 +6,8 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'md' | 'sm';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary text-on-primary hover:bg-primary-hover',
-  secondary: 'bg-surface text-ink border border-control hover:bg-neutral-soft',
+  primary: 'bg-primary text-on-primary shadow-[0_6px_16px_-8px_rgb(31_61_44/0.7)] hover:bg-primary-hover hover:-translate-y-px',
+  secondary: 'bg-surface text-ink ring-1 ring-control hover:bg-neutral-soft',
   ghost: 'text-ink hover:bg-neutral-soft',
   danger: 'bg-danger-solid text-white hover:bg-danger',
 };
@@ -36,7 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       aria-busy={loading || undefined}
       className={cn(
         'inline-flex cursor-pointer items-center justify-center gap-2 rounded-control font-medium',
-        'transition-[background-color,transform] duration-150 ease-out active:scale-[0.98]',
+        'transition-[background-color,transform,box-shadow] duration-200 ease-out active:translate-y-0 active:scale-[0.98]',
         'disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100',
         variants[variant],
         sizes[size],

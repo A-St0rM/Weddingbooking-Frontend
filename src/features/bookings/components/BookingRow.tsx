@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CaretDown, CaretRight, CaretUp } from '@phosphor-icons/react';
 import { cn } from '@/lib/cn';
 import type { BookingSummary, DisplayStatus } from '@/lib/api/types';
-import { formatLongDate } from '@/lib/format';
+import { formatLongDate, relativeDays } from '@/lib/format';
+import { DateTile } from '@/features/bookings/components/DateTile';
 import { StatusBadge } from '@/features/bookings/components/StatusBadge';
 
 export function BookingRow({ booking }: { booking: BookingSummary }) {
@@ -11,16 +12,18 @@ export function BookingRow({ booking }: { booking: BookingSummary }) {
     <li>
       <Link
         to={`/bookinger/${booking.id}`}
-        className="flex min-h-16 items-center gap-3 px-4 py-3 transition-colors hover:bg-neutral-soft active:bg-neutral-soft"
+        className="group flex min-h-18 items-center gap-4 px-4 py-3 transition-colors duration-200 hover:bg-canvas/70 active:bg-canvas"
       >
+        <DateTile iso={booking.eventDate} />
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium">{booking.customerName}</p>
-          <p className="text-sm text-ink-muted first-letter:uppercase">
-            {formatLongDate(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
+          <p className="truncate font-display text-lg leading-tight font-medium">{booking.customerName}</p>
+          <p className="mt-0.5 text-sm text-ink-muted">
+            <span className="sr-only">{formatLongDate(booking.eventDate)} · </span>
+            {relativeDays(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
           </p>
         </div>
         <StatusBadge status={booking.status} />
-        <CaretRight aria-hidden="true" className="size-4 shrink-0 text-ink-muted" />
+        <CaretRight aria-hidden="true" className="size-4 shrink-0 text-ink-muted transition-transform duration-200 group-hover:translate-x-0.5" />
       </Link>
     </li>
   );
@@ -28,7 +31,7 @@ export function BookingRow({ booking }: { booking: BookingSummary }) {
 
 export function BookingList({ bookings }: { bookings: BookingSummary[] }) {
   return (
-    <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface shadow-card">
+    <ul className="divide-y divide-line overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
       {bookings.map((booking) => (
         <BookingRow key={booking.id} booking={booking} />
       ))}
@@ -64,9 +67,9 @@ export function BookingTable({ bookings }: { bookings: BookingSummary[] }) {
   const rows = [...bookings].sort((a, b) => compare[sort.key](a, b) * (sort.ascending ? 1 : -1));
 
   return (
-    <div className="overflow-hidden rounded-card border border-line bg-surface shadow-card">
+    <div className="overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line/60">
       <table className="w-full text-left">
-        <thead className="border-b border-line bg-neutral-soft text-sm text-ink-muted">
+        <thead className="border-b border-line text-xs tracking-wider text-ink-muted uppercase">
           <tr>
             {columns.map((column) => {
               const active = sort.key === column.key;
@@ -75,7 +78,7 @@ export function BookingTable({ bookings }: { bookings: BookingSummary[] }) {
                   key={column.key}
                   scope="col"
                   aria-sort={active ? (sort.ascending ? 'ascending' : 'descending') : 'none'}
-                  className={cn('px-4 py-2 font-medium', column.numeric && 'text-right')}
+                  className={cn('px-5 py-3 font-semibold', column.numeric && 'text-right')}
                 >
                   <button
                     type="button"
@@ -95,16 +98,24 @@ export function BookingTable({ bookings }: { bookings: BookingSummary[] }) {
             <tr
               key={booking.id}
               onClick={() => navigate(`/bookinger/${booking.id}`)}
-              className="cursor-pointer transition-colors hover:bg-neutral-soft"
+              className="group cursor-pointer transition-colors duration-200 hover:bg-canvas/70"
             >
-              <td className="px-4 py-3 whitespace-nowrap first-letter:uppercase">{formatLongDate(booking.eventDate)}</td>
-              <td className="px-4 py-3 font-medium">
-                <Link to={`/bookinger/${booking.id}`} onClick={(e) => e.stopPropagation()} className="hover:underline">
+              <td className="px-5 py-3">
+                <span className="flex items-center gap-4">
+                  <DateTile iso={booking.eventDate} />
+                  <span>
+                    <span className="block whitespace-nowrap first-letter:uppercase">{formatLongDate(booking.eventDate)}</span>
+                    <span className="block text-sm text-ink-muted">{relativeDays(booking.eventDate)}</span>
+                  </span>
+                </span>
+              </td>
+              <td className="px-5 py-3">
+                <Link to={`/bookinger/${booking.id}`} onClick={(e) => e.stopPropagation()} className="font-display text-lg font-medium group-hover:underline">
                   {booking.customerName}
                 </Link>
               </td>
-              <td className="px-4 py-3 text-right tabular">{booking.guestCount}</td>
-              <td className="px-4 py-3">
+              <td className="px-5 py-3 text-right text-lg tabular">{booking.guestCount}</td>
+              <td className="px-5 py-3">
                 <StatusBadge status={booking.status} />
               </td>
             </tr>

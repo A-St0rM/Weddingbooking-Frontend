@@ -19,7 +19,7 @@ export function Alert({ tone = 'info', title, children, className }: {
 }) {
   const { box, Icon } = styles[tone];
   return (
-    <div role={tone === 'danger' ? 'alert' : 'status'} className={cn('flex gap-3 rounded-control p-4', box, className)}>
+    <div role={tone === 'danger' ? 'alert' : 'status'} className={cn('flex gap-3 rounded-card p-4 ring-1 ring-current/10', box, className)}>
       <Icon aria-hidden="true" weight="bold" className="mt-0.5 size-5 shrink-0" />
       <div className="space-y-1 text-sm">
         {title && <p className="font-semibold">{title}</p>}

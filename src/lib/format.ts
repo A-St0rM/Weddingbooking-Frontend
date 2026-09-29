@@ -12,6 +12,21 @@ export const formatLongDate = (iso: string) => longDate.format(parseDate(iso));
 export const formatShortDate = (iso: string) => shortDate.format(parseDate(iso));
 export const formatDateTime = (iso: string) => dateTime.format(new Date(iso));
 
+/** Whole days from today to the date: 0 is today, negative is past. */
+export function daysUntil(iso: string, today = new Date()) {
+  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12);
+  return Math.round((parseDate(iso).getTime() - start.getTime()) / 86_400_000);
+}
+
+/** "i dag", "i morgen", "om 12 dage", "for 3 dage siden". */
+export function relativeDays(iso: string) {
+  const days = daysUntil(iso);
+  if (days === 0) return 'i dag';
+  if (days === 1) return 'i morgen';
+  if (days === -1) return 'i går';
+  return days > 0 ? `om ${days} dage` : `for ${-days} dage siden`;
+}
+
 export const roleLabels = {
   EventManager: 'Event manager',
   Owner: 'Ejer',

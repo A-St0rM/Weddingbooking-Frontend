@@ -2,12 +2,11 @@ import type { ReactNode } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
-import { Spinner } from '@/components/ui/Spinner';
 import { errorMessage } from '@/lib/api/errorMessage';
 
 /** Loading, error with retry, or the data. */
 export function QueryState<T>({ query, children }: { query: UseQueryResult<T>; children: (data: T) => ReactNode }) {
-  if (query.isPending) return <div className="py-10 text-center text-ink-muted"><Spinner label="Henter" /></div>;
+  if (query.isPending) return <Skeleton />;
   if (query.isError) {
     return (
       <Alert tone="danger" title="Kunne ikke hente">
@@ -19,4 +18,15 @@ export function QueryState<T>({ query, children }: { query: UseQueryResult<T>; c
     );
   }
   return <>{children(query.data)}</>;
+}
+
+/** The shape of a list arriving, instead of a spinner in empty space. */
+export function Skeleton({ rows = 4 }: { rows?: number }) {
+  return (
+    <div role="status" aria-label="Henter" className="space-y-3">
+      {Array.from({ length: rows }, (_, i) => (
+        <div key={i} className="h-16 animate-pulse rounded-card bg-neutral-soft/80" style={{ opacity: 1 - i * 0.18 }} />
+      ))}
+    </div>
+  );
 }

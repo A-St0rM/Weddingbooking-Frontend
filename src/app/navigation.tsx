@@ -11,23 +11,28 @@ export interface NavItem {
   inTabBar: boolean;
   /** Who sees the destination. Everyone, when left out. */
   visibleTo?: (role: Role) => boolean;
+  /** The heading it sits under in the sidebar. Left out: phone only. */
+  section?: NavSection;
 }
+
+export type NavSection = 'Hverdag' | 'Salg og kunder' | 'Kontoret';
+export const navSections: NavSection[] = ['Hverdag', 'Salg og kunder', 'Kontoret'];
 
 const seesPrices = (role: Role) => permissionsFor(role).seesPrices;
 const manages = (role: Role) => permissionsFor(role).manages;
 
 export const navItems: NavItem[] = [
-  { to: '/', label: 'Oversigt', icon: House, inTabBar: true },
-  { to: '/bookinger', label: 'Bookinger', icon: Notebook, inTabBar: true },
-  { to: '/kalender', label: 'Kalender', icon: CalendarBlank, inTabBar: true },
-  { to: '/kunder', label: 'Kunder', icon: UsersThree, inTabBar: true },
-  { to: '/pakker', label: 'Pakker', icon: Package, inTabBar: false, visibleTo: seesPrices },
-  { to: '/regnskab', label: 'Regnskab', icon: Receipt, inTabBar: false, visibleTo: seesPrices },
-  { to: '/resume', label: 'Resumé af en sag', icon: Sparkle, inTabBar: false },
-  { to: '/tekstbidder', label: 'Tekstbidder', icon: TextAlignLeft, inTabBar: false, visibleTo: manages },
-  { to: '/udbakke', label: 'Udbakke', icon: EnvelopeSimple, inTabBar: false, visibleTo: manages },
-  { to: '/trello', label: 'Trello', icon: Kanban, inTabBar: false },
-  { to: '/brugere', label: 'Brugere', icon: IdentificationCard, inTabBar: false, visibleTo: manages },
+  { to: '/', label: 'Oversigt', icon: House, inTabBar: true, section: 'Hverdag' },
+  { to: '/bookinger', label: 'Bookinger', icon: Notebook, inTabBar: true, section: 'Hverdag' },
+  { to: '/kalender', label: 'Kalender', icon: CalendarBlank, inTabBar: true, section: 'Hverdag' },
+  { to: '/trello', label: 'Trello', icon: Kanban, inTabBar: false, section: 'Hverdag' },
+  { to: '/kunder', label: 'Kunder', icon: UsersThree, inTabBar: true, section: 'Salg og kunder' },
+  { to: '/pakker', label: 'Pakker', icon: Package, inTabBar: false, visibleTo: seesPrices, section: 'Salg og kunder' },
+  { to: '/udbakke', label: 'Udbakke', icon: EnvelopeSimple, inTabBar: false, visibleTo: manages, section: 'Salg og kunder' },
+  { to: '/tekstbidder', label: 'Tekstbidder', icon: TextAlignLeft, inTabBar: false, visibleTo: manages, section: 'Salg og kunder' },
+  { to: '/regnskab', label: 'Regnskab', icon: Receipt, inTabBar: false, visibleTo: seesPrices, section: 'Kontoret' },
+  { to: '/resume', label: 'Resumé af en sag', icon: Sparkle, inTabBar: false, section: 'Kontoret' },
+  { to: '/brugere', label: 'Brugere', icon: IdentificationCard, inTabBar: false, visibleTo: manages, section: 'Kontoret' },
   { to: '/mere', label: 'Mere', icon: DotsThreeOutline, inTabBar: true },
 ];
 

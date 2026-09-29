@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle, UserCircle } from '@phosphor-icons/react';
 import { Alert } from '@/components/ui/Alert';
 import { BackLink } from '@/components/ui/BackLink';
@@ -26,7 +26,8 @@ export function NewBookingPage() {
   const navigate = useNavigate();
   const [people, setPeople] = useState([emptyPerson, emptyPerson]);
   const [customer, setCustomer] = useState<CustomerSummary | null>(null);
-  const [eventDate, setEventDate] = useState('');
+  // A free Saturday picked on the overview arrives as ?dato=YYYY-MM-DD.
+  const [eventDate, setEventDate] = useState(useSearchParams()[0].get('dato') ?? '');
   const [guests, setGuests] = useState('');
   const [terms, setTerms] = useState<PaymentTerms>('New');
   const create = useCreateBooking();

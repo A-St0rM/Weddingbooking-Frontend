@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
       </AccessGate>
     ),
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomePage />, handle: { wide: true } },
       { path: 'bookinger', element: <BookingListPage />, handle: { wide: true } },
       { path: 'bookinger/ny', element: <NewBookingPage /> },
       { path: 'bookinger/:id', element: <BookingPage />, handle: { wide: true } },
