@@ -12,6 +12,7 @@ import type { Customer, CustomerDetail } from '@/lib/api/types';
 import { BookingList } from '@/features/bookings/components/BookingRow';
 import { useCustomer, useCustomerMutations } from '@/features/customers/api/customers';
 import { ContactsCard } from '@/features/customers/components/ContactsCard';
+import { usePermissions } from '@/features/auth/permissions';
 
 export function CustomerPage() {
   const { id = '' } = useParams();
@@ -40,6 +41,7 @@ function CustomerView({ detail }: { detail: CustomerDetail }) {
 }
 
 function DetailsCard({ customer }: { customer: Customer }) {
+  const { manages } = usePermissions();
   const { update } = useCustomerMutations(customer.id);
   const [form, setForm] = useState({
     name: customer.name,
@@ -63,14 +65,16 @@ function DetailsCard({ customer }: { customer: Customer }) {
     <Card>
       <h2 className="mb-4 text-lg font-semibold">Kunde</h2>
       <form onSubmit={submit} className="space-y-4">
+        <fieldset disabled={!manages} className="space-y-4">
         <Field label="Parrets navn" value={form.name} onChange={set('name')} required />
         <Field label="Adresse" autoComplete="street-address" value={form.address} onChange={set('address')} />
         <div className="grid grid-cols-[7rem_1fr] gap-3">
           <Field label="Postnr." inputMode="numeric" autoComplete="postal-code" value={form.postalCode} onChange={set('postalCode')} />
           <Field label="By" autoComplete="address-level2" value={form.city} onChange={set('city')} />
         </div>
+        </fieldset>
         {update.isError && <Alert tone="danger">{errorMessage(update.error)}</Alert>}
-        {dirty && (
+        {dirty && manages && (
           <Button type="submit" loading={update.isPending} disabled={!form.name.trim()}>
             Gem
           </Button>

@@ -8,10 +8,36 @@ import { Segmented } from '@/components/ui/Segmented';
 import { errorMessage, isConflict } from '@/lib/api/errorMessage';
 import type { Booking, PaymentTerms } from '@/lib/api/types';
 import { termsDescriptions, termsLabels } from '@/lib/labels';
+import { formatLongDate } from '@/lib/format';
 import { bookingKeys, useUpdateBooking } from '@/features/bookings/api/bookings';
+import { usePermissions } from '@/features/auth/permissions';
 
 /** Date, guest count and terms — the guest count is typed here and nowhere else. */
 export function BookingDetailsCard({ booking }: { booking: Booking }) {
+  const { manages } = usePermissions();
+  if (!manages) return <BookingFacts booking={booking} />;
+  return <BookingForm booking={booking} />;
+}
+
+/** For the kitchen and event production: the facts, without a form to change them. */
+function BookingFacts({ booking }: { booking: Booking }) {
+  return (
+    <Card>
+      <dl className="grid grid-cols-2 gap-4">
+        <div>
+          <dt className="text-sm text-ink-muted">Dato</dt>
+          <dd className="font-medium first-letter:uppercase">{formatLongDate(booking.eventDate)}</dd>
+        </div>
+        <div>
+          <dt className="text-sm text-ink-muted">Gæster</dt>
+          <dd className="text-2xl font-semibold tabular">{booking.guestCount}</dd>
+        </div>
+      </dl>
+    </Card>
+  );
+}
+
+function BookingForm({ booking }: { booking: Booking }) {
   const queryClient = useQueryClient();
   const update = useUpdateBooking(booking.id);
   const [eventDate, setEventDate] = useState(booking.eventDate);

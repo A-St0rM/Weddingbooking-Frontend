@@ -56,3 +56,13 @@ Det, der blev besluttet undervejs uden et svar fra dig. Hvert punkt kan ændres 
 - **"Vedhæft til tilbud"** lægger aftalen på det nyeste tilbud i regnskabet og afvises, når tilbuddet ikke længere er en kladde — som i e-conomic.
 - **QuestPDF bruges under Community-licensen** (§11.9); licensen skal afklares, før godset bruger det i drift.
 - **Verifikation:** 17 integrationstests grønne (ny version efter rettet gæsteantal bevarer den gamle; underskrevet PDF uploades og hentes byte for byte; en fil, der ikke er PDF, afvises; bilag afvises på et sendt tilbud). En genereret aftale er læst igennem: parret, adresse, kontakter, dato, 94 gæster, hver linje, præciseringen og raterne står der. Migrationen `Agreements` anvendt; advisors rene.
+
+## Fase 5 — Klargøring og roller
+
+- **Hver booking får fem klargøringspunkter**, et pr. del af Trello-kortet: kontakt, opdækning og opstilling, pynt og blomster, mad (menu, kuverter, allergier) og efterfakturering. Event manager og ejere kan tilføje flere. Eksisterende bookinger fik punkterne i migrationen.
+- **"Klar til afholdelse"** = alle punkter undtagen efterfakturering er *Færdig*. Efterfakturering kommer efter festen.
+- **"Afventer efterfakturering"** = datoen er passeret, og efterfaktureringspunktet står *I gang* (der er tillæg, som mangler at blive faktureret).
+- **Hvem retter hvad:** event manager og ejere alt; kokken mad og allergier; event produceren kontakt, opdækning og pynt; bogholderen efterfakturering. Alle kan læse klargøringen. Håndhævet i domænet (403), ikke kun skjult i brugerfladen.
+- **Kok og event producer ser ikke betalingsbaserede statusser** ("Dato sikret", "Betaling forfalden"), fordi de ikke må se betalinger. De ser salgstrin og klargøring.
+- **Brugeradministration** er bygget her: event manager og ejere opretter brugere med e-mail og rolle og kan lukke adgangen. Ingen kan ændre sin egen rolle eller lukke sin egen adgang.
+- **Verifikation:** 42 domænetests og 21 integrationstests grønne — bl.a. at intet felt i kokkens svar (booking, liste, klargøring, kunde) indeholder en pris eller et beløb, at alle punkter færdige giver *Klar til afholdelse* uden at nogen sætter det, og at kokken kan rette mad men får 403 på opdækning. Set i browseren som kok. Migrationen `Readiness` anvendt; advisors rene.

@@ -7,11 +7,13 @@ import { Field } from '@/components/ui/Field';
 import { errorMessage } from '@/lib/api/errorMessage';
 import type { Contact, Customer } from '@/lib/api/types';
 import { useCustomerMutations, type ContactInput } from '@/features/customers/api/customers';
+import { usePermissions } from '@/features/auth/permissions';
 
 /** Normally the two getting married. Exactly one is primary; mail goes to them. */
 export function ContactsCard({ customer }: { customer: Customer }) {
+  const { manages } = usePermissions();
   const mutations = useCustomerMutations(customer.id);
-  const [editing, setEditing] = useState<string | 'new' | null>(customer.contacts.length === 0 ? 'new' : null);
+  const [editing, setEditing] = useState<string | 'new' | null>(manages && customer.contacts.length === 0 ? 'new' : null);
   const error = [mutations.makePrimary, mutations.removeContact].find((m) => m.isError)?.error;
 
   return (
@@ -45,14 +47,16 @@ export function ContactsCard({ customer }: { customer: Customer }) {
                 </p>
                 <p className="text-sm text-ink-muted [overflow-wrap:anywhere]">{[contact.email, contact.phone].filter(Boolean).join(' · ') || 'Ingen e-mail eller telefon'}</p>
               </div>
-              {!contact.isPrimary && (
+              {manages && !contact.isPrimary && (
                 <Button size="sm" variant="ghost" aria-label={`Gør ${contact.name} primær`} onClick={() => mutations.makePrimary.mutate(contact.id)}>
                   <Star aria-hidden="true" className="size-5" />
                 </Button>
               )}
-              <Button size="sm" variant="ghost" aria-label={`Ret ${contact.name}`} onClick={() => setEditing(contact.id)}>
-                <PencilSimple aria-hidden="true" className="size-5" />
-              </Button>
+              {manages && (
+                <Button size="sm" variant="ghost" aria-label={`Ret ${contact.name}`} onClick={() => setEditing(contact.id)}>
+                  <PencilSimple aria-hidden="true" className="size-5" />
+                </Button>
+              )}
             </li>
           ),
         )}
@@ -69,7 +73,7 @@ export function ContactsCard({ customer }: { customer: Customer }) {
             onSubmit={(input) => mutations.addContact.mutate(input, { onSuccess: () => setEditing(null) })}
           />
         </div>
-      ) : (
+      ) : manages && (
         <Button variant="secondary" className="mt-3 w-full sm:w-auto" onClick={() => setEditing('new')}>
           <Plus aria-hidden="true" className="size-5" /> Tilføj kontaktperson
         </Button>
