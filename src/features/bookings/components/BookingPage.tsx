@@ -18,6 +18,8 @@ import { SameDateWarning } from '@/features/bookings/components/SameDateWarning'
 import { StatusBadge } from '@/features/bookings/components/StatusBadge';
 import { StageCard } from '@/features/bookings/components/StageCard';
 import { RequestCard } from '@/features/bookings/components/RequestCard';
+import { ConfirmWeddingCard } from '@/features/bookings/components/ConfirmWeddingCard';
+import { Badge } from '@/components/ui/Badge';
 
 export function BookingPage() {
   const { id = '' } = useParams();
@@ -33,12 +35,15 @@ export function BookingPage() {
 function BookingView({ booking }: { booking: Booking }) {
   const { seesPrices, manages } = usePermissions();
   const sent = (useLocation().state as { sent?: boolean } | null)?.sent;
+  // A viewing is not a wedding yet: no price, payments or agreement until the couple says yes.
+  const isViewing = booking.kind === 'Viewing';
   return (
     <div className="space-y-4">
       {sent && <Alert tone="ok">Mailen er sendt og står i historikken.</Alert>}
       <header>
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={booking.status} />
+          {isViewing && <Badge tone="info">Fremvisning</Badge>}
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-balance">
           <Link to={`/kunder/${booking.customer.id}`} className="hover:underline">
@@ -46,7 +51,7 @@ function BookingView({ booking }: { booking: Booking }) {
           </Link>
         </h1>
         <p className="text-ink-muted first-letter:uppercase">
-          {formatLongDate(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
+          {isViewing && 'Ønsker '}{formatLongDate(booking.eventDate)} · <span className="tabular">{booking.guestCount}</span> gæster
           {booking.price && booking.lines.length > 0 && <> · <span className="tabular">{formatKroner(booking.price.total)}</span></>}
         </p>
       </header>
@@ -59,14 +64,22 @@ function BookingView({ booking }: { booking: Booking }) {
       <div className="space-y-4 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-start lg:gap-6 lg:space-y-0">
         <div className="space-y-4">
           {/* Keyed on the version, so a saved change or someone else's resets the form to what is stored. */}
-          <BookingDetailsCard key={booking.version} booking={booking} />
-          <BookingLinesCard booking={booking} />
-          <ReadinessCard bookingId={booking.id} />
-          {seesPrices && <AgreementCard booking={booking} />}
+          {isViewing ? (
+            manages && booking.stage !== 'Requested' && booking.stage !== 'Lost' && (
+              <ConfirmWeddingCard key={booking.version} booking={booking} title="Efter fremvisningen" />
+            )
+          ) : (
+            <>
+              <BookingDetailsCard key={booking.version} booking={booking} />
+              <BookingLinesCard booking={booking} />
+              <ReadinessCard bookingId={booking.id} />
+              {seesPrices && <AgreementCard booking={booking} />}
+            </>
+          )}
           <SummaryCard bookingId={booking.id} />
         </div>
         <div className="space-y-4">
-          {seesPrices && <PaymentsCard booking={booking} />}
+          {seesPrices && !isViewing && <PaymentsCard booking={booking} />}
           {manages && <StageCard booking={booking} />}
           <ContactCard customer={booking.customer} />
           <HistoryCard bookingId={booking.id} />
