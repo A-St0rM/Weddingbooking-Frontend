@@ -140,6 +140,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/trello/boards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BoardSummaryResponse"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/trello/boards/{boardId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    boardId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BoardResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/trello/status": {
         parameters: {
             query?: never;
@@ -3018,6 +3090,18 @@ export interface components {
             year: null | number;
             cards: components["schemas"]["CardReport"][];
         };
+        BoardResponse: {
+            id: string;
+            name: string;
+            url: null | string;
+            /** Format: date-time */
+            fetchedAt: string;
+            lists: components["schemas"]["ListResponse"][];
+        };
+        BoardSummaryResponse: {
+            id: string;
+            name: string;
+        };
         /** @enum {unknown} */
         BookingKind: "Viewing" | "Wedding";
         BookingLineResponse: {
@@ -3045,6 +3129,7 @@ export interface components {
             stage: components["schemas"]["SalesStage"];
             origin: components["schemas"]["BookingOrigin"];
             kind: components["schemas"]["BookingKind"];
+            trelloCardId: null | string;
             status: components["schemas"]["DisplayStatus"];
             /** Format: date-time */
             signedAt: null | string;
@@ -3116,6 +3201,19 @@ export interface components {
             /** Format: uuid */
             bookingId: null | string;
         };
+        CardResponse: {
+            id: string;
+            name: string;
+            description: string;
+            /** Format: date-time */
+            due: null | string;
+            dueComplete: boolean;
+            url: null | string;
+            labels: components["schemas"]["LabelResponse"][];
+            checklists: components["schemas"]["ChecklistResponse"][];
+            /** Format: uuid */
+            bookingId: null | string;
+        };
         CaseSummary: {
             status: string;
             agreedContent: string;
@@ -3124,6 +3222,14 @@ export interface components {
         };
         ChangeStageRequest: {
             stage: components["schemas"]["SalesStage"];
+        };
+        CheckItemResponse: {
+            name: string;
+            complete: boolean;
+        };
+        ChecklistResponse: {
+            name: string;
+            items: components["schemas"]["CheckItemResponse"][];
         };
         ClarificationRequest: {
             clarification: null | string;
@@ -3289,6 +3395,10 @@ export interface components {
         };
         /** @enum {unknown} */
         InstalmentState: "NotInvoiced" | "Draft" | "Booked" | "Paid" | "Overdue";
+        LabelResponse: {
+            name: string;
+            color: string;
+        };
         /** @enum {unknown} */
         LinePricing: "PerGuest" | "Fixed";
         LineRequest: {
@@ -3301,6 +3411,11 @@ export interface components {
             quantity: number;
             /** Format: int32 */
             minimumQuantity: null | number;
+        };
+        ListResponse: {
+            id: string;
+            name: string;
+            cards: components["schemas"]["CardResponse"][];
         };
         MeResponse: {
             /** Format: uuid */

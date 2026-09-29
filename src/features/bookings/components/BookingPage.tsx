@@ -44,6 +44,11 @@ function BookingView({ booking }: { booking: Booking }) {
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={booking.status} />
           {isViewing && <Badge tone="info">Fremvisning</Badge>}
+          {booking.trelloCardId && (
+            <a href={`https://trello.com/c/${booking.trelloCardId}`} target="_blank" rel="noreferrer" className="inline-flex min-h-9 items-center text-sm font-medium text-primary underline">
+              Trello-kort
+            </a>
+          )}
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-balance">
           <Link to={`/kunder/${booking.customer.id}`} className="hover:underline">

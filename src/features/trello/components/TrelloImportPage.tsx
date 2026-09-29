@@ -55,9 +55,12 @@ export function TrelloImportPage() {
           />
           <p className="text-sm text-ink-muted">I Trello: bordets menu → Udskriv, eksportér og del → Eksportér som JSON. Ét bord pr. fil.</p>
         </div>
-        {status.data?.apiConfigured && (
-          <Field label="Eller bord-id'er fra Trello" value={boardIds} onChange={(e) => setBoardIds(e.target.value)} hint="Adskil med komma. Trello-nøglen er sat op." />
-        )}
+        <Field
+          label="Eller bord-id'er fra Trello"
+          value={boardIds}
+          onChange={(e) => setBoardIds(e.target.value)}
+          hint={status.data?.apiConfigured ? 'Adskil med komma. Trello-nøglen er sat op.' : 'Adskil med komma. Uden Trello-nøgle kan kun offentlige boards læses.'}
+        />
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" loading={preview.isPending} disabled={!hasSource} onClick={() => { run.reset(); preview.mutate(source); }}>
             Tørløb

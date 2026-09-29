@@ -494,7 +494,7 @@ En sag, der starter som fremvisning, bliver en booking med **Bekræft som bookin
 
 ### Fase 14 — Trello-boardet i systemet
 
-Årsboardene vises som **kanban inde i systemet** — lister, kort, labels, tjeklister og forfaldsdatoer, som i Trello — så ingen skal skifte til Trello. `ITrelloGateway` læser gennem Trellos API med nøgle og token i API'et. Et kort, der hører til en booking (`TrelloCardLink`), linker til den, og bookingen linker til kortet.
+Årsboardene vises som **kanban inde i systemet** — lister, kort, labels, tjeklister og forfaldsdatoer, som i Trello — så ingen skal skifte til Trello. `ITrelloGateway` læser boardets åbne JSON-adresse uden nøgle (§11.16); med nøgle og token læses gennem Trellos API i stedet. Et kort, der hører til en booking (`TrelloCardLink`), linker til den, og bookingen linker til kortet.
 
 **Færdig når:**
 - boardet vises fra en telefon med samme lister, kort, labels og tjeklister som i Trello
