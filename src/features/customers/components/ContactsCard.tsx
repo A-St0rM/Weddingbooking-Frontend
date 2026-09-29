@@ -1,59 +1,54 @@
 import { useState, type FormEvent } from 'react';
-import { PencilSimple, Plus, Star } from '@phosphor-icons/react';
+import { PencilSimple } from '@phosphor-icons/react';
 import { Alert } from '@/components/ui/Alert';
+import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
 import { errorMessage } from '@/lib/api/errorMessage';
 import type { Contact, Customer } from '@/lib/api/types';
-import { useCustomerMutations, type ContactInput } from '@/features/customers/api/customers';
 import { usePermissions } from '@/features/auth/permissions';
+import { useCustomerMutations } from '@/features/customers/api/customers';
 
-/** Normally the two getting married. Exactly one is primary; mail goes to them. */
+/** The two people. One is the payer — the one on the quote and the invoice. */
 export function ContactsCard({ customer }: { customer: Customer }) {
   const { manages } = usePermissions();
-  const mutations = useCustomerMutations(customer.id);
-  const [editing, setEditing] = useState<string | 'new' | null>(manages && customer.contacts.length === 0 ? 'new' : null);
-  const error = [mutations.makePrimary, mutations.removeContact].find((m) => m.isError)?.error;
+  const { updatePartner, makePayer, addMissingPartner } = useCustomerMutations(customer.id);
+  const [editing, setEditing] = useState<string | null>(null);
 
   return (
     <Card>
-      <h2 className="mb-3 text-lg font-semibold">Kontaktpersoner</h2>
+      <h2 className="mb-3 text-lg font-semibold">Parret</h2>
       <ul className="divide-y divide-line">
-        {customer.contacts.map((contact) =>
-          editing === contact.id ? (
-            <li key={contact.id} className="py-3">
-              <ContactForm
-                initial={contact}
-                pending={mutations.updateContact.isPending}
-                error={mutations.updateContact.error}
+        {customer.contacts.map((person) =>
+          editing === person.id ? (
+            <li key={person.id} className="py-3">
+              <PartnerForm
+                person={person}
+                pending={updatePartner.isPending}
+                error={updatePartner.error}
                 onCancel={() => setEditing(null)}
-                onSubmit={(input) =>
-                  mutations.updateContact.mutate({ contactId: contact.id, ...input }, { onSuccess: () => setEditing(null) })
-                }
-                onRemove={() => {
-                  if (window.confirm(`Fjern ${contact.name} som kontaktperson?`)) {
-                    mutations.removeContact.mutate(contact.id, { onSuccess: () => setEditing(null) });
-                  }
-                }}
+                onSubmit={(input) => updatePartner.mutate({ contactId: person.id, ...input }, { onSuccess: () => setEditing(null) })}
               />
             </li>
           ) : (
-            <li key={contact.id} className="flex items-start gap-3 py-3">
+            <li key={person.id} className="flex items-start gap-3 py-3">
               <div className="min-w-0 flex-1">
                 <p className="font-medium">
-                  {contact.name}
-                  {contact.isPrimary && <span className="ml-2 rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold text-primary">Primær</span>}
+                  {person.fullName}
+                  {person.isPayer && <Badge tone="primary" className="ml-2">Betaler</Badge>}
                 </p>
-                <p className="text-sm text-ink-muted [overflow-wrap:anywhere]">{[contact.email, contact.phone].filter(Boolean).join(' · ') || 'Ingen e-mail eller telefon'}</p>
+                <p className="text-sm text-ink-muted [overflow-wrap:anywhere]">
+                  {[person.email, person.phone].filter(Boolean).join(' · ') || 'Ingen e-mail eller telefon'}
+                </p>
               </div>
-              {manages && !contact.isPrimary && (
-                <Button size="sm" variant="ghost" aria-label={`Gør ${contact.name} primær`} onClick={() => mutations.makePrimary.mutate(contact.id)}>
-                  <Star aria-hidden="true" className="size-5" />
+              {manages && !person.isPayer && (
+                <Button size="sm" variant="ghost" loading={makePayer.isPending} onClick={() => makePayer.mutate(person.id)}>
+                  Gør til betaler
                 </Button>
               )}
               {manages && (
-                <Button size="sm" variant="ghost" aria-label={`Ret ${contact.name}`} onClick={() => setEditing(contact.id)}>
+                <Button size="sm" variant="ghost" aria-label={`Ret ${person.fullName}`} onClick={() => setEditing(person.id)}>
                   <PencilSimple aria-hidden="true" className="size-5" />
                 </Button>
               )}
@@ -61,64 +56,51 @@ export function ContactsCard({ customer }: { customer: Customer }) {
           ),
         )}
       </ul>
-
-      {error && <Alert tone="danger" className="mt-3">{errorMessage(error)}</Alert>}
-
-      {editing === 'new' ? (
+      {makePayer.isError && <Alert tone="danger" className="mt-3">{errorMessage(makePayer.error)}</Alert>}
+      {/* Only a customer from before the couple was two people can be missing one. */}
+      {manages && customer.contacts.length < 2 && (
         <div className="mt-3 border-t border-line pt-4">
-          <ContactForm
-            pending={mutations.addContact.isPending}
-            error={mutations.addContact.error}
-            onCancel={customer.contacts.length > 0 ? () => setEditing(null) : undefined}
-            onSubmit={(input) => mutations.addContact.mutate(input, { onSuccess: () => setEditing(null) })}
+          <p className="mb-3 text-sm font-medium">Tilføj {customer.contacts.length === 0 ? 'første' : 'anden'} person</p>
+          <PartnerForm
+            pending={addMissingPartner.isPending}
+            error={addMissingPartner.error}
+            onSubmit={(input) => addMissingPartner.mutate(input)}
           />
         </div>
-      ) : manages && (
-        <Button variant="secondary" className="mt-3 w-full sm:w-auto" onClick={() => setEditing('new')}>
-          <Plus aria-hidden="true" className="size-5" /> Tilføj kontaktperson
-        </Button>
       )}
     </Card>
   );
 }
 
-function ContactForm({ initial, pending, error, onSubmit, onCancel, onRemove }: {
-  initial?: Contact;
+function PartnerForm({ person, pending, error, onSubmit, onCancel }: {
+  person?: Contact;
   pending: boolean;
   error: unknown;
-  onSubmit: (input: ContactInput) => void;
+  onSubmit: (input: { firstName: string; lastName: string | null; email: string | null; phone: string | null }) => void;
   onCancel?: () => void;
-  onRemove?: () => void;
 }) {
-  const [name, setName] = useState(initial?.name ?? '');
-  const [email, setEmail] = useState(initial?.email ?? '');
-  const [phone, setPhone] = useState(initial?.phone ?? '');
+  const [firstName, setFirstName] = useState(person?.firstName ?? '');
+  const [lastName, setLastName] = useState(person?.lastName ?? '');
+  const [email, setEmail] = useState(person?.email ?? '');
+  const [phone, setPhone] = useState(person?.phone ?? '');
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    onSubmit({ name: name.trim(), email: email.trim() || null, phone: phone.trim() || null });
+    onSubmit({ firstName: firstName.trim(), lastName: lastName.trim() || null, email: email.trim() || null, phone: phone.trim() || null });
   }
 
   return (
     <form onSubmit={submit} className="space-y-3">
-      <Field label="Navn" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} required />
-      <Field label="E-mail" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <Field label="Telefon" type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="Fornavn" autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+        <Field label="Efternavn" autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        <Field label="E-mail" type="email" inputMode="email" autoCapitalize="none" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Field label="Telefon" type="tel" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      </div>
       {Boolean(error) && <Alert tone="danger">{errorMessage(error)}</Alert>}
-      <div className="flex flex-wrap gap-3">
-        <Button type="submit" loading={pending} disabled={!name.trim()}>
-          {initial ? 'Gem' : 'Tilføj'}
-        </Button>
-        {onCancel && (
-          <Button variant="ghost" onClick={onCancel}>
-            Annullér
-          </Button>
-        )}
-        {onRemove && (
-          <Button variant="ghost" className="ml-auto text-danger" onClick={onRemove}>
-            Fjern
-          </Button>
-        )}
+      <div className="flex gap-3">
+        <Button type="submit" loading={pending} disabled={!firstName.trim()}>Gem</Button>
+        {onCancel && <Button variant="ghost" onClick={onCancel}>Annullér</Button>}
       </div>
     </form>
   );

@@ -7,16 +7,30 @@ import { QueryState } from '@/components/ui/QueryState';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { formatShortDate } from '@/lib/format';
 import { useDebounced } from '@/lib/hooks/useDebounced';
-import { useCustomers } from '@/features/customers/api/customers';
+import { useCustomers, useIncompleteCustomers } from '@/features/customers/api/customers';
+import { usePermissions } from '@/features/auth/permissions';
+import { Alert } from '@/components/ui/Alert';
 
 export function CustomerListPage() {
   const [search, setSearch] = useState('');
   const term = useDebounced(search.trim());
   const query = useCustomers(term);
+  const incomplete = useIncompleteCustomers(usePermissions().manages);
 
   return (
     <>
       <PageHeader title="Kunder" description="Et par, der kommer igen, er den samme kunde." />
+      {incomplete.data && incomplete.data.length > 0 && (
+        <Alert tone="warn" title={`${incomplete.data.length} kunder er ikke to personer endnu`} className="mb-4">
+          <ul className="mt-1 space-y-1">
+            {incomplete.data.map((c) => (
+              <li key={c.id}>
+                <Link to={`/kunder/${c.id}`} className="font-medium underline">{c.name || 'Uden navn'}</Link> — {c.reason}
+              </li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       <SearchInput label="Søg på navn eller e-mail" value={search} onChange={setSearch} />
       <div className="mt-4">
         <QueryState query={query}>
@@ -34,7 +48,7 @@ export function CustomerListPage() {
                         <p className="truncate font-medium">{customer.name}</p>
                         <p className="truncate text-sm text-ink-muted">
                           {[
-                            customer.primaryContact?.email ?? customer.primaryContact?.phone,
+                            customer.payer?.email ?? customer.payer?.phone,
                             customer.nextEventDate ? `Næste: ${formatShortDate(customer.nextEventDate)}` : null,
                             `${customer.bookingCount} ${customer.bookingCount === 1 ? 'booking' : 'bookinger'}`,
                           ]

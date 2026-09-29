@@ -20,21 +20,25 @@ import { useCustomers } from '@/features/customers/api/customers';
  * Everything else can wait. While the name is typed, customers who match are
  * offered, so a couple who come back get their new booking on the same customer.
  */
+const emptyPerson = { firstName: '', lastName: '' };
+
 export function NewBookingPage() {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
+  const [people, setPeople] = useState([emptyPerson, emptyPerson]);
   const [customer, setCustomer] = useState<CustomerSummary | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [guests, setGuests] = useState('');
   const [terms, setTerms] = useState<PaymentTerms>('New');
   const create = useCreateBooking();
 
-  const term = useDebounced(name.trim());
+  // Looks for the couple as it is typed: the first name alone, or both joined with "og".
+  const typed = people.map((p) => p.firstName.trim()).filter(Boolean);
+  const term = useDebounced(typed.join(' og '));
   const matches = useCustomers(term, { enabled: !customer && term.length >= 2 });
   const onDate = useBookingsOnDate(eventDate);
 
   const guestCount = Number.parseInt(guests, 10);
-  const valid = (customer || name.trim()) && eventDate && guestCount >= 1 && guestCount <= 350;
+  const valid = (customer || typed.length === 2) && eventDate && guestCount >= 1 && guestCount <= 350;
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -42,7 +46,9 @@ export function NewBookingPage() {
     create.mutate(
       {
         customerId: customer?.id ?? null,
-        customerName: customer ? null : name.trim(),
+        partners: customer
+          ? null
+          : people.map((p) => ({ firstName: p.firstName.trim(), lastName: p.lastName.trim() || null, email: null, phone: null })),
         eventDate,
         guestCount,
         paymentTerms: terms,
@@ -54,7 +60,7 @@ export function NewBookingPage() {
   return (
     <>
       <BackLink to="/bookinger">Bookinger</BackLink>
-      <PageHeader title="Ny booking" description="Navn, dato og gæsteantal. Resten kan komme senere." />
+      <PageHeader title="Ny booking" description="De to navne, dato og gæsteantal. Resten kan komme senere." />
 
       <form onSubmit={submit} className="space-y-5" noValidate>
         {customer ? (
@@ -70,15 +76,25 @@ export function NewBookingPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            <Field
-              label="Parrets navn"
-              placeholder="Tobias og Cecilie"
-              autoComplete="off"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoFocus
-            />
+            {people.map((person, index) => (
+              <fieldset key={index} className="grid grid-cols-2 gap-3">
+                <legend className="mb-1.5 text-sm font-semibold">{index === 0 ? 'Første person' : 'Anden person'}</legend>
+                <Field
+                  label="Fornavn"
+                  autoComplete="off"
+                  value={person.firstName}
+                  onChange={(e) => setPeople(people.map((p, i) => (i === index ? { ...p, firstName: e.target.value } : p)))}
+                  required
+                  autoFocus={index === 0}
+                />
+                <Field
+                  label="Efternavn"
+                  autoComplete="off"
+                  value={person.lastName}
+                  onChange={(e) => setPeople(people.map((p, i) => (i === index ? { ...p, lastName: e.target.value } : p)))}
+                />
+              </fieldset>
+            ))}
             {term.length >= 2 && matches.data && matches.data.length > 0 && (
               <div aria-live="polite" className="rounded-control border border-line bg-surface">
                 <p className="px-4 pt-3 text-sm font-medium text-ink-muted">Er det en af disse?</p>
@@ -94,7 +110,7 @@ export function NewBookingPage() {
                         <span className="min-w-0 flex-1">
                           <span className="block truncate font-medium">{match.name}</span>
                           <span className="block truncate text-sm text-ink-muted">
-                            {[match.primaryContact?.email, match.city, `${match.bookingCount} ${match.bookingCount === 1 ? 'booking' : 'bookinger'}`]
+                            {[match.payer?.email, match.city, `${match.bookingCount} ${match.bookingCount === 1 ? 'booking' : 'bookinger'}`]
                               .filter(Boolean)
                               .join(' · ')}
                           </span>

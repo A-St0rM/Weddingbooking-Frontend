@@ -44,13 +44,11 @@ function DetailsCard({ customer }: { customer: Customer }) {
   const { manages } = usePermissions();
   const { update } = useCustomerMutations(customer.id);
   const [form, setForm] = useState({
-    name: customer.name,
     address: customer.address ?? '',
     postalCode: customer.postalCode ?? '',
     city: customer.city ?? '',
   });
   const dirty =
-    form.name !== customer.name ||
     form.address !== (customer.address ?? '') ||
     form.postalCode !== (customer.postalCode ?? '') ||
     form.city !== (customer.city ?? '');
@@ -58,15 +56,14 @@ function DetailsCard({ customer }: { customer: Customer }) {
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    update.mutate({ name: form.name, address: form.address || null, postalCode: form.postalCode || null, city: form.city || null });
+    update.mutate({ address: form.address || null, postalCode: form.postalCode || null, city: form.city || null });
   }
 
   return (
     <Card>
-      <h2 className="mb-4 text-lg font-semibold">Kunde</h2>
+      <h2 className="mb-4 text-lg font-semibold">Betalerens adresse</h2>
       <form onSubmit={submit} className="space-y-4">
         <fieldset disabled={!manages} className="space-y-4">
-        <Field label="Parrets navn" value={form.name} onChange={set('name')} required />
         <Field label="Adresse" autoComplete="street-address" value={form.address} onChange={set('address')} />
         <div className="grid grid-cols-[7rem_1fr] gap-3">
           <Field label="Postnr." inputMode="numeric" autoComplete="postal-code" value={form.postalCode} onChange={set('postalCode')} />
@@ -75,7 +72,7 @@ function DetailsCard({ customer }: { customer: Customer }) {
         </fieldset>
         {update.isError && <Alert tone="danger">{errorMessage(update.error)}</Alert>}
         {dirty && manages && (
-          <Button type="submit" loading={update.isPending} disabled={!form.name.trim()}>
+          <Button type="submit" loading={update.isPending}>
             Gem
           </Button>
         )}

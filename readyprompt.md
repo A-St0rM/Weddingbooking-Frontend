@@ -126,7 +126,7 @@ erDiagram
 | Entitet | Vigtigste felter | Bemærk |
 |---|---|---|
 | **Customer** | de to personer, betaleren | Overlever sine bookinger. Et par, der kommer igen, er samme kunde. Visningsnavnet ("Tobias og Cecilie") **udledes** af de to fornavne og gemmes ikke. |
-| **Partner** (i dag `ContactPerson`) | fornavn, efternavn, e-mail, telefon, `isPayer`, adresse (kun betaleren) | **Præcis to pr. kunde**, hver for sig. Højst én betaler; vælges senest, når sagen bekræftes som booking. Betaleren er den, der oprettes i regnskabet. |
+| **ContactPerson** (personen i parret) | fornavn, efternavn, e-mail, telefon, `isPayer`, `position` (1 eller 2) | **Præcis to pr. kunde**, hver for sig. Højst én betaler; vælges senest, når sagen bekræftes som booking. Betaleren er den, der oprettes i regnskabet. |
 | **Booking** | kunde, `kind` (`Viewing`/`Wedding`), `origin` (`Website`/`Staff`/`Trello`), bryllupsdato, **gæsteantal**, `paymentTerms` (`Old`/`New`), salgstrin, oprettet | Gæsteantallet findes kun her. En sag starter som `Viewing` eller `Wedding`; en fremvisning bekræftes til `Wedding` på samme række. |
 | **ViewingAppointment** | booking, start, varighed, vært, status (`Requested`/`Confirmed`/`Held`/`Cancelled`) | En fremvisning i kalenderen. `Requested` optager tiden, indtil Johan har bekræftet eller afvist. |
 | **HostAvailability** | vært, ugedag, fra–til, gyldig fra/til | Ugeplanen for, hvornår en vært kan vise rundt. |
@@ -254,7 +254,7 @@ Derefter **synkroniseres Trello** (§11.6 er besvaret): boardet vises som kanban
 | Klargøring · klar til afholdelse | `Readiness` · `ReadyForEvent` |
 | Efterfakturering | `PostEventInvoice` |
 | Tekstbid | `MessageTemplate` |
-| Person i parret · betaler | `Partner` · `Payer` |
+| Person i parret · betaler | `ContactPerson` · `IsPayer` |
 | Fremvisning (i kalenderen) · vært | `ViewingAppointment` · `Host` |
 | Bestilling (fra hjemmesiden) | `Request` (med `origin = Website`) |
 | Bekræft som booking | `ConfirmAsWedding` |
